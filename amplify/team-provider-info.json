@@ -18,7 +18,7 @@
       "function": {
         "blogsLambda": {
           "deploymentBucketName": "amplify-blogwebsite-dev-124623-deployment",
-          "s3Key": "amplify-builds/blogsLambda-636f6d532b453048542f-build.zip"
+          "s3Key": "amplify-builds/blogsLambda-7630507a794c4c505439-build.zip"
         }
       }
     }

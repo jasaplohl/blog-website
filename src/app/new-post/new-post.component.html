@@ -1,11 +1,23 @@
 <div>
-    <form>
+    <form
+        autocomplete="off"
+        [formGroup]="newBlogForm"
+        (ngSubmit)="onCreate(newBlogForm.value)"
+        >
         <div>
-            <input type="text" placeholder="What is on your mind?" autocomplete="off" class="form-control">
+            <input 
+                type="text"
+                formControlName="blogContent"
+                placeholder="What is on your mind?" 
+                class="form-control">
         </div>
         <div>
-            <button type="button" class="btn btn-outline-primary">Add image</button>
-            <button type="submit" class="btn btn-outline-primary">Post</button>
+            <button 
+                type="button" 
+                class="btn btn-outline-primary">Add image</button>
+            <button 
+                type="submit" 
+                class="btn btn-outline-primary">Post</button>
         </div>
     </form>
 </div>

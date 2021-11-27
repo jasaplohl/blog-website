@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { API } from 'aws-amplify';
 
 @Component({
   selector: 'app-post-list',
@@ -9,7 +10,20 @@ export class PostListComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    const requestInfo = {
+      headers: {
+        Authorization: null
+      }
+    };
+    API
+      .get('blogsApi', '/blogs', requestInfo)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log("Error: ", error.response);
+      });
   }
 
 }

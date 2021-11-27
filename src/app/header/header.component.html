@@ -2,12 +2,16 @@
     <div class="container-fluid">
         <a href="#" class="navbar-brand">HeadBook</a>
         <form class="d-flex">
-            <button 
+            <a 
                 class="m-1 btn btn-outline-primary" 
-                type="submit">Log in</button>
-            <button 
+                href="/login">Log in</a>
+
+            <!-- <div *ngIf="authState === 'signedin'">
+                <amplify-sign-out></amplify-sign-out>
+            </div> -->
+            <!-- <a 
                 class="m-1 btn btn-outline-primary" 
-                type="submit">Sign up</button>
+                href="/signup">Sign up</a> -->
         </form>
     </div>
 </nav>
