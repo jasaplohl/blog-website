@@ -1,4 +1,6 @@
 <div>
     <!-- A list of all posts -->
-    <app-post></app-post>
+    <app-post
+        *ngFor="let blogPost of blogPosts"
+        [post]="blogPost"></app-post>
 </div>
