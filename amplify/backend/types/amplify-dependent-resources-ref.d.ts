@@ -21,7 +21,7 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "function": {
-        "blogsLambda": {
+        "getPostsLambda": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",
@@ -29,7 +29,7 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "api": {
-        "blogsApi": {
+        "getPostsApi": {
             "RootUrl": "string",
             "ApiName": "string",
             "ApiId": "string"

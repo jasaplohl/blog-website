@@ -33,8 +33,8 @@ const awsmobile = {
     ],
     "aws_cloud_logic_custom": [
         {
-            "name": "blogsApi",
-            "endpoint": "https://qv49r5p8la.execute-api.us-east-1.amazonaws.com/dev",
+            "name": "getPostsApi",
+            "endpoint": "https://yd5dfcal3h.execute-api.us-east-1.amazonaws.com/dev",
             "region": "us-east-1"
         }
     ]

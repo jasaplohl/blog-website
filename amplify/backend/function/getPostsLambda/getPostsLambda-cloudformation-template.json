@@ -47,12 +47,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "blogsLambda",
+            "getPostsLambda",
             {
               "Fn::Join": [
                 "",
                 [
-                  "blogsLambda",
+                  "getPostsLambda",
                   "-",
                   {
                     "Ref": "env"
@@ -89,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "blogwebsiteLambdaRole27245ba2",
+            "blogwebsiteLambdaRole47e00441",
             {
               "Fn::Join": [
                 "",
                 [
-                  "blogwebsiteLambdaRole27245ba2",
+                  "blogwebsiteLambdaRole47e00441",
                   "-",
                   {
                     "Ref": "env"

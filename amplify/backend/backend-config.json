@@ -32,20 +32,20 @@
     }
   },
   "function": {
-    "blogsLambda": {
+    "getPostsLambda": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
   },
   "api": {
-    "blogsApi": {
+    "getPostsApi": {
       "service": "API Gateway",
       "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "blogsLambda",
+          "resourceName": "getPostsLambda",
           "attributes": [
             "Name",
             "Arn"

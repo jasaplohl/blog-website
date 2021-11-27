@@ -1,9 +1,9 @@
 {
   "version": 1,
   "paths": {
-    "/blogs": {
-      "name": "/blogs",
-      "lambdaFunction": "blogsLambda",
+    "/getposts": {
+      "name": "/getposts",
+      "lambdaFunction": "getPostsLambda",
       "permissions": {
         "setting": "open"
       }

@@ -1,0 +1,22 @@
+<div class="card mb-2">
+    <div class="card-header">
+        <h4>{{ post.user_id }}</h4>
+    </div>
+    <div class="card-body">
+        <p>{{ post.blog_content }}</p>
+    </div>
+    <div *ngIf="post.blog_image">
+        <p>IMAGE</p>
+    </div>
+    <div class="d-flex">
+        <p class="m-1">Likes</p>
+        <p class="m-1">Comments</p>
+    </div>
+    <div class="card-footer">
+        <div class="d-flex">
+            <button class="btn btn-primary">Like</button>
+            <button (click)="toggleCommentSection()" class="btn btn-primary">Comment</button>
+        </div>
+        <app-comment-section *ngIf="showCommentSection"></app-comment-section>
+    </div>
+</div>

@@ -16,9 +16,9 @@
         "blogwebsitea9fc2081": {}
       },
       "function": {
-        "blogsLambda": {
+        "getPostsLambda": {
           "deploymentBucketName": "amplify-blogwebsite-dev-124623-deployment",
-          "s3Key": "amplify-builds/blogsLambda-2b71374668584a625466-build.zip"
+          "s3Key": "amplify-builds/getPostsLambda-486c6f6b6d3444746272-build.zip"
         }
       }
     }

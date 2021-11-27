@@ -20,11 +20,10 @@ export class PostListComponent implements OnInit {
       }
     };
     API
-      .get('blogsApi', '/blogs', requestInfo)
+      .get('getPostsApi', '/getposts', requestInfo)
       .then(response => {
         response = response.blogs
         for(var i=0; i<response.length; i++) {
-          console.log(response[i].blog_content);
           this.blogPosts.push({
             blog_id: response[i].blog_id,
             user_id: response[i].user_id,
@@ -32,10 +31,9 @@ export class PostListComponent implements OnInit {
             blog_image: response[i].blog_image
           });
         }
-        console.log(response.length);
       })
       .catch(error => {
-        console.log("Error: ", error.response);
+        console.log("Error: ", error);
       });
   }
 
