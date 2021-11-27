@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/blogs": {
+      "name": "/blogs",
+      "lambdaFunction": "blogsLambda",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

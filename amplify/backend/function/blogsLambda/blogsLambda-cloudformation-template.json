@@ -15,18 +15,6 @@
     },
     "s3Key": {
       "Type": "String"
-    },
-    "storageblogDBName": {
-      "Type": "String",
-      "Default": "storageblogDBName"
-    },
-    "storageblogDBArn": {
-      "Type": "String",
-      "Default": "storageblogDBArn"
-    },
-    "storageblogDBStreamArn": {
-      "Type": "String",
-      "Default": "storageblogDBStreamArn"
     }
   },
   "Conditions": {
@@ -81,15 +69,6 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
-            },
-            "STORAGE_BLOGDB_NAME": {
-              "Ref": "storageblogDBName"
-            },
-            "STORAGE_BLOGDB_ARN": {
-              "Ref": "storageblogDBArn"
-            },
-            "STORAGE_BLOGDB_STREAMARN": {
-              "Ref": "storageblogDBStreamArn"
             }
           }
         },
@@ -110,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "blogwebsiteLambdaRole94efa2cc",
+            "blogwebsiteLambdaRole27245ba2",
             {
               "Fn::Join": [
                 "",
                 [
-                  "blogwebsiteLambdaRole94efa2cc",
+                  "blogwebsiteLambdaRole27245ba2",
                   "-",
                   {
                     "Ref": "env"
@@ -181,86 +160,6 @@
                   }
                 ]
               }
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:DescribeTable",
-                "dynamodb:GetItem",
-                "dynamodb:Query",
-                "dynamodb:Scan",
-                "dynamodb:PutItem",
-                "dynamodb:UpdateItem",
-                "dynamodb:DeleteItem"
-              ],
-              "Resource": [
-                {
-                  "Ref": "storageblogDBArn"
-                },
-                {
-                  "Fn::Join": [
-                    "/",
-                    [
-                      {
-                        "Ref": "storageblogDBArn"
-                      },
-                      "index/*"
-                    ]
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      }
-    },
-    "AmplifyResourcesPolicy": {
-      "DependsOn": [
-        "LambdaExecutionRole"
-      ],
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": "amplify-lambda-execution-policy",
-        "Roles": [
-          {
-            "Ref": "LambdaExecutionRole"
-          }
-        ],
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:Put*",
-                "dynamodb:Create*",
-                "dynamodb:BatchWriteItem",
-                "dynamodb:Get*",
-                "dynamodb:BatchGetItem",
-                "dynamodb:List*",
-                "dynamodb:Describe*",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:Update*",
-                "dynamodb:RestoreTable*",
-                "dynamodb:Delete*"
-              ],
-              "Resource": [
-                {
-                  "Ref": "storageblogDBArn"
-                },
-                {
-                  "Fn::Join": [
-                    "/",
-                    [
-                      {
-                        "Ref": "storageblogDBArn"
-                      },
-                      "index/*"
-                    ]
-                  ]
-                }
-              ]
             }
           ]
         }

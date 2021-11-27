@@ -1,28 +1,24 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-blogwebsite-dev-02342-authRole",
-      "UnauthRoleArn": "arn:aws:iam::466676818017:role/amplify-blogwebsite-dev-02342-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::466676818017:role/amplify-blogwebsite-dev-02342-authRole",
-      "Region": "eu-west-2",
-      "DeploymentBucketName": "amplify-blogwebsite-dev-02342-deployment",
-      "UnauthRoleName": "amplify-blogwebsite-dev-02342-unauthRole",
-      "StackName": "amplify-blogwebsite-dev-02342",
-      "StackId": "arn:aws:cloudformation:eu-west-2:466676818017:stack/amplify-blogwebsite-dev-02342/eaef5560-4f0f-11ec-92d1-06b5d32bb498",
-      "AmplifyAppId": "d3qig1bnj6qg5c",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-blogwebsite-dev-02342-deployment/amplify-cfn-templates/api\\APIGatewayAuthStack.json"
+      "AuthRoleName": "amplify-blogwebsite-dev-124623-authRole",
+      "UnauthRoleArn": "arn:aws:iam::466676818017:role/amplify-blogwebsite-dev-124623-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::466676818017:role/amplify-blogwebsite-dev-124623-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-blogwebsite-dev-124623-deployment",
+      "UnauthRoleName": "amplify-blogwebsite-dev-124623-unauthRole",
+      "StackName": "amplify-blogwebsite-dev-124623",
+      "StackId": "arn:aws:cloudformation:us-east-1:466676818017:stack/amplify-blogwebsite-dev-124623/a8182560-4f77-11ec-bbbc-1241a8f78a6d",
+      "AmplifyAppId": "d1eh6pehrwpo86"
     },
     "categories": {
       "auth": {
-        "undefined": {},
-        "blogwebsitea08e96a1": {},
-        "blogwebsite9d9749b4": {},
-        "true": {}
+        "blogwebsitea9fc2081": {}
       },
       "function": {
         "blogsLambda": {
-          "deploymentBucketName": "amplify-blogwebsite-dev-02342-deployment",
-          "s3Key": "amplify-builds/blogsLambda-45437865314e43306b70-build.zip"
+          "deploymentBucketName": "amplify-blogwebsite-dev-124623-deployment",
+          "s3Key": "amplify-builds/blogsLambda-636f6d532b453048542f-build.zip"
         }
       }
     }

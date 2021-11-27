@@ -1,12 +1,23 @@
 export type AmplifyDependentResourcesAttributes = {
     "storage": {
-        "blogDB": {
+        "blogsDB": {
             "Name": "string",
             "Arn": "string",
             "StreamArn": "string",
             "PartitionKeyName": "string",
             "PartitionKeyType": "string",
             "Region": "string"
+        }
+    },
+    "auth": {
+        "blogwebsitea9fc2081": {
+            "IdentityPoolId": "string",
+            "IdentityPoolName": "string",
+            "UserPoolId": "string",
+            "UserPoolArn": "string",
+            "UserPoolName": "string",
+            "AppClientIDWeb": "string",
+            "AppClientID": "string"
         }
     },
     "function": {
@@ -17,15 +28,11 @@ export type AmplifyDependentResourcesAttributes = {
             "LambdaExecutionRole": "string"
         }
     },
-    "auth": {
-        "blogwebsite9d9749b4": {
-            "IdentityPoolId": "string",
-            "IdentityPoolName": "string",
-            "UserPoolId": "string",
-            "UserPoolArn": "string",
-            "UserPoolName": "string",
-            "AppClientIDWeb": "string",
-            "AppClientID": "string"
+    "api": {
+        "blogsApi": {
+            "RootUrl": "string",
+            "ApiName": "string",
+            "ApiId": "string"
         }
     }
 }
