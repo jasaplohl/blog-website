@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { API, Auth } from 'aws-amplify';
+import { API } from 'aws-amplify';
 
 @Component({
   selector: 'app-new-post',
@@ -19,14 +19,30 @@ export class NewPostComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  async getBlogs() {
+    const requestInfo = {
+      headers: {
+        Authorization: null
+      },
+      body: {
+        MyHeader: "Hello world"
+      }
+    };
+
+    API
+      .post('uploadPostApi', '/uploadpost', requestInfo)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log("Error: ", error);
+      });
+  }
+
   onCreate(blogPost: any): void {
     console.log("Creating a new post: " + blogPost.blogContent);
-    async function getBlogs() {
-      const user = await Auth.currentAuthenticatedUser();
-      const token = user.signInUserSession.idToken.jwtToken;
-      console.log("Token", token);
-    }
-    getBlogs();
+
+    this.getBlogs();
     // const user = Auth.currentAuthenticatedUser();
     // const token = user.signInUserSession.idToken.jwtToken;
     // const requestInfo = {

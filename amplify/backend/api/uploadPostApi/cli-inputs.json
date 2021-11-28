@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/uploadpost": {
+      "name": "/uploadpost",
+      "lambdaFunction": "uploadPostLambda",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

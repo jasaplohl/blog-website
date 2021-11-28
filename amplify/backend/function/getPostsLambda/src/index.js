@@ -1,7 +1,4 @@
-
-
 exports.handler = async (event) => {
-    console.log(event);
     const body = {
         blogs: [
             {
@@ -21,12 +18,10 @@ exports.handler = async (event) => {
     const response = {
         statusCode: 200,
         body: JSON.stringify(body),
-    //  Uncomment below to enable CORS requests
         headers: {
             "Access-Control-Allow-Origin": "*",
             // "Access-Control-Allow-Headers": "*"
         }, 
-        body: JSON.stringify(body),
     };
     return response;
 };

@@ -36,6 +36,11 @@ const awsmobile = {
             "name": "getPostsApi",
             "endpoint": "https://yd5dfcal3h.execute-api.us-east-1.amazonaws.com/dev",
             "region": "us-east-1"
+        },
+        {
+            "name": "uploadPostApi",
+            "endpoint": "https://8dkmyqb8vg.execute-api.us-east-1.amazonaws.com/dev",
+            "region": "us-east-1"
         }
     ]
 };

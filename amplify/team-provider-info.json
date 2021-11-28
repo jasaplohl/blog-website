@@ -18,7 +18,11 @@
       "function": {
         "getPostsLambda": {
           "deploymentBucketName": "amplify-blogwebsite-dev-124623-deployment",
-          "s3Key": "amplify-builds/getPostsLambda-486c6f6b6d3444746272-build.zip"
+          "s3Key": "amplify-builds/getPostsLambda-5733612b70416a514c46-build.zip"
+        },
+        "uploadPostLambda": {
+          "deploymentBucketName": "amplify-blogwebsite-dev-124623-deployment",
+          "s3Key": "amplify-builds/uploadPostLambda-6d493265314b5a623367-build.zip"
         }
       }
     }
