@@ -15,6 +15,14 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "storageblogwebsiteDBName": {
+      "Type": "String",
+      "Default": "storageblogwebsiteDBName"
+    },
+    "storageblogwebsiteDBArn": {
+      "Type": "String",
+      "Default": "storageblogwebsiteDBArn"
     }
   },
   "Conditions": {
@@ -47,12 +55,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "getPostsLambda",
+            "blogLambda",
             {
               "Fn::Join": [
                 "",
                 [
-                  "getPostsLambda",
+                  "blogLambda",
                   "-",
                   {
                     "Ref": "env"
@@ -89,12 +97,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "blogwebsiteLambdaRole47e00441",
+            "blogwebsiteLambdaRoleae187c4f",
             {
               "Fn::Join": [
                 "",
                 [
-                  "blogwebsiteLambdaRole47e00441",
+                  "blogwebsiteLambdaRoleae187c4f",
                   "-",
                   {
                     "Ref": "env"
@@ -160,6 +168,34 @@
                   }
                 ]
               }
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:DescribeTable",
+                "dynamodb:GetItem",
+                "dynamodb:Query",
+                "dynamodb:Scan",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem"
+              ],
+              "Resource": [
+                {
+                  "Ref": "storageblogwebsiteDBArn"
+                },
+                {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      {
+                        "Ref": "storageblogwebsiteDBArn"
+                      },
+                      "index/*"
+                    ]
+                  ]
+                }
+              ]
             }
           ]
         }

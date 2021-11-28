@@ -19,18 +19,25 @@ export class NewPostComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  async getBlogs() {
+  async createBlog(blogPost: any) {
+    // const user = Auth.currentAuthenticatedUser();
+    // const token = user.signInUserSession.idToken.jwtToken;
+
     const requestInfo = {
       headers: {
         Authorization: null
       },
       body: {
-        MyHeader: "Hello world"
+        user_id: "",
+        blog_content: blogPost.blogContent,
+        image_id: ""
       }
     };
 
+    console.log(requestInfo.body);
+
     API
-      .post('uploadPostApi', '/uploadpost', requestInfo)
+      .post('blog', '/blog', requestInfo)
       .then(response => {
         console.log(response);
       })
@@ -42,28 +49,7 @@ export class NewPostComponent implements OnInit {
   onCreate(blogPost: any): void {
     console.log("Creating a new post: " + blogPost.blogContent);
 
-    this.getBlogs();
-    // const user = Auth.currentAuthenticatedUser();
-    // const token = user.signInUserSession.idToken.jwtToken;
-    // const requestInfo = {
-    //   headers: {
-    //     Authorization: null
-    //   },
-    //   body: {
-    //     blog_id: "",
-    //     user_id: "",
-    //     blog_content: "",
-    //     blog_image: false
-    //   }
-    // };
-    // API
-    //   .post('blogsApi', '/blogs', requestInfo)
-    //   .then(response => {
-    //     console.log(response);
-    //   })
-    //   .catch(error => {
-    //     console.log("Error: ", error.response);
-    //   });
+    this.createBlog(blogPost);
   }
 
 }

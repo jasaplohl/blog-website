@@ -1,6 +1,6 @@
 {
   "storage": {
-    "blogsDB": {
+    "blogwebsiteDB": {
       "service": "DynamoDB",
       "providerPlugin": "awscloudformation"
     }
@@ -32,39 +32,34 @@
     }
   },
   "function": {
-    "getPostsLambda": {
+    "blogLambda": {
       "build": true,
       "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "uploadPostLambda": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    }
-  },
-  "api": {
-    "getPostsApi": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
       "dependsOn": [
         {
-          "category": "function",
-          "resourceName": "getPostsLambda",
+          "category": "storage",
+          "resourceName": "blogwebsiteDB",
           "attributes": [
             "Name",
             "Arn"
-          ]
+          ],
+          "attributeEnvMap": {
+            "Name": "TABLE_NAME",
+            "Arn": "TABLE_ARN"
+          }
         }
       ]
-    },
-    "uploadPostApi": {
+    }
+  },
+  "api": {
+    "blog": {
       "service": "API Gateway",
       "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "uploadPostLambda",
+          "resourceName": "blogLambda",
           "attributes": [
             "Name",
             "Arn"

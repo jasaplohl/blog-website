@@ -1,9 +1,9 @@
 {
   "version": 1,
   "paths": {
-    "/uploadpost": {
-      "name": "/uploadpost",
-      "lambdaFunction": "uploadPostLambda",
+    "/blog": {
+      "name": "/blog",
+      "lambdaFunction": "blogLambda",
       "permissions": {
         "setting": "open"
       }

@@ -1,6 +1,6 @@
 export type AmplifyDependentResourcesAttributes = {
     "storage": {
-        "blogsDB": {
+        "blogwebsiteDB": {
             "Name": "string",
             "Arn": "string",
             "StreamArn": "string",
@@ -21,13 +21,7 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "function": {
-        "getPostsLambda": {
-            "Name": "string",
-            "Arn": "string",
-            "Region": "string",
-            "LambdaExecutionRole": "string"
-        },
-        "uploadPostLambda": {
+        "blogLambda": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",
@@ -35,12 +29,7 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "api": {
-        "getPostsApi": {
-            "RootUrl": "string",
-            "ApiName": "string",
-            "ApiId": "string"
-        },
-        "uploadPostApi": {
+        "blog": {
             "RootUrl": "string",
             "ApiName": "string",
             "ApiId": "string"
