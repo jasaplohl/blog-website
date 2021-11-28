@@ -29,7 +29,6 @@ export class PostListComponent implements OnInit {
     API
       .get('blog', '/blog', requestInfo)
       .then(response => {
-        console.log(response);
         this.formatData(response);
       })
       .catch(error => {

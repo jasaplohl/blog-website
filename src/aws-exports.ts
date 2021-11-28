@@ -33,21 +33,6 @@ const awsmobile = {
     ],
     "aws_cloud_logic_custom": [
         {
-            "name": "getPostsApi",
-            "endpoint": "https://yd5dfcal3h.execute-api.us-east-1.amazonaws.com/dev",
-            "region": "us-east-1"
-        },
-        {
-            "name": "uploadPostApi",
-            "endpoint": "https://8dkmyqb8vg.execute-api.us-east-1.amazonaws.com/dev",
-            "region": "us-east-1"
-        },
-        {
-            "name": "readData",
-            "endpoint": "https://qodr7z9ew2.execute-api.us-east-1.amazonaws.com/dev",
-            "region": "us-east-1"
-        },
-        {
             "name": "blog",
             "endpoint": "https://dg03mh4du9.execute-api.us-east-1.amazonaws.com/dev",
             "region": "us-east-1"
