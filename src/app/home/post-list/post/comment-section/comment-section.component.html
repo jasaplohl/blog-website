@@ -1,18 +1,24 @@
 <div>
-    <form
-        autocomplete="off"
-        [formGroup]="newCommentForm"
-        (ngSubmit)="onCreate(newCommentForm.value)">
-        <input 
-            type="text"
-            formControlName="comment_content"
-            placeholder="Write a comment ..."
-            class="form-control">
-        <button type="submit">Post</button> <!-- TODO insert icon -->
-    </form>
+    <div class="row">
+        <form
+            autocomplete="off"
+            [formGroup]="newCommentForm"
+            (ngSubmit)="onCreate(newCommentForm.value)">
+            <div class="m-1 d-flex">
+                <input 
+                    type="text"
+                    formControlName="comment_content"
+                    placeholder="Write a comment ..."
+                    class="form-control me-1">
+                <button type="submit" class="btn btn-primary">Post</button>
+            </div>
+        </form>
+    </div>
     <!-- A list of all comments -->
-    <app-comment
-        [blog_id]="blog.blog_id"
-        *ngFor="let comment of blog.comments"
-        [comment]="comment"></app-comment>
+    <div class="row">
+        <app-comment
+            [blog_id]="blog.blog_id"
+            *ngFor="let comment of blog.comments"
+            [comment]="comment"></app-comment>
+    </div>
 </div>

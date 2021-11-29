@@ -1,0 +1,9 @@
+.comment-section-text:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.comment-section-text {
+    width: fit-content;
+    text-align: right;
+}

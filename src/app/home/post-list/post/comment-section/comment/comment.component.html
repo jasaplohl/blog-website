@@ -1,5 +1,11 @@
-<div class="container">
+<div class="card m-1">
     <p>{{ comment.user_name }}</p>
-    <p>{{ convertToDate(comment.timestamp).toLocaleString() }}</p>
     <p>{{ comment.comment_content }}</p>
+    <div class="d-flex">
+        <a class="me-2 response-button">Like</a>
+        <a class="me-2 response-button">Comment</a>
+        <a class="me-2 response-button">Dislike</a>
+        <p>({{ convertToDate(comment.timestamp).toLocaleString() }})</p>
+    </div>
+    <a><i class="bi bi-arrow-return-right"></i> 0 replies</a>
 </div>

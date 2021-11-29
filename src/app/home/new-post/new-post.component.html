@@ -1,22 +1,22 @@
-<div>
+<div class="card mb-3 bg-light">
     <form
         autocomplete="off"
         [formGroup]="newBlogForm"
         (ngSubmit)="onCreate(newBlogForm.value)">
-        <div>
+        <div class="m-1">
             <input 
                 type="text"
                 formControlName="blogContent"
                 placeholder="What is on your mind?" 
                 class="form-control">
         </div>
-        <div>
+        <div class="m-1 d-flex">
             <button 
                 type="button" 
-                class="btn btn-outline-primary">Add image</button>
+                class="m-1 btn btn-primary col"><i class="bi bi-card-image"></i> Add image</button>
             <button 
                 type="submit" 
-                class="btn btn-outline-primary">Post</button>
+                class="m-1 btn btn-primary col">Post</button>
         </div>
     </form>
 </div>
