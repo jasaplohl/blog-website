@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { API, Auth } from 'aws-amplify';
 
 import { BlogPost } from 'src/app/models/blog-post.model';
-import { BlogComment } from 'src/app/models/blog-comment.model';
-import { CommentReply } from 'src/app/models/comment-reply.model';
 
 @Component({
   selector: 'app-post-list',
@@ -45,7 +43,7 @@ export class PostListComponent implements OnInit {
     console.log(response);
 
     for(var i=0; i<response.length; i++) {
-      var post = new BlogPost(response[i].blog_id, response[i].user_id, response[i].user_name, new Date(response[i].timestamp), response[i].blog_content, response[i].image_id,
+      var post = new BlogPost(response[i].blog_id, response[i].user_id, response[i].user_name, response[i].timestamp, response[i].blog_content, response[i].image_id,
                   response[i].likes, response[i].dislikes, response[i].comments);
       this.blogPosts.push(post);
       console.log(response[i].timestamp);

@@ -1,0 +1,24 @@
+<div>
+    <!-- A list of all replies -->
+    <div class="row">
+        <app-comment-reply
+            (replyEvent)="onUpdateReply($event)"
+            *ngFor="let reply of replies"
+            [reply]="reply"></app-comment-reply>
+    </div>
+    <div class="row">
+        <form
+            autocomplete="off"
+            [formGroup]="newReplyForm"
+            (ngSubmit)="onCreateReply(newReplyForm.value)">
+            <div class="m-1 d-flex">
+                <input 
+                    type="text"
+                    formControlName="reply_content"
+                    placeholder="Write a reply ..."
+                    class="form-control me-1">
+                <button type="submit" class="btn btn-primary">Post</button>
+            </div>
+        </form>
+    </div>
+</div>

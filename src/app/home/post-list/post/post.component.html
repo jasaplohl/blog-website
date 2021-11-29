@@ -29,7 +29,8 @@
             <button class="m-1 btn btn-outline-primary col"><i class="bi bi-hand-thumbs-down"></i> Dislike</button>
         </div>
         <app-comment-section 
-            [blog]="blog" 
+            (commentsEvent)="onCommentsEvent($event)"
+            [comments]="blog.comments" 
             *ngIf="showCommentSection"></app-comment-section>
     </div>
 </div>

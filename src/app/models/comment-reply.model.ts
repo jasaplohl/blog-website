@@ -1,13 +1,19 @@
 export class CommentReply {
-    public timestamp: Date;
-    public comment_content: String;
+    public reply_id: String;
+    public user_id: String;
+    public user_name: String;
+    public reply_content: String;
+    public timestamp: string;
     public likes: String[];
     public dislikes: String[];
 
-    constructor(timestamp: Date, comment_content: String, 
-                likes: String[], dislikes: String[]) {
+    constructor(reply_id: String, user_id: String, user_name: String, timestamp: string, 
+                reply_content: String, likes: String[], dislikes: String[]) {
+        this.reply_id = reply_id;
+        this.user_id = user_id;
+        this.user_name = user_name;
         this.timestamp = timestamp;
-        this.comment_content = comment_content;
+        this.reply_content = reply_content;
         this.likes = likes;
         this.dislikes = dislikes;
     }

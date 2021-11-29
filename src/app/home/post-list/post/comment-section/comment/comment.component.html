@@ -7,5 +7,11 @@
         <a class="me-2 response-button">Dislike</a>
         <p>({{ convertToDate(comment.timestamp).toLocaleString() }})</p>
     </div>
-    <a><i class="bi bi-arrow-return-right"></i> 0 replies</a>
+    <a (click)="toggleCommentReplies()">
+        <i class="bi bi-arrow-return-right"></i> {{ comment.replies.length }} {{ comment.replies.length === 1 ? "reply" : "replies" }}
+    </a>
+    <app-comment-replies
+            (repliesEvent)="onRepliesEvent($event)" 
+            [replies]="comment.replies" 
+            *ngIf="showCommentReplies"></app-comment-replies>
 </div>

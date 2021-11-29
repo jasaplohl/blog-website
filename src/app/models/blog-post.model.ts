@@ -1,19 +1,16 @@
-import { BlogComment } from "./blog-comment.model";
-
 export class BlogPost {
     public blog_id: String;
     public user_id: String;
     public user_name: String;
-    public timestamp: Date;
     public blog_content: String;
     public image_id: String;
+    public timestamp: string;
 
     public likes: String[];
     public dislikes: String[];
-
     public comments: any[];
 
-    constructor(blog_id: String, user_id: String, user_name: String,  timestamp: Date, 
+    constructor(blog_id: String, user_id: String, user_name: String,  timestamp: string, 
                 blog_content: String, image_id: String, likes: String[], dislikes: String[],
                 comments: any[]) {
         this.blog_id = blog_id;
@@ -32,7 +29,7 @@ export class BlogPost {
             blog_id: this.blog_id,
             user_id: this.user_id,
             user_name: this.user_name,
-            timestamp: this.timestamp.toISOString(),
+            timestamp: this.timestamp,
             blog_content: this.blog_content,
             image_id: this.image_id,
             likes: this.likes,

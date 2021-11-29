@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { API, Auth } from 'aws-amplify';
-import { BlogPost } from 'src/app/models/blog-post.model';
+import { BlogComment } from 'src/app/models/blog-comment.model';
+import { v4 as uuidv4 } from 'uuid';
+import { Auth } from 'aws-amplify';
 
 @Component({
   selector: 'app-comment-section',
@@ -9,7 +10,15 @@ import { BlogPost } from 'src/app/models/blog-post.model';
   styleUrls: ['./comment-section.component.css']
 })
 export class CommentSectionComponent implements OnInit {
-  @Input() declare blog: BlogPost;
+  @Input() declare comments: BlogComment[];
+
+  /**
+   * Called when:
+   * - a comment has been added
+   * - a comment has been updated
+   * - a user liked or disliked the comment
+   */
+   @Output() commentsEvent = new EventEmitter<BlogComment[]>();
 
   public newCommentForm: FormGroup;
 
@@ -21,37 +30,41 @@ export class CommentSectionComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onCreate(commentPost: any): void {
-    this.createComment(commentPost);
-  }
-
-  async createComment(commentPost: any) {
+  async onCreateComment(commentPost: any) {
     const user = await Auth.currentAuthenticatedUser();
-
-    const requestInfo = {
-      headers: {
-        Authorization: user.signInUserSession.idToken.jwtToken
-      },
-      body: {}
-    };
-
     await Auth.currentUserInfo()
               .then(user_ => {
-                this.blog.comments.push({ user_id: user_.attributes.sub, user_name: user.username, 
-                                     timestamp: new Date().toISOString(), comment_content: commentPost.comment_content, 
-                                     likes: [], dislikes: [] });
-                requestInfo.body = this.blog.blogToJSON();
-                console.log(this.blog.blogToJSON());
-                console.log(this.blog);
-                API
-                  .post('blog', '/blog', requestInfo)
-                  .then(response => {
-                    console.log(response);
-                  })
-                  .catch(error => {
-                    console.log("Error: ", error);
-                  });
+                //We create a new comment
+                var newComment = new BlogComment(
+                  uuidv4(), user_.attributes.sub, user.username, new Date().toISOString(), commentPost.comment_content, [], [], []
+                );
+                this.comments.push(newComment);
+                this.emitCommentEvent();
               });
   }
 
+  onCommentEvent(comment: BlogComment) {
+    //TODO: UPDATE THE RECEIVED COMMENT (replies/likes/dislikes)
+    this.comments.forEach(element => {
+      if(element.comment_id === comment.comment_id) {
+        element = comment;
+        console.log(true);
+      } else {
+        console.log(false);
+      }
+    });
+    // console.log("Comment section:");
+    // console.log(this.comments);
+    // console.log("Received comment:");
+    // console.log(comment);
+    this.emitCommentEvent();
+  }
+
+  /**
+   * Emits the comments to the parent component.
+   */
+   emitCommentEvent() {
+    this.commentsEvent.emit(this.comments);
+  }
+  
 }
