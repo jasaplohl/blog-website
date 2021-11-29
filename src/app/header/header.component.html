@@ -1,17 +1,25 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a href="#" class="navbar-brand">HeadBook</a>
-        <form class="d-flex">
-            <a 
-                class="m-1 btn btn-outline-primary" 
-                href="/login">Log in</a>
-            <a 
-                class="m-1 btn btn-outline-primary" 
-                href="/signup">Sign up</a>
+        <a href="#" class="navbar-brand">BlogWebsite</a>
+        <div class="d-flex">
             <a 
                 class="m-1 btn btn-outline-primary" 
                 href="/profile">Profile</a>
             <amplify-sign-out></amplify-sign-out>
-        </form>
+            <!-- <div *ngIf="!isSignedIn">
+                <a 
+                    class="m-1 btn btn-outline-primary" 
+                    href="/login">Log in</a>
+                <a 
+                    class="m-1 btn btn-outline-primary" 
+                    href="/signup">Sign up</a>
+            </div>
+            <div *ngIf="isSignedIn">
+                <a 
+                    class="m-1 btn btn-outline-primary" 
+                    href="/profile">Profile</a>
+                <amplify-sign-out></amplify-sign-out>
+            </div> -->
+        </div>
     </div>
 </nav>

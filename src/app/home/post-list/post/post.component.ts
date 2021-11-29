@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { BlogPost } from 'src/app/models/blog-post.model';
 
 @Component({
   selector: 'app-post',
@@ -6,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./post.component.css']
 })
 export class PostComponent implements OnInit {
-  @Input('post') declare post: { blog_id: String, user_id: String, blog_content: String, blog_image: boolean };
+  @Input() declare blog: BlogPost;
 
   showCommentSection: boolean;
 

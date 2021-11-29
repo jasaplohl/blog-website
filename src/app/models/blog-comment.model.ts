@@ -1,15 +1,15 @@
 import { CommentReply } from "./comment-reply.model";
 
 export class BlogComment {
-    public comment_id: String;
+    public timestamp: Date;
     public comment_content: String;
     public likes: String[];
     public dislikes: String[];
     public replies: CommentReply[];
 
-    constructor(comment_id: String, comment_content: String, 
+    constructor(timestamp: Date, comment_content: String, 
                 likes: String[], dislikes: String[], replies: CommentReply[]) {
-        this.comment_id = comment_id;
+        this.timestamp = timestamp;
         this.comment_content = comment_content;
         this.likes = likes;
         this.dislikes = dislikes;

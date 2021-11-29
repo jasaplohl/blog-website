@@ -1,1 +1,18 @@
-<p>comment-section works!</p>
+<div>
+    <form
+        autocomplete="off"
+        [formGroup]="newCommentForm"
+        (ngSubmit)="onCreate(newCommentForm.value)">
+        <input 
+            type="text"
+            formControlName="comment_content"
+            placeholder="Write a comment ..."
+            class="form-control">
+        <button type="submit">Post</button> <!-- TODO insert icon -->
+    </form>
+    <!-- A list of all comments -->
+    <app-comment
+        [blog_id]="blog.blog_id"
+        *ngFor="let comment of blog.comments"
+        [comment]="comment"></app-comment>
+</div>

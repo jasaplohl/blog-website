@@ -15,6 +15,7 @@ import { NewPostComponent } from './home/new-post/new-post.component';
 import { PostListComponent } from './home/post-list/post-list.component';
 import { PostComponent } from './home/post-list/post/post.component';
 import { CommentSectionComponent } from './home/post-list/post/comment-section/comment-section.component';
+import { CommentComponent } from './home/post-list/post/comment-section/comment/comment.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -34,7 +35,8 @@ const appRoutes: Routes = [
     PostComponent,
     HeaderComponent,
     SignupComponent,
-    CommentSectionComponent
+    CommentSectionComponent,
+    CommentComponent
   ],
   imports: [
     BrowserModule,

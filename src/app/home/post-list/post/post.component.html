@@ -1,11 +1,12 @@
 <div class="card mb-2">
     <div class="card-header">
-        <h4>{{ post.user_id }}</h4>
+        <h4>{{ blog.user_name }}</h4>
+        <p>{{ blog.timestamp.toLocaleString() }}</p>
     </div>
     <div class="card-body">
-        <p>{{ post.blog_content }}</p>
+        <p>{{ blog.blog_content }}</p>
     </div>
-    <div *ngIf="post.blog_image">
+    <div *ngIf="blog.image_id">
         <p>IMAGE</p>
     </div>
     <div class="d-flex card-body">
@@ -17,6 +18,8 @@
             <button class="btn btn-primary">Like</button>
             <button (click)="toggleCommentSection()" class="btn btn-primary">Comment</button>
         </div>
-        <app-comment-section *ngIf="showCommentSection"></app-comment-section>
+        <app-comment-section 
+            [blog]="blog" 
+            *ngIf="showCommentSection"></app-comment-section>
     </div>
 </div>

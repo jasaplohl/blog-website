@@ -187,8 +187,13 @@ app.put(path, function(req, res) {
     Item: req.body
   }
 
-  putItemParams.Item.blog_id = uuidv4();
-  putItemParams.Item.timestamp = new Date().toISOString();
+  if(putItemParams.Item.blog_id === undefined) {
+    putItemParams.Item.blog_id = uuidv4();
+    putItemParams.Item.timestamp = new Date().toISOString();
+    putItemParams.Item.likes = [];
+    putItemParams.Item.dislikes = [];
+    putItemParams.Item.comments = [];
+  }
 
   dynamodb.put(putItemParams, (err, data) => {
     if(err) {
@@ -215,8 +220,13 @@ app.post(path, function(req, res) {
     Item: req.body
   }
   
-  putItemParams.Item.blog_id = uuidv4();
-  putItemParams.Item.timestamp = new Date().toISOString();
+  if(putItemParams.Item.blog_id === undefined) {
+    putItemParams.Item.blog_id = uuidv4();
+    putItemParams.Item.timestamp = new Date().toISOString();
+    putItemParams.Item.likes = [];
+    putItemParams.Item.dislikes = [];
+    putItemParams.Item.comments = [];
+  }
   
   dynamodb.put(putItemParams, (err, data) => {
     if(err) {
