@@ -31,6 +31,8 @@ export class CommentSectionComponent implements OnInit {
   ngOnInit(): void {}
 
   async onCreateComment(commentPost: any) {
+    this.newCommentForm.reset();
+    
     const user = await Auth.currentAuthenticatedUser();
     await Auth.currentUserInfo()
               .then(user_ => {
@@ -44,7 +46,6 @@ export class CommentSectionComponent implements OnInit {
   }
 
   onCommentEvent(comment: BlogComment) {
-    //TODO: UPDATE THE RECEIVED COMMENT (replies/likes/dislikes)
     this.comments.forEach(element => {
       if(element.comment_id === comment.comment_id) {
         element = comment;
@@ -53,10 +54,6 @@ export class CommentSectionComponent implements OnInit {
         console.log(false);
       }
     });
-    // console.log("Comment section:");
-    // console.log(this.comments);
-    // console.log("Received comment:");
-    // console.log(comment);
     this.emitCommentEvent();
   }
 

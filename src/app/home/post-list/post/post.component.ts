@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BlogComment } from 'src/app/models/blog-comment.model';
 import { BlogPost } from 'src/app/models/blog-post.model';
 import { API, Auth } from 'aws-amplify';
@@ -10,8 +10,11 @@ import { API, Auth } from 'aws-amplify';
 })
 export class PostComponent implements OnInit {
   @Input() declare blog: BlogPost;
+  @Output() refreshEvent = new EventEmitter<Boolean>();
 
+  currentUser!: String;
   showCommentSection: boolean;
+  commentCount!: number;
 
   constructor() { 
     this.showCommentSection = false;
@@ -21,11 +24,18 @@ export class PostComponent implements OnInit {
     this.showCommentSection = !this.showCommentSection;
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await Auth.currentAuthenticatedUser()
+              .then(usr => {
+                this.currentUser = usr.username;
+              });
+    this.commentCount = this.blog.comments.length;
+    this.blog.comments.forEach(element => {
+      this.commentCount += element.replies.length;
+    });
   }
 
   onCommentsEvent(comments: BlogComment[]) {
-    //TODO: UPDATE THE BLOGS COMMENTS
     console.log(comments);
     this.blog.comments = comments;
     this.uploadData();
@@ -43,17 +53,56 @@ export class PostComponent implements OnInit {
       },
       body: this.blog.blogToJSON()
     };
-
-    console.log(this.blog);
      
     API
       .post('blog', '/blog', requestInfo)
       .then(response => {
         console.log(response);
+        this.requestRefresh();
       })
       .catch(error => {
         console.log("Error: ", error);
+        this.requestRefresh();
       });
+  }
+
+  likePost() {
+    if(!this.blog.likes.includes(this.currentUser)) {
+      var index = this.blog.dislikes.indexOf(this.currentUser)
+      if(index > -1) {
+        this.blog.dislikes.splice(index, 1);
+      }
+      this.blog.likes.push(this.currentUser);
+    } else {
+      var index = this.blog.likes.indexOf(this.currentUser)
+      if(index > -1) {
+        this.blog.likes.splice(index, 1);
+      }
+    }
+    this.uploadData();
+  }
+
+  dislikePost() {
+    if(!this.blog.dislikes.includes(this.currentUser)) {
+      var index = this.blog.likes.indexOf(this.currentUser)
+      if(index > -1) {
+        this.blog.likes.splice(index, 1);
+      }
+      this.blog.dislikes.push(this.currentUser);
+    } else {
+      var index = this.blog.dislikes.indexOf(this.currentUser)
+      if(index > -1) {
+        this.blog.dislikes.splice(index, 1);
+      }
+    }
+    this.uploadData();
+  }
+
+  /**
+   * Emits the comments to the parent component.
+   */
+   requestRefresh() {
+    this.refreshEvent.emit(true);
   }
 
 }

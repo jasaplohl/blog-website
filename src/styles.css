@@ -2,3 +2,19 @@
 /* 
 @import '~aws-amplify-angular/theme.css'; */
 @import "~bootstrap-icons/font/bootstrap-icons.css";
+
+.comment {
+    border-radius: 25px;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.hover-underline-text:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.hover-underline-text {
+    width: fit-content;
+    text-align: right;
+}

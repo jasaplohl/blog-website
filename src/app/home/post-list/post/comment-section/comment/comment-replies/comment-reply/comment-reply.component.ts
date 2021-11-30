@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommentReply } from 'src/app/models/comment-reply.model';
+import { Auth } from 'aws-amplify';
 
 @Component({
   selector: 'app-comment-reply',
@@ -8,6 +9,8 @@ import { CommentReply } from 'src/app/models/comment-reply.model';
 })
 export class CommentReplyComponent implements OnInit {
   @Input() declare reply: CommentReply;
+
+  currentUser!: String;
 
   /**
    * Called when:
@@ -18,7 +21,11 @@ export class CommentReplyComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await Auth.currentAuthenticatedUser()
+    .then(usr => {
+      this.currentUser = usr.username;
+    });
   }
 
   convertToDate(dateStr: string) {
@@ -35,6 +42,38 @@ export class CommentReplyComponent implements OnInit {
    */
    emitReplyEvent() {
     this.replyEvent.emit(this.reply);
+  }
+
+  likeReply() {
+    if(!this.reply.likes.includes(this.currentUser)) {
+      var index = this.reply.dislikes.indexOf(this.currentUser)
+      if(index > -1) {
+        this.reply.dislikes.splice(index, 1);
+      }
+      this.reply.likes.push(this.currentUser);
+    } else {
+      var index = this.reply.likes.indexOf(this.currentUser)
+      if(index > -1) {
+        this.reply.likes.splice(index, 1);
+      }
+    }
+    this.emitReplyEvent()
+  }
+
+  dislikeReply() {
+    if(!this.reply.dislikes.includes(this.currentUser)) {
+      var index = this.reply.likes.indexOf(this.currentUser)
+      if(index > -1) {
+        this.reply.likes.splice(index, 1);
+      }
+      this.reply.dislikes.push(this.currentUser);
+    } else {
+      var index = this.reply.dislikes.indexOf(this.currentUser)
+      if(index > -1) {
+        this.reply.dislikes.splice(index, 1);
+      }
+    }
+    this.emitReplyEvent()
   }
 
 }

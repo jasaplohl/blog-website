@@ -2,10 +2,12 @@
     <div class="container-fluid">
         <a href="#" class="navbar-brand">BlogWebsite</a>
         <div class="d-flex">
-            <a 
+            <p class="navbar-brand">Hello {{ currentUser }}</p>
+            <!-- <a 
                 class="m-1 btn btn-outline-primary" 
-                href="/profile">Profile</a>
+                href="/profile">Profile</a> -->
             <amplify-sign-out></amplify-sign-out>
+
             <!-- <div *ngIf="!isSignedIn">
                 <a 
                     class="m-1 btn btn-outline-primary" 

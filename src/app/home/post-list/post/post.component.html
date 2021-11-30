@@ -16,17 +16,30 @@
                 <p class="text-primary me-2">{{ blog.likes.length }} <i class="bi bi-hand-thumbs-up"></i></p>
                 <p class="text-primary">{{ blog.dislikes.length }} <i class="bi bi-hand-thumbs-down"></i></p>
             </div>
-            <div class="col-auto">
-                <!-- <a class="text-end">{{ blog.comments.length }} Comments</a> -->
-                <p (click)="toggleCommentSection()" class="comment-section-text">{{ blog.comments.length }} Comments</p>
+            <div class="col-auto" *ngIf="blog.comments.length !== 0">
+                <p (click)="toggleCommentSection()" class="hover-underline-text">{{ commentCount }} Comments</p>
             </div>
         </div>
     </div>
     <div class="card-footer">
         <div class="d-flex">
-            <button class="m-1 btn btn-outline-primary col"><i class="bi bi-hand-thumbs-up"></i> Like</button>
-            <button (click)="toggleCommentSection()" class="m-1 btn btn-outline-primary col"><i class="bi bi-chat-left"></i> Comment</button>
-            <button class="m-1 btn btn-outline-primary col"><i class="bi bi-hand-thumbs-down"></i> Dislike</button>
+            <button 
+                [ngClass]="blog.likes.includes(currentUser) ? 'btn btn-primary' : 'btn btn-outline-primary'" 
+                (click)="likePost()" 
+                class="m-1 col">
+                    <i class="bi bi-hand-thumbs-up"></i> Like
+            </button>
+            <button 
+                (click)="toggleCommentSection()" 
+                class="m-1 btn btn-outline-primary col">
+                    <i class="bi bi-chat-left"></i> Comment
+            </button>
+            <button 
+                [ngClass]="blog.dislikes.includes(currentUser) ? 'btn btn-primary' : 'btn btn-outline-primary'" 
+                (click)="dislikePost()" 
+                class="m-1 col">
+                    <i class="bi bi-hand-thumbs-down"></i> Dislike
+            </button>
         </div>
         <app-comment-section 
             (commentsEvent)="onCommentsEvent($event)"

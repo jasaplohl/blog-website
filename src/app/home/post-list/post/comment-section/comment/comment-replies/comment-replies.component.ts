@@ -31,6 +31,7 @@ export class CommentRepliesComponent implements OnInit {
   ngOnInit(): void {}
 
   onCreateReply(commentReply: any): void {
+    this.newReplyForm.reset();
     this.createReply(commentReply);
   }
 

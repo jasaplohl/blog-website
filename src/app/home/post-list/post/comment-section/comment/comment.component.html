@@ -1,15 +1,35 @@
-<div class="card m-1">
-    <p>{{ comment.user_name }}</p>
-    <p>{{ comment.comment_content }}</p>
-    <div class="d-flex">
-        <a class="me-2 response-button">Like</a>
-        <a class="me-2 response-button">Comment</a>
-        <a class="me-2 response-button">Dislike</a>
-        <p>({{ convertToDate(comment.timestamp).toLocaleString() }})</p>
+<div>
+    <div class="comment bg-secondary">
+        <div class="container">
+            <p>{{ comment.user_name }}</p>
+            <p>{{ comment.comment_content }}</p>
+            <div class="row justify-content-between">
+                <div class="col d-flex">
+                    <div class="d-flex">
+                        <p
+                            (click)="likeComment()"
+                            class="me-2 hover-underline-text"
+                            [ngClass]="{'text-primary': comment.likes.includes(currentUser)}">Like</p>
+                        <p 
+                            (click)="toggleCommentReplies()" 
+                            class="me-2 hover-underline-text">Reply</p>
+                        <p 
+                            (click)="dislikeComment()"
+                            class="me-2 hover-underline-text"
+                            [ngClass]="{'text-primary': comment.dislikes.includes(currentUser)}">Dislike</p>
+                        <p>({{ convertToDate(comment.timestamp).toLocaleString() }})</p>
+                    </div>
+                </div>  
+                <div class="col-auto d-flex">
+                    <p><i class="bi bi-hand-thumbs-up"></i>{{ comment.likes.length }}</p>
+                    <p><i class="bi bi-hand-thumbs-down"></i>{{ comment.dislikes.length }}</p>
+                </div>
+            </div>
+            <p (click)="toggleCommentReplies()" class="hover-underline-text" *ngIf="comment.replies.length !== 0">
+                <i class="bi bi-arrow-return-right"></i> {{ comment.replies.length }} {{ comment.replies.length === 1 ? "reply" : "replies" }}
+            </p>
+        </div>
     </div>
-    <a (click)="toggleCommentReplies()">
-        <i class="bi bi-arrow-return-right"></i> {{ comment.replies.length }} {{ comment.replies.length === 1 ? "reply" : "replies" }}
-    </a>
     <app-comment-replies
             (repliesEvent)="onRepliesEvent($event)" 
             [replies]="comment.replies" 

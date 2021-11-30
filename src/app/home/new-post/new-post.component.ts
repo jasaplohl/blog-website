@@ -37,6 +37,8 @@ export class NewPostComponent implements OnInit {
         image_id: ""
       }
     };
+    
+    this.newBlogForm.reset();
 
     await Auth.currentUserInfo()
               .then(user_ => {
@@ -48,6 +50,7 @@ export class NewPostComponent implements OnInit {
                   })
                   .catch(error => {
                     console.log("Error: ", error);
+                    this.newBlogForm.reset();
                   });
               });
   }

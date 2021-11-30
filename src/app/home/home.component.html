@@ -3,6 +3,8 @@
         <app-new-post></app-new-post>
     </div>
     <div class="row pt-2">
-        <app-post-list></app-post-list>
+        <app-post-list
+            (refreshEvent)="fetchData()"
+            [blogPosts]="blogPosts"></app-post-list>
     </div>
 </div>

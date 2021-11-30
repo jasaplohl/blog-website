@@ -9,6 +9,15 @@ import { onAuthUIStateChange, CognitoUserInterface, AuthState, FormFieldTypes  }
 })
 export class AppComponent {
   title = 'blog-website';
+  currentUser!: String;
+
+  async ngOnInit() {
+    await Auth.currentAuthenticatedUser()
+    .then(usr => {
+      this.currentUser = usr.username;
+    });
+  }
+
   // user: CognitoUserInterface | undefined;
   // authState!: AuthState;
   // formFields: FormFieldTypes;
