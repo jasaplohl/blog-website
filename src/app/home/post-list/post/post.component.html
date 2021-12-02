@@ -1,7 +1,14 @@
 <div class="card mb-2">
     <div class="card-header">
-        <h5>{{ blog.user_name }}</h5>
-        <p>{{ blog.timestamp.toLocaleString() }}</p>
+        <div class="row justify-content-between">
+            <div class="col">
+                <h5>{{ blog.user_name }}</h5>
+                <p>{{ blog.timestamp.toLocaleString() }}</p>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-outline-primary"><i class="bi bi-three-dots-vertical"></i></button>
+            </div>
+        </div>
     </div>
     <div class="card-body">
         <p>{{ blog.blog_content }}</p>
@@ -43,6 +50,7 @@
         </div>
         <app-comment-section 
             (commentsEvent)="onCommentsEvent($event)"
+            [blog_id]="blog.blog_id"
             [comments]="blog.comments" 
             *ngIf="showCommentSection"></app-comment-section>
     </div>

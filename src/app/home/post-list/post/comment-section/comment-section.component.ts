@@ -10,6 +10,7 @@ import { Auth } from 'aws-amplify';
   styleUrls: ['./comment-section.component.css']
 })
 export class CommentSectionComponent implements OnInit {
+  @Input() declare blog_id: String;
   @Input() declare comments: BlogComment[];
 
   /**
@@ -38,7 +39,8 @@ export class CommentSectionComponent implements OnInit {
               .then(user_ => {
                 //We create a new comment
                 var newComment = new BlogComment(
-                  uuidv4(), user_.attributes.sub, user.username, new Date().toISOString(), commentPost.comment_content, [], [], []
+                  this.blog_id, uuidv4(), user_.attributes.sub, user.username, new Date().toISOString(), 
+                  commentPost.comment_content, [], [], []
                 );
                 this.comments.push(newComment);
                 this.emitCommentEvent();

@@ -18,6 +18,7 @@
     <div class="row">
         <app-comment
             (commentEvent)="onCommentEvent($event)"
+            [blog_id]="blog_id"
             *ngFor="let comment of comments"
             [comment]="comment"></app-comment>
     </div>

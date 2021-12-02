@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BlogPost } from '../models/blog-post.model';
-import { API } from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 
 @Component({
   selector: 'app-home',
@@ -20,14 +20,38 @@ export class HomeComponent implements OnInit {
     this.fetchData();
   }
 
-  async fetchData() {
-    // const user = await Auth.currentAuthenticatedUser();
-    // const token = user.signInUserSession.idToken.jwtToken;
+  /**
+   * We fetch the new post and add it to the list (without refreshing the entire page)
+   */
+  async onNewPostEvent(blog_id: String) {
+    const user = await Auth.currentAuthenticatedUser();
     
     const requestInfo = {
-      // headers: {
-      //   Authorization: null
-      // }
+      headers: {
+        Authorization: user.signInUserSession.idToken.jwtToken
+      }
+    };
+
+    API
+      .get('blog', '/blog/' + blog_id, requestInfo)
+      .then(response => {
+        response = response[0];
+        var post = new BlogPost(response.blog_id, response.user_id, response.user_name, response.timestamp, response.blog_content, response.image_id,
+          response.likes, response.dislikes, response.comments);
+          this.blogPosts.push(post);
+      })
+      .catch(error => {
+        console.log("Error: ", error);
+      });
+  }
+
+  async fetchData() {
+    const user = await Auth.currentAuthenticatedUser();
+    
+    const requestInfo = {
+      headers: {
+        Authorization: user.signInUserSession.idToken.jwtToken
+      }
     };
     API
       .get('blog', '/blog', requestInfo)

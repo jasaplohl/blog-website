@@ -9,14 +9,15 @@ import { BlogPost } from 'src/app/models/blog-post.model';
 })
 export class PostListComponent implements OnInit {
   @Input() declare blogPosts: BlogPost[];
-  @Output() refreshEvent = new EventEmitter<Boolean>();
 
   constructor() {}
 
   ngOnInit() {
   }
 
-  requestRefresh() {
-    this.refreshEvent.emit(true);
+  onNewPostEvent(post: BlogPost) {
+    this.blogPosts.push(post);
+    console.log(this.blogPosts);
   }
+
 }

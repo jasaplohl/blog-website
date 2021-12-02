@@ -10,6 +10,8 @@ import { Auth } from 'aws-amplify';
   styleUrls: ['./comment-replies.component.css']
 })
 export class CommentRepliesComponent implements OnInit {
+  @Input() declare blog_id: String;
+  @Input() declare comment_id: String;
   @Input() declare replies: CommentReply[];
   
   /**
@@ -41,7 +43,8 @@ export class CommentRepliesComponent implements OnInit {
               .then(user_ => {
                 //We create a new reply
                 var newReply = new CommentReply(
-                  uuidv4(), user_.attributes.sub, user.username, new Date().toISOString(), commentReply.reply_content, [], []
+                  this.blog_id, this.comment_id, uuidv4(), user_.attributes.sub, user.username, 
+                  new Date().toISOString(), commentReply.reply_content, [], []
                 );
                 //If the list is still empty
                 if(this.replies === undefined) {

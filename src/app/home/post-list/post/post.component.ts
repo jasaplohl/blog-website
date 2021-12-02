@@ -10,7 +10,6 @@ import { API, Auth } from 'aws-amplify';
 })
 export class PostComponent implements OnInit {
   @Input() declare blog: BlogPost;
-  @Output() refreshEvent = new EventEmitter<Boolean>();
 
   currentUser!: String;
   showCommentSection: boolean;
@@ -36,34 +35,8 @@ export class PostComponent implements OnInit {
   }
 
   onCommentsEvent(comments: BlogComment[]) {
-    console.log(comments);
     this.blog.comments = comments;
     this.uploadData();
-  }
-
-  /**
-   * Uploades the updated post to the DB
-   */
-  async uploadData() {
-    const user = await Auth.currentAuthenticatedUser();
-
-    const requestInfo = {
-      headers: {
-        Authorization: user.signInUserSession.idToken.jwtToken
-      },
-      body: this.blog.blogToJSON()
-    };
-     
-    API
-      .post('blog', '/blog', requestInfo)
-      .then(response => {
-        console.log(response);
-        this.requestRefresh();
-      })
-      .catch(error => {
-        console.log("Error: ", error);
-        this.requestRefresh();
-      });
   }
 
   likePost() {
@@ -99,10 +72,41 @@ export class PostComponent implements OnInit {
   }
 
   /**
-   * Emits the comments to the parent component.
+   * Uploades the updated post to the DB
    */
-   requestRefresh() {
-    this.refreshEvent.emit(true);
+   async uploadData() {
+    const user = await Auth.currentAuthenticatedUser();
+
+    const getRequestInfo = {
+      headers: {
+        Authorization: user.signInUserSession.idToken.jwtToken
+      }
+    };
+
+    // First we fetch the current blog, to see if there have been any changes
+    API
+      .get('blog', '/blog/' + this.blog.blog_id, getRequestInfo)
+      .then(response => {
+        this.blog.updateBlogPost(response);
+        // Then we upload the changes to the current blog
+        const postRequestInfo = {
+          headers: {
+            Authorization: user.signInUserSession.idToken.jwtToken
+          },
+          body: this.blog.blogToJSON() 
+        };
+        API
+          .put('blog', '/blog', postRequestInfo)
+          .then(response => {
+            console.log(response);
+          })
+          .catch(error => {
+            console.error("Error: ", error);
+          });
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
 }

@@ -1,7 +1,6 @@
 <div>
     <!-- A list of all posts -->
     <app-post
-        (refreshEvent)="requestRefresh()"
         *ngFor="let blogPost of blogPosts"
         [blog]="blogPost"></app-post>
 </div>

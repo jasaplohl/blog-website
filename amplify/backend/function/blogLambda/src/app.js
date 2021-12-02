@@ -233,7 +233,7 @@ app.post(path, function(req, res) {
       res.statusCode = 500;
       res.json({error: err, url: req.url, body: req.body});
     } else{
-      res.json({success: 'post call succeed!', url: req.url, data: data})
+      res.json({success: 'post call succeed!', url: req.url, data: data, blog_id: putItemParams.Item.blog_id})
     }
   });
 });

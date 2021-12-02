@@ -3,6 +3,8 @@
     <div class="row">
         <app-comment-reply
             (replyEvent)="onUpdateReply($event)"
+            [blog_id]="blog_id"
+            [comment_id]="comment_id"
             *ngFor="let reply of replies"
             [reply]="reply"></app-comment-reply>
     </div>

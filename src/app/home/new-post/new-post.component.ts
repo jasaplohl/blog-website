@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { API, Auth } from 'aws-amplify';
 
@@ -8,6 +8,8 @@ import { API, Auth } from 'aws-amplify';
   styleUrls: ['./new-post.component.css']
 })
 export class NewPostComponent implements OnInit {
+  @Output() newPostEvent = new EventEmitter<String>();
+  
   public newBlogForm: FormGroup;
 
   constructor(fb: FormBuilder) {
@@ -47,6 +49,7 @@ export class NewPostComponent implements OnInit {
                   .post('blog', '/blog', requestInfo)
                   .then(response => {
                     console.log(response);
+                    this.newPostEvent.emit(response.blog_id);
                   })
                   .catch(error => {
                     console.log("Error: ", error);

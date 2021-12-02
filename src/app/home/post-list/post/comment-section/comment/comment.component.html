@@ -32,6 +32,8 @@
     </div>
     <app-comment-replies
             (repliesEvent)="onRepliesEvent($event)" 
+            [blog_id]="blog_id"
+            [comment_id]="comment.comment_id"
             [replies]="comment.replies" 
             *ngIf="showCommentReplies"></app-comment-replies>
 </div>
