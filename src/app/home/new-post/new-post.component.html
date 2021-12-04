@@ -10,10 +10,20 @@
                 placeholder="What is on your mind?" 
                 class="form-control">
         </div>
+        <!-- Display the image -->
+        <div *ngIf="imgFile">
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-outline-danger" (click)="removeUploadedImage()"><i class="bi bi-trash"></i></button>
+            </div>
+            <div class="d-flex justify-content-center">
+                <img [src]="url" width="50%">
+            </div>
+        </div>
         <div class="m-1 d-flex">
             <input 
                 #imageInput
                 type="file"
+                accept="image/*"
                 (change)="onImageUpload($event)"
                 class="m-1 btn btn-primary col">
             <!-- <button 

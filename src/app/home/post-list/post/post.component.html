@@ -28,8 +28,8 @@
     <div class="card-body">
         <p>{{ blog.blog_content }}</p>
     </div>
-    <div *ngIf="blog.image_id">
-        <p>{{ blog.image_id }}</p>
+    <div *ngIf="blog.image_id" class="d-flex justify-content-center">
+        <img [src]="blog.image" width="50%">
     </div>
     <hr>
     <div class="container">

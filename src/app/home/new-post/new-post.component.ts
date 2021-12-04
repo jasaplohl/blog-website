@@ -13,6 +13,7 @@ export class NewPostComponent implements OnInit {
   @Output() newPostEvent = new EventEmitter<String>();
   imgName!: string;
   imgFile!: File;
+  url!: any;
 
   public newBlogForm: FormGroup;
 
@@ -34,13 +35,25 @@ export class NewPostComponent implements OnInit {
       if(!this.imgFile.type.match("image.*")) {
         console.log("Invalid file format"); //TODO - display error
         this.imgFile = undefined!;
-        this.imageInput.nativeElement.value = '';
+        this.imageInput.nativeElement.value = "";
       } else {
         this.imgName = event.target.files[0].name;
+        var reader = new FileReader();
+        reader.readAsDataURL(event.target.files[0]);
+        reader.onload = (event) => {
+          this.url = event.target?.result;
+        };
       }
     } else {
       this.imgName = undefined!;
     }
+  }
+
+  removeUploadedImage() {
+        this.imageInput.nativeElement.value = "";
+        this.url = "";
+        this.imgFile = undefined!;
+        this.imgName = undefined!;
   }
 
   async onCreate(blogPost: any) {

@@ -12,6 +12,8 @@ export class BlogPost {
     public dislikes: String[];
     public comments: any[];
 
+    public image!: any;
+
     constructor(blog_id: String, user_id: String, user_name: String,  timestamp: string, 
                 blog_content: String, image_id: string, likes: String[], dislikes: String[],
                 comments: any[]) {
@@ -27,15 +29,16 @@ export class BlogPost {
     }
 
     async getBlogImage() {
-        if(this.image_id.trim() !== "" && this.image_id !== undefined) {
+        console.log(this.image_id);
+        if(this.image_id && this.image_id.trim() !== "") {
             Storage
-                .get(this.image_id)
+                .get(this.image_id, {
+                    level: "protected"
+                })
                 .then(res => {
-                    console.log("Success:");
-                    console.log(res);
+                    this.image = res;
                 })
                 .catch(error => {
-                    console.log("Error:");
                     console.log(error);
                 });
         }
