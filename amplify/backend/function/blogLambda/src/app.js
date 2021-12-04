@@ -271,9 +271,9 @@ app.delete(path + '/object' + hashKeyPath + sortKeyPath, function(req, res) {
   dynamodb.delete(removeItemParams, (err, data)=> {
     if(err) {
       res.statusCode = 500;
-      res.json({error: err, url: req.url});
+      res.json({error: err, url: req.url, itemParams: removeItemParams});
     } else {
-      res.json({url: req.url, data: data});
+      res.json({url: req.url, data: data, itemParams: removeItemParams});
     }
   });
 });

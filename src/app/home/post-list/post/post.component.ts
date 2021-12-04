@@ -10,13 +10,16 @@ import { API, Auth } from 'aws-amplify';
 })
 export class PostComponent implements OnInit {
   @Input() declare blog: BlogPost;
+  @Output() deletePostEvent = new EventEmitter<BlogPost>();
 
   currentUser!: String;
   showCommentSection: boolean;
+  showDeletePostModal: boolean;
   commentCount!: number;
 
   constructor() { 
     this.showCommentSection = false;
+    this.showDeletePostModal = true;
   }
 
   toggleCommentSection() {
@@ -69,6 +72,36 @@ export class PostComponent implements OnInit {
       }
     }
     this.uploadData();
+  }
+
+  onEditPostClick() {
+    console.log("Editing the post...");
+  }
+
+  async onDeletePostClick() {
+    if(confirm("Are you sure you want to delete your post?")) {
+      const user = await Auth.currentAuthenticatedUser();
+
+      const getRequestInfo = {
+        headers: {
+          Authorization: user.signInUserSession.idToken.jwtToken
+        },
+        body: {
+          blog_id: this.blog.blog_id
+        }
+      };
+      API
+        .del('blog', '/blog/' + this.blog.blog_id, getRequestInfo)
+        .then(response => {
+          console.log(response);
+          this.deletePostEvent.emit(this.blog);
+        })
+        .catch(error => {
+          console.log("error: ");
+          console.log(error);
+        });
+        
+    }
   }
 
   /**

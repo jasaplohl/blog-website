@@ -20,4 +20,11 @@ export class PostListComponent implements OnInit {
     console.log(this.blogPosts);
   }
 
+  deletePost(post: BlogPost) {
+    const index = this.blogPosts.indexOf(post);
+    if (index > -1) {
+      this.blogPosts.splice(index, 1);
+    }
+  }
+
 }

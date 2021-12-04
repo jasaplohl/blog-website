@@ -71,6 +71,12 @@ export class HomeComponent implements OnInit {
                   response[i].likes, response[i].dislikes, response[i].comments);
 
       var index = this.blogIDs.indexOf(post.blog_id);
+      
+      post.getBlogImage();
+
+      /**
+       * TODO
+       */
       if(index > -1) {
         //If the blog is already displayed, we just update the values
         this.blogPosts[index] = post;

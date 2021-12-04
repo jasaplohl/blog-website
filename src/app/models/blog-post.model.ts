@@ -1,9 +1,11 @@
+import { Storage } from 'aws-amplify';
+
 export class BlogPost {
     public blog_id: String;
     public user_id: String;
     public user_name: String;
     public blog_content: String;
-    public image_id: String;
+    public image_id: string;
     public timestamp: string;
 
     public likes: String[];
@@ -11,7 +13,7 @@ export class BlogPost {
     public comments: any[];
 
     constructor(blog_id: String, user_id: String, user_name: String,  timestamp: string, 
-                blog_content: String, image_id: String, likes: String[], dislikes: String[],
+                blog_content: String, image_id: string, likes: String[], dislikes: String[],
                 comments: any[]) {
         this.blog_id = blog_id;
         this.user_id = user_id;
@@ -22,6 +24,21 @@ export class BlogPost {
         this.likes = likes;
         this.dislikes = dislikes;
         this.comments = comments;
+    }
+
+    async getBlogImage() {
+        if(this.image_id.trim() !== "" && this.image_id !== undefined) {
+            Storage
+                .get(this.image_id)
+                .then(res => {
+                    console.log("Success:");
+                    console.log(res);
+                })
+                .catch(error => {
+                    console.log("Error:");
+                    console.log(error);
+                });
+        }
     }
 
     blogToJSON() {

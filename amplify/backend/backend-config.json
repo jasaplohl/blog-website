@@ -3,6 +3,11 @@
     "blogwebsiteDB": {
       "service": "DynamoDB",
       "providerPlugin": "awscloudformation"
+    },
+    "blogImages": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
     }
   },
   "auth": {

@@ -6,7 +6,22 @@
                 <p>{{ blog.timestamp.toLocaleString() }}</p>
             </div>
             <div class="col-auto">
-                <button class="btn btn-outline-primary"><i class="bi bi-three-dots-vertical"></i></button>
+                <!-- Edit/delete post dropdown -->
+                <div class="dropdown">
+                    <button 
+                        id="dropdownMenuButton"
+                        class="btn btn-outline-secondary dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <button class="dropdown-item" (click)="onEditPostClick()">Edit Post</button>
+                        <button class="dropdown-item" (click)="onDeletePostClick()" >Delete Post</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -14,7 +29,7 @@
         <p>{{ blog.blog_content }}</p>
     </div>
     <div *ngIf="blog.image_id">
-        <p>IMAGE</p>
+        <p>{{ blog.image_id }}</p>
     </div>
     <hr>
     <div class="container">

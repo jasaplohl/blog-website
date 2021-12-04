@@ -10,6 +10,8 @@ const awsmobile = {
             "region": "us-east-1"
         }
     ],
+    "aws_user_files_s3_bucket": "blogwebsite8df4d53729a04eac8a9bdce98157d36a124623-dev",
+    "aws_user_files_s3_bucket_region": "us-east-1",
     "aws_cognito_identity_pool_id": "us-east-1:4b1d78f7-3750-479f-b9d1-e76bb0137a59",
     "aws_cognito_region": "us-east-1",
     "aws_user_pools_id": "us-east-1_44D82qkV3",

@@ -11,9 +11,19 @@
                 class="form-control">
         </div>
         <div class="m-1 d-flex">
-            <button 
+            <input 
+                #imageInput
+                type="file"
+                (change)="onImageUpload($event)"
+                class="m-1 btn btn-primary col">
+            <!-- <button 
+                class="m-1 btn btn-primary col"
+                (click)="onImageUploadClick()">
+                    <i class="bi bi-card-image"></i> Add image
+            </button> -->
+            <!-- <button 
                 type="button" 
-                class="m-1 btn btn-primary col"><i class="bi bi-card-image"></i> Add image</button>
+                class="m-1 btn btn-primary col"><i class="bi bi-card-image"></i> Add image</button> -->
             <button 
                 type="submit" 
                 class="m-1 btn btn-primary col">Post</button>
