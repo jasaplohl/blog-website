@@ -1,7 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { BlogComment } from 'src/app/models/blog-comment.model';
 import { BlogPost } from 'src/app/models/blog-post.model';
 import { API, Auth } from 'aws-amplify';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-post',
@@ -17,7 +19,9 @@ export class PostComponent implements OnInit {
   showDeletePostModal: boolean;
   commentCount!: number;
 
-  constructor() { 
+  public newBlogForm!: FormGroup;
+
+  constructor(private modalService: NgbModal, private fb: FormBuilder) { 
     this.showCommentSection = false;
     this.showDeletePostModal = true;
   }
@@ -35,6 +39,16 @@ export class PostComponent implements OnInit {
     this.blog.comments.forEach(element => {
       this.commentCount += element.replies.length;
     });
+
+    if(this.blog) {
+      this.newBlogForm = this.fb.group({
+        blogEditContent: [this.blog.blog_content, Validators.required]
+      });
+    } else {
+      this.newBlogForm = this.fb.group({
+        blogEditContent: ["", Validators.required]
+      });
+    }
   }
 
   onCommentsEvent(comments: BlogComment[]) {
@@ -74,10 +88,38 @@ export class PostComponent implements OnInit {
     this.uploadData();
   }
 
-  onEditPostClick() {
-    console.log("Editing the post...");
+  /**
+   * Opens the modal for editing the post
+   */
+  onEditPostClick(content: TemplateRef<any>) {
+    this.modalService.open(content).result.then((result) => {
+      // When we save the changes
+      console.log(result);
+      this.blog.blog_content = result.blogEditContent; //First we update it locally
+      this.uploadData(); //Then we upload it to the DB
+    }, (reason) => {
+      // When we cancel the changes
+      console.log(this.getDismissReason(reason));
+    });
   }
 
+  /**
+   * Logs the dismissal reason
+   */
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
+  }
+
+  /**
+   * Deletes the post from the DB
+   * TODO
+   */
   async onDeletePostClick() {
     if(confirm("Are you sure you want to delete your post?")) {
       const user = await Auth.currentAuthenticatedUser();
@@ -120,7 +162,7 @@ export class PostComponent implements OnInit {
     API
       .get('blog', '/blog/' + this.blog.blog_id, getRequestInfo)
       .then(response => {
-        this.blog.updateBlogPost(response);
+        // this.blog.updateBlogPost(response);
         // Then we upload the changes to the current blog
         const postRequestInfo = {
           headers: {

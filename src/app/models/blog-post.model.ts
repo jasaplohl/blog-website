@@ -69,8 +69,8 @@ export class BlogPost {
         this.image_id = response.image_id;
 
         //Not good - the same user can be in the likes and dislikes now
-        this.likes = [...new Set(this.likes.concat(response.likes))];
-        this.dislikes = [...new Set(this.dislikes.concat(response.dislikes))];
+        // this.likes = [...new Set(this.likes.concat(response.likes))];
+        // this.dislikes = [...new Set(this.dislikes.concat(response.dislikes))];
 
         // this.comments.forEach(element => {
             

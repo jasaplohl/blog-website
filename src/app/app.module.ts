@@ -5,6 +5,8 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AmplifyUIAngularModule } from '@aws-amplify/ui-angular';
 
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
@@ -47,6 +49,7 @@ const appRoutes: Routes = [
     AmplifyUIAngularModule,
     FormsModule,
     ReactiveFormsModule,
+    NgbModule,
     RouterModule.forRoot(appRoutes)
   ],
   providers: [],

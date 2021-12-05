@@ -18,7 +18,7 @@
                             <i class="bi bi-three-dots-vertical"></i>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <button class="dropdown-item" (click)="onEditPostClick()">Edit Post</button>
+                        <button class="dropdown-item" (click)="onEditPostClick(mymodal)">Edit Post</button>
                         <button class="dropdown-item" (click)="onDeletePostClick()" >Delete Post</button>
                     </div>
                 </div>
@@ -70,3 +70,38 @@
             *ngIf="showCommentSection"></app-comment-section>
     </div>
 </div>
+
+<!-- Edit post modal -->
+<ng-template #mymodal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Edit your post content.</h4>
+      <button class="close" (click)="modal.dismiss('cross')">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+        <form
+            autocomplete="off"
+            [formGroup]="newBlogForm"
+            (ngSubmit)="modal.close(newBlogForm.value)">
+            <input 
+                type="text" 
+                placeholder="{{ blog.blog_content }}" 
+                formControlName="blogEditContent"
+                class="form-control">
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button 
+            class="btn btn-outline-dark" 
+            (click)="modal.dismiss('cancel')">
+            <i class="bi bi-x-lg"></i> Cancel
+        </button>
+        <button 
+            type="submit"
+            class="btn btn-outline-dark" 
+            (click)="modal.close(newBlogForm.value)">
+            <i class="bi bi-check-lg"></i> Save
+        </button>
+    </div>
+</ng-template>
