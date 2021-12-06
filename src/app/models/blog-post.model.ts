@@ -1,4 +1,5 @@
 import { Storage } from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 
 export class BlogPost {
     public blog_id: String;
@@ -28,22 +29,9 @@ export class BlogPost {
         this.comments = comments;
     }
 
-    async getBlogImage() {
-        console.log(this.image_id);
-        if(this.image_id && this.image_id.trim() !== "") {
-            Storage
-                .get(this.image_id, {
-                    level: "protected"
-                })
-                .then(res => {
-                    this.image = res;
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        }
-    }
-
+    /**
+     * Returns the blog data in a JSON format
+     */
     blogToJSON() {
         return {
             blog_id: this.blog_id,
@@ -58,30 +46,165 @@ export class BlogPost {
         };
     }
 
+    updateFromJSON(response: any) {
+        this.blog_content = response[0].blog_content;
+        this.likes = response[0].likes;
+        this.dislikes = response[0].dislikes;
+        this.comments = response[0].comments;
+    }
+
     /**
-     * Finds the differences between the blog post JSON and the model
-     * and updates the model accordingly
+     * Fetches the image for the blog from the S3 bucket
      */
-    updateBlogPost(response: any) {
-        response = response[0];
-        
-        this.blog_content = response.blog_content;
-        this.image_id = response.image_id;
+    async getBlogImage() {
+        if(this.image_id && this.image_id.trim() !== "") {
+            Storage
+                .get(this.image_id, {
+                    level: "public"
+                })
+                .then(res => {
+                    this.image = res;
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
+    }
 
-        //Not good - the same user can be in the likes and dislikes now
-        // this.likes = [...new Set(this.likes.concat(response.likes))];
-        // this.dislikes = [...new Set(this.dislikes.concat(response.dislikes))];
+    async likePost() {
+        const user = await Auth.currentAuthenticatedUser();
 
-        // this.comments.forEach(element => {
-            
-        // });
+        const getRequestInfo = {
+          headers: {
+            Authorization: user.signInUserSession.idToken.jwtToken
+          }
+        };
 
-        // console.log(this.comments.map);
+        // First we fetch the current blog, to update any changes from other users
+        API
+          .get('blog', '/blog/' + this.blog_id, getRequestInfo)
+          .then(response => {
+            //We update the blog with the new content
+            this.updateFromJSON(response);
+            console.log(response);
+            if(!this.likes.includes(user.username)) {
+                var index = this.dislikes.indexOf(user.username)
+                if(index > -1) {
+                    this.dislikes.splice(index, 1);
+                }
+                this.likes.push(user.username);
+            } else {
+                var index = this.likes.indexOf(user.username)
+                if(index > -1) {
+                    this.likes.splice(index, 1);
+                }
+            }
+            // Then we upload the changes
+            const postRequestInfo = {
+                headers: {
+                  Authorization: user.signInUserSession.idToken.jwtToken
+                },
+                body: this.blogToJSON() 
+            };
+            API
+              .put('blog', '/blog', postRequestInfo)
+              .then(response => {
+                console.log(response);
+              })
+              .catch(error => {
+                console.error("Error: ", error);
+              });
+          })
+          .catch(error => {
+            console.error(error);
+          });
+    }
 
-        console.log("Latest:");
-        console.log(response);
-        console.log("Our:");
-        console.log(this.blogToJSON());
+    async dislikePost() {
+        const user = await Auth.currentAuthenticatedUser();
+        console.log(user);
+        const getRequestInfo = {
+          headers: {
+            Authorization: user.signInUserSession.idToken.jwtToken
+          }
+        };
+
+        // First we fetch the current blog, to update any changes from other users
+        API
+          .get('blog', '/blog/' + this.blog_id, getRequestInfo)
+          .then(response => {
+            //We update the blog with the new content
+            this.updateFromJSON(response);
+
+            if(!this.dislikes.includes(user.username)) {
+                var index = this.likes.indexOf(user.username)
+                if(index > -1) {
+                    this.likes.splice(index, 1);
+                }
+                this.dislikes.push(user.username);
+            } else {
+                var index = this.dislikes.indexOf(user.username)
+                if(index > -1) {
+                    this.dislikes.splice(index, 1);
+                }
+            }
+            // Then we upload the changes
+            const postRequestInfo = {
+                headers: {
+                  Authorization: user.signInUserSession.idToken.jwtToken
+                },
+                body: this.blogToJSON() 
+            };
+            API
+              .put('blog', '/blog', postRequestInfo)
+              .then(response => {
+                console.log(response);
+              })
+              .catch(error => {
+                console.error("Error: ", error);
+              });
+          })
+          .catch(error => {
+            console.error(error);
+          });
+    }
+
+    async updatePostContent(newContent: String) {
+        const user = await Auth.currentAuthenticatedUser();
+
+        const getRequestInfo = {
+          headers: {
+            Authorization: user.signInUserSession.idToken.jwtToken
+          }
+        };
+    
+        // First we fetch the current blog, to update any changes from other users
+        API
+          .get('blog', '/blog/' + this.blog_id, getRequestInfo)
+          .then(response => {
+            //We update the blog with the new content
+            this.updateFromJSON(response);
+            this.blog_content = newContent;
+
+            // Then we upload the changes
+            const postRequestInfo = {
+              headers: {
+                Authorization: user.signInUserSession.idToken.jwtToken
+              },
+              body: this.blogToJSON() 
+            };
+            API
+              .put('blog', '/blog', postRequestInfo)
+              .then(response => {
+                console.log(response);
+              })
+              .catch(error => {
+                console.error("Error: ", error);
+              });
+          })
+          .catch(error => {
+            console.error(error);
+          });
     }
 
 }

@@ -60,13 +60,14 @@ export class NewPostComponent implements OnInit {
     if(this.imgFile) {
       await Storage
         .put(uuidv4(), this.imgFile, {
-          level: "protected",
+          level: "public",
           progressCallback(progress) {
             console.log(`Uploaded: ${progress.loaded}/${progress.total}`);
           }
         })
         .then(res => {
           console.log(res);
+          this.removeUploadedImage();
           this.createBlog(blogPost, res.key);
         })
         .catch(error => {

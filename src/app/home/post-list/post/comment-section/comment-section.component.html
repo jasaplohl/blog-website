@@ -3,7 +3,7 @@
         <form
             autocomplete="off"
             [formGroup]="newCommentForm"
-            (ngSubmit)="onCreateComment(newCommentForm.value)">
+            (ngSubmit)="createComment(newCommentForm.value)">
             <div class="m-1 d-flex">
                 <input 
                     type="text"
@@ -17,9 +17,8 @@
     <!-- A list of all comments -->
     <div class="row">
         <app-comment
-            (commentEvent)="onCommentEvent($event)"
             [blog_id]="blog_id"
             *ngFor="let comment of comments"
-            [comment]="comment"></app-comment>
+            [comment]="commentFromJSON(comment)"></app-comment>
     </div>
 </div>

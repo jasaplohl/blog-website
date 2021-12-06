@@ -15,6 +15,7 @@ export class PostComponent implements OnInit {
   @Output() deletePostEvent = new EventEmitter<BlogPost>();
 
   currentUser!: String;
+
   showCommentSection: boolean;
   showDeletePostModal: boolean;
   commentCount!: number;
@@ -35,11 +36,14 @@ export class PostComponent implements OnInit {
               .then(usr => {
                 this.currentUser = usr.username;
               });
+
+    //We display the comment count for each post
     this.commentCount = this.blog.comments.length;
     this.blog.comments.forEach(element => {
       this.commentCount += element.replies.length;
     });
 
+    //The modal for editting the post content
     if(this.blog) {
       this.newBlogForm = this.fb.group({
         blogEditContent: [this.blog.blog_content, Validators.required]
@@ -51,52 +55,13 @@ export class PostComponent implements OnInit {
     }
   }
 
-  onCommentsEvent(comments: BlogComment[]) {
-    this.blog.comments = comments;
-    this.uploadData();
-  }
-
-  likePost() {
-    if(!this.blog.likes.includes(this.currentUser)) {
-      var index = this.blog.dislikes.indexOf(this.currentUser)
-      if(index > -1) {
-        this.blog.dislikes.splice(index, 1);
-      }
-      this.blog.likes.push(this.currentUser);
-    } else {
-      var index = this.blog.likes.indexOf(this.currentUser)
-      if(index > -1) {
-        this.blog.likes.splice(index, 1);
-      }
-    }
-    this.uploadData();
-  }
-
-  dislikePost() {
-    if(!this.blog.dislikes.includes(this.currentUser)) {
-      var index = this.blog.likes.indexOf(this.currentUser)
-      if(index > -1) {
-        this.blog.likes.splice(index, 1);
-      }
-      this.blog.dislikes.push(this.currentUser);
-    } else {
-      var index = this.blog.dislikes.indexOf(this.currentUser)
-      if(index > -1) {
-        this.blog.dislikes.splice(index, 1);
-      }
-    }
-    this.uploadData();
-  }
-
   /**
    * Opens the modal for editing the post
    */
   onEditPostClick(content: TemplateRef<any>) {
     this.modalService.open(content).result.then((result) => {
       // When we save the changes
-      console.log(result);
-      this.blog.blog_content = result.blogEditContent; //First we update it locally
-      this.uploadData(); //Then we upload it to the DB
+      this.blog.updatePostContent(result.blogEditContent);
     }, (reason) => {
       // When we cancel the changes
       console.log(this.getDismissReason(reason));
@@ -116,11 +81,19 @@ export class PostComponent implements OnInit {
     }
   }
 
+  async likePost() {
+    this.blog.likePost();
+  }
+
+  async dislikePost() {
+    this.blog.dislikePost();
+  }
+
   /**
    * Deletes the post from the DB
    * TODO
    */
-  async onDeletePostClick() {
+   async onDeletePostClick() {
     if(confirm("Are you sure you want to delete your post?")) {
       const user = await Auth.currentAuthenticatedUser();
 
@@ -144,44 +117,6 @@ export class PostComponent implements OnInit {
         });
         
     }
-  }
-
-  /**
-   * Uploades the updated post to the DB
-   */
-   async uploadData() {
-    const user = await Auth.currentAuthenticatedUser();
-
-    const getRequestInfo = {
-      headers: {
-        Authorization: user.signInUserSession.idToken.jwtToken
-      }
-    };
-
-    // First we fetch the current blog, to see if there have been any changes
-    API
-      .get('blog', '/blog/' + this.blog.blog_id, getRequestInfo)
-      .then(response => {
-        // this.blog.updateBlogPost(response);
-        // Then we upload the changes to the current blog
-        const postRequestInfo = {
-          headers: {
-            Authorization: user.signInUserSession.idToken.jwtToken
-          },
-          body: this.blog.blogToJSON() 
-        };
-        API
-          .put('blog', '/blog', postRequestInfo)
-          .then(response => {
-            console.log(response);
-          })
-          .catch(error => {
-            console.error("Error: ", error);
-          });
-      })
-      .catch(error => {
-        console.error(error);
-      });
   }
 
 }
