@@ -64,6 +64,7 @@
             </button>
         </div>
         <app-comment-section 
+            (requestUpdateEvent)="onRequestUpdate()"
             [blog_id]="blog.blog_id"
             [comments]="blog.comments" 
             *ngIf="showCommentSection"></app-comment-section>

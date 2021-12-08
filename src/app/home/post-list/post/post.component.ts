@@ -32,10 +32,10 @@ export class PostComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await Auth.currentAuthenticatedUser()
-              .then(usr => {
-                this.currentUser = usr.username;
-              });
+    // await Auth.currentAuthenticatedUser()
+    //           .then(usr => {
+    //             this.currentUser = usr.username;
+    //           });
 
     //We display the comment count for each post
     this.commentCount = this.blog.comments.length;
@@ -95,11 +95,11 @@ export class PostComponent implements OnInit {
    */
    async onDeletePostClick() {
     if(confirm("Are you sure you want to delete your post?")) {
-      const user = await Auth.currentAuthenticatedUser();
+      // const user = await Auth.currentAuthenticatedUser();
 
       const getRequestInfo = {
         headers: {
-          Authorization: user.signInUserSession.idToken.jwtToken
+          // Authorization: user.signInUserSession.idToken.jwtToken
         },
         body: {
           blog_id: this.blog.blog_id
@@ -117,6 +117,10 @@ export class PostComponent implements OnInit {
         });
         
     }
+  }
+
+  onRequestUpdate() {
+    this.blog.fetchLatestBlogData();
   }
 
 }

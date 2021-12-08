@@ -24,11 +24,11 @@ export class HomeComponent implements OnInit {
    * We fetch the new post and add it to the list (without refreshing the entire page)
    */
   async onNewPostEvent(blog_id: String) {
-    const user = await Auth.currentAuthenticatedUser();
+    // const user = await Auth.currentAuthenticatedUser();
     
     const requestInfo = {
       headers: {
-        Authorization: user.signInUserSession.idToken.jwtToken
+        Authorization: null //user.signInUserSession.idToken.jwtToken
       }
     };
 
@@ -46,22 +46,29 @@ export class HomeComponent implements OnInit {
   }
 
   async fetchData() {
-    const user = await Auth.currentAuthenticatedUser();
-    
     const requestInfo = {
       headers: {
-        Authorization: user.signInUserSession.idToken.jwtToken
+        Authorization: "" // user.signInUserSession.idToken.jwtToken
       }
     };
-    API
-      .get('blog', '/blog', requestInfo)
+
+    // const user = await Auth.currentAuthenticatedUser();
+    Auth.currentSession()
       .then(response => {
-        console.log(response);
-        this.formatData(response);
-        this.orderPostsByTimeStamp(this.blogPosts);
+        requestInfo.headers.Authorization = response.getAccessToken().getJwtToken();
+        API
+          .get('blog', '/blog', requestInfo)
+          .then(response => {
+            console.log(response);
+            this.formatData(response);
+            this.orderPostsByTimeStamp(this.blogPosts);
+          })
+          .catch(error => {
+            console.log("Error: ", error);
+          });
       })
       .catch(error => {
-        console.log("Error: ", error);
+        console.log(error);
       });
   }
 

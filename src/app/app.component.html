@@ -1,11 +1,5 @@
-<amplify-authenticator>
-    <div>
-        <!-- <amplify-sign-out></amplify-sign-out>
-        <div>Hello, {{user.username}}</div> -->
-        <div>
-            <app-header
-                [currentUser]="currentUser"></app-header>
-            <router-outlet></router-outlet>
-        </div>
-    </div>
-</amplify-authenticator>
+<div>
+    <app-header
+        [currentUser]="currentUser"></app-header>
+    <router-outlet></router-outlet>
+</div>

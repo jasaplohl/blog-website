@@ -81,15 +81,15 @@ export class NewPostComponent implements OnInit {
   }
 
   async createBlog(blogPost: any, imageID?: string) {
-    const user = await Auth.currentAuthenticatedUser();
+    // const user = await Auth.currentAuthenticatedUser();
 
     const requestInfo = {
       headers: {
-        Authorization: user.signInUserSession.idToken.jwtToken
+        // Authorization: user.signInUserSession.idToken.jwtToken
       },
       body: {
-        user_id: "",
-        user_name: user.username,
+        // user_id: "",
+        // user_name: user.username,
         blog_content: blogPost.blogContent,
         image_id: imageID
       }
@@ -97,9 +97,9 @@ export class NewPostComponent implements OnInit {
     
     this.newBlogForm.reset();
 
-    await Auth.currentUserInfo()
-              .then(user_ => {
-                requestInfo.body.user_id = user_.attributes.sub
+    // await Auth.currentUserInfo()
+              // .then(user_ => {
+                // requestInfo.body.user_id = user_.attributes.sub
                 API
                   .post('blog', '/blog', requestInfo)
                   .then(response => {
@@ -110,6 +110,6 @@ export class NewPostComponent implements OnInit {
                     console.log("Error: ", error);
                     this.newBlogForm.reset();
                   });
-              });
+              // });
   }
 }
