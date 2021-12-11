@@ -13,17 +13,6 @@ export type AmplifyDependentResourcesAttributes = {
             "Region": "string"
         }
     },
-    "auth": {
-        "blogwebsitea9fc2081": {
-            "IdentityPoolId": "string",
-            "IdentityPoolName": "string",
-            "UserPoolId": "string",
-            "UserPoolArn": "string",
-            "UserPoolName": "string",
-            "AppClientIDWeb": "string",
-            "AppClientID": "string"
-        }
-    },
     "function": {
         "blogLambda": {
             "Name": "string",
@@ -33,10 +22,21 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "api": {
-        "blog": {
+        "blogapi": {
             "RootUrl": "string",
             "ApiName": "string",
             "ApiId": "string"
+        }
+    },
+    "auth": {
+        "blogwebsitec5d6a990": {
+            "IdentityPoolId": "string",
+            "IdentityPoolName": "string",
+            "UserPoolId": "string",
+            "UserPoolArn": "string",
+            "UserPoolName": "string",
+            "AppClientIDWeb": "string",
+            "AppClientID": "string"
         }
     }
 }

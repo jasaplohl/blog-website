@@ -12,13 +12,13 @@ const AWS = require('aws-sdk')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 var bodyParser = require('body-parser')
 var express = require('express')
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid')
 
 AWS.config.update({ region: process.env.TABLE_REGION });
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-let tableName = "blogs";
+let tableName = "blogwebsiteDB";
 if(process.env.ENV && process.env.ENV !== "NONE") {
   tableName = tableName + '-' + process.env.ENV;
 }
@@ -40,8 +40,8 @@ app.use(awsServerlessExpressMiddleware.eventContext())
 
 // Enable CORS for all methods
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Headers", "*")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader("Access-Control-Allow-Headers", "*")
   next()
 });
 
@@ -200,7 +200,7 @@ app.put(path, function(req, res) {
       res.statusCode = 500;
       res.json({error: err, url: req.url, body: req.body});
     } else{
-      res.json({success: 'put call succeed!', url: req.url, data: data})
+      res.json({success: 'put call succeed!', url: req.url, data: data, blog_id: putItemParams.Item.blog_id, requestData: req.apiGateway.event.requestContext})
     }
   });
 });
@@ -219,7 +219,7 @@ app.post(path, function(req, res) {
     TableName: tableName,
     Item: req.body
   }
-  
+
   if(putItemParams.Item.blog_id === undefined) {
     putItemParams.Item.blog_id = uuidv4();
     putItemParams.Item.timestamp = new Date().toISOString();
@@ -227,13 +227,13 @@ app.post(path, function(req, res) {
     putItemParams.Item.dislikes = [];
     putItemParams.Item.comments = [];
   }
-  
+
   dynamodb.put(putItemParams, (err, data) => {
     if(err) {
       res.statusCode = 500;
       res.json({error: err, url: req.url, body: req.body});
     } else{
-      res.json({success: 'post call succeed!', url: req.url, data: data, blog_id: putItemParams.Item.blog_id})
+      res.json({success: 'post call succeed!', url: req.url, data: data, blog_id: putItemParams.Item.blog_id, requestData: req.apiGateway.event.requestContext})
     }
   });
 });
@@ -271,9 +271,9 @@ app.delete(path + '/object' + hashKeyPath + sortKeyPath, function(req, res) {
   dynamodb.delete(removeItemParams, (err, data)=> {
     if(err) {
       res.statusCode = 500;
-      res.json({error: err, url: req.url, itemParams: removeItemParams});
+      res.json({error: err, url: req.url});
     } else {
-      res.json({url: req.url, data: data, itemParams: removeItemParams});
+      res.json({url: req.url, data: data});
     }
   });
 });

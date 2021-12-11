@@ -1,27 +1,26 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-blogwebsite-dev-124623-authRole",
-      "UnauthRoleArn": "arn:aws:iam::466676818017:role/amplify-blogwebsite-dev-124623-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::466676818017:role/amplify-blogwebsite-dev-124623-authRole",
+      "AuthRoleName": "amplify-blogwebsite-dev-151731-authRole",
+      "UnauthRoleArn": "arn:aws:iam::466676818017:role/amplify-blogwebsite-dev-151731-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::466676818017:role/amplify-blogwebsite-dev-151731-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-blogwebsite-dev-124623-deployment",
-      "UnauthRoleName": "amplify-blogwebsite-dev-124623-unauthRole",
-      "StackName": "amplify-blogwebsite-dev-124623",
-      "StackId": "arn:aws:cloudformation:us-east-1:466676818017:stack/amplify-blogwebsite-dev-124623/a8182560-4f77-11ec-bbbc-1241a8f78a6d",
-      "AmplifyAppId": "d1eh6pehrwpo86",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-blogwebsite-dev-124623-deployment/amplify-cfn-templates/api\\APIGatewayAuthStack.json"
+      "DeploymentBucketName": "amplify-blogwebsite-dev-151731-deployment",
+      "UnauthRoleName": "amplify-blogwebsite-dev-151731-unauthRole",
+      "StackName": "amplify-blogwebsite-dev-151731",
+      "StackId": "arn:aws:cloudformation:us-east-1:466676818017:stack/amplify-blogwebsite-dev-151731/1611b2f0-5a8d-11ec-be4a-125f876cdce7",
+      "AmplifyAppId": "dqgn9rc9r6fai"
     },
     "categories": {
-      "auth": {
-        "blogwebsitea9fc2081": {},
-        "true": {}
-      },
       "function": {
         "blogLambda": {
-          "deploymentBucketName": "amplify-blogwebsite-dev-124623-deployment",
-          "s3Key": "amplify-builds/blogLambda-6175646f4b3453684551-build.zip"
+          "deploymentBucketName": "amplify-blogwebsite-dev-151731-deployment",
+          "s3Key": "amplify-builds/blogLambda-474d4264555856307530-build.zip"
         }
+      },
+      "auth": {
+        "blogwebsitec5d6a990": {},
+        "true": {}
       }
     }
   }

@@ -33,8 +33,9 @@ export class HomeComponent implements OnInit {
     };
 
     API
-      .get('blog', '/blog/' + blog_id, requestInfo)
+      .get('blogapi', '/blog/' + blog_id, requestInfo)
       .then(response => {
+        console.log(response);
         response = response[0];
         var post = new BlogPost(response.blog_id, response.user_id, response.user_name, response.timestamp, response.blog_content, response.image_id,
           response.likes, response.dislikes, response.comments);
@@ -56,8 +57,14 @@ export class HomeComponent implements OnInit {
     Auth.currentSession()
       .then(response => {
         requestInfo.headers.Authorization = response.getAccessToken().getJwtToken();
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+        requestInfo.headers.Authorization = "";
         API
-          .get('blog', '/blog', requestInfo)
+          .get('blogapi', '/blog', requestInfo)
           .then(response => {
             console.log(response);
             this.formatData(response);
@@ -66,9 +73,6 @@ export class HomeComponent implements OnInit {
           .catch(error => {
             console.log("Error: ", error);
           });
-      })
-      .catch(error => {
-        console.log(error);
       });
   }
 

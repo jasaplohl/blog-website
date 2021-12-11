@@ -1,7 +1,7 @@
 {
   "resourceName": "blogImages",
-  "policyUUID": "2bd8ac13",
-  "bucketName": "blogwebsite8df4d53729a04eac8a9bdce98157d36a",
+  "policyUUID": "fa4a5486",
+  "bucketName": "blogwebsite803d5b017d9949fcb18e95d79b166ad1",
   "storageAccess": "authAndGuest",
   "guestAccess": [
     "READ"

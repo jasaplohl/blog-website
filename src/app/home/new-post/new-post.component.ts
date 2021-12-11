@@ -81,11 +81,12 @@ export class NewPostComponent implements OnInit {
   }
 
   async createBlog(blogPost: any, imageID?: string) {
-    // const user = await Auth.currentAuthenticatedUser();
+    const user = await Auth.currentAuthenticatedUser();
 
     const requestInfo = {
       headers: {
-        // Authorization: user.signInUserSession.idToken.jwtToken
+        Authorization: user.signInUserSession.idToken.jwtToken
+        // Authorization: ""
       },
       body: {
         // user_id: "",
@@ -101,13 +102,14 @@ export class NewPostComponent implements OnInit {
               // .then(user_ => {
                 // requestInfo.body.user_id = user_.attributes.sub
                 API
-                  .post('blog', '/blog', requestInfo)
+                  .post('blogapi', '/blog', requestInfo)
                   .then(response => {
                     console.log(response);
                     this.newPostEvent.emit(response.blog_id);
                   })
                   .catch(error => {
-                    console.log("Error: ", error);
+                    console.log("Error: ");
+                    console.log(error);
                     this.newBlogForm.reset();
                   });
               // });

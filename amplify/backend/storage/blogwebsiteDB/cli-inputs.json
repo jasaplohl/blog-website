@@ -1,6 +1,6 @@
 {
   "resourceName": "blogwebsiteDB",
-  "tableName": "blogs",
+  "tableName": "blogwebsiteDB",
   "partitionKey": {
     "fieldName": "blog_id",
     "fieldType": "string"
