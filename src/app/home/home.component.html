@@ -1,10 +1,12 @@
-<div class="container">
-    <div class="row pt-2">
-        <app-new-post
-        (newPostEvent)="onNewPostEvent($event)"></app-new-post>
-    </div>
-    <div class="row pt-2">
-        <app-post-list
-            [blogPosts]="blogPosts"></app-post-list>
+<div class="d-flex justify-content-center">
+    <div class="posts-container">
+        <div class="row pt-2">
+            <app-new-post
+            (newPostEvent)="onNewPostEvent($event)"></app-new-post>
+        </div>
+        <div class="row pt-2">
+            <app-post-list
+                [blogPosts]="blogPosts"></app-post-list>
+        </div>
     </div>
 </div>

@@ -1,9 +1,12 @@
-<div class="card mb-2">
-    <div class="card-header">
+<div class="card-container mb-2">
+    <div class="card-content">
         <div class="row justify-content-between">
-            <div class="col">
-                <h5>{{ blog.user_name }}</h5>
-                <p>{{ blog.timestamp.toLocaleString() }}</p>
+            <div class="col d-flex">
+                <img [src]="profileImage" class="profile-img" >
+                <div>
+                    <h5>{{ blog.user_name }}</h5>
+                    <p>{{ blog.timestamp.toLocaleString() }}</p>
+                </div>
             </div>
             <div class="col-auto">
                 <!-- Edit/delete post dropdown -->
@@ -25,13 +28,10 @@
             </div>
         </div>
     </div>
-    <div class="card-body">
+    <img *ngIf="blog.image_id" [src]="blog.image" width="100%">
+    <div class="card-content">
         <p>{{ blog.blog_content }}</p>
     </div>
-    <div *ngIf="blog.image_id" class="d-flex justify-content-center">
-        <img [src]="blog.image" width="50%">
-    </div>
-    <hr>
     <div class="container">
         <div class="row justify-content-between">
             <div class="col d-flex">

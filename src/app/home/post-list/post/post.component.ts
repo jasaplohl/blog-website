@@ -16,6 +16,7 @@ export class PostComponent implements OnInit {
 
   currentUser!: String;
 
+  profileImage: any;
   showCommentSection: boolean;
   showDeletePostModal: boolean;
   commentCount!: number;
@@ -55,6 +56,8 @@ export class PostComponent implements OnInit {
         blogEditContent: ["", Validators.required]
       });
     }
+
+    this.getProfileImg();
   }
 
   /**
@@ -155,6 +158,19 @@ export class PostComponent implements OnInit {
       // When we cancel the changes
       console.log(reason);
     });
+  }
+
+  async getProfileImg() {
+    await Storage
+      .get("profile-img.png", {
+          level: "public"
+      })
+      .then(res => {
+          this.profileImage = res;
+      })
+      .catch(error => {
+          console.log(error);
+      });
   }
 
 }
