@@ -36,9 +36,12 @@ export class PostComponent implements OnInit {
 
   async ngOnInit() {
     await Auth.currentAuthenticatedUser()
-              .then(usr => {
-                this.currentUser = usr.username;
-              });
+      .then(usr => {
+        this.currentUser = usr.username;
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
     //We display the comment count for each post
     this.commentCount = this.blog.comments.length;

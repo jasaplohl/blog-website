@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
               }
             })
             .catch(error => {
-              console.log("Error: ", error);
+              console.log(error);
             });
         })
         .catch(error => {
@@ -58,31 +58,29 @@ export class HomeComponent implements OnInit {
   async fetchData() {
     const requestInfo = {
       headers: {
-        Authorization: "" // user.signInUserSession.idToken.jwtToken
+        Authorization: undefined
       }
     };
 
-    // const user = await Auth.currentAuthenticatedUser();
-    Auth.currentSession()
-      .then(response => {
-        requestInfo.headers.Authorization = response.getAccessToken().getJwtToken();
-      })
-      .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
-        requestInfo.headers.Authorization = "";
-        API
-          .get('blogapi', '/blog', requestInfo)
-          .then(response => {
-            console.log(response);
-            this.formatData(response);
-            this.orderPostsByTimeStamp(this.blogPosts);
-          })
-          .catch(error => {
-            console.log("Error: ", error);
-          });
-      });
+    await Auth.currentAuthenticatedUser()
+        .then(response => {
+          requestInfo.headers.Authorization = response.signInUserSession.idToken.jwtToken;
+        })
+        .catch(error => {
+          console.log(error);
+        })
+        .finally(() => {
+          API
+            .get('blogapi', '/blog', requestInfo)
+            .then(response => {
+              console.log(response);
+              this.formatData(response);
+              this.orderPostsByTimeStamp(this.blogPosts);
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        });
   }
 
   formatData(response: any) {
