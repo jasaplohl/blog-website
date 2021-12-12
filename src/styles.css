@@ -18,3 +18,7 @@
     width: fit-content;
     text-align: right;
 }
+
+.hover-pointer:hover {
+    cursor: pointer;
+}

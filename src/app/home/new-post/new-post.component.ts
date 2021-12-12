@@ -81,37 +81,35 @@ export class NewPostComponent implements OnInit {
   }
 
   async createBlog(blogPost: any, imageID?: string) {
-    const user = await Auth.currentAuthenticatedUser();
+    await Auth.currentAuthenticatedUser()
+      .then(response => {
+        const requestInfo = {
+          headers: {
+            Authorization: response.signInUserSession.idToken.jwtToken
+          },
+          body: {
+            user_id: response.signInUserSession.idToken.payload.sub,
+            user_name: response.username,
+            blog_content: blogPost.blogContent,
+            image_id: imageID
+          }
+        };
 
-    const requestInfo = {
-      headers: {
-        Authorization: user.signInUserSession.idToken.jwtToken
-        // Authorization: ""
-      },
-      body: {
-        // user_id: "",
-        // user_name: user.username,
-        blog_content: blogPost.blogContent,
-        image_id: imageID
-      }
-    };
-    
-    this.newBlogForm.reset();
-
-    // await Auth.currentUserInfo()
-              // .then(user_ => {
-                // requestInfo.body.user_id = user_.attributes.sub
-                API
-                  .post('blogapi', '/blog', requestInfo)
-                  .then(response => {
-                    console.log(response);
-                    this.newPostEvent.emit(response.blog_id);
-                  })
-                  .catch(error => {
-                    console.log("Error: ");
-                    console.log(error);
-                    this.newBlogForm.reset();
-                  });
-              // });
+        API
+          .post('blogapi', '/blog', requestInfo)
+          .then(response => {
+            console.log(response);
+            this.newPostEvent.emit(response.blog_id);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+        this.newBlogForm.reset();
+      });
   }
 }

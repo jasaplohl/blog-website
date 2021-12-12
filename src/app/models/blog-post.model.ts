@@ -63,7 +63,7 @@ export class BlogPost {
 
       // First we fetch the current blog, to update any changes from other users
       API
-        .get('blog', '/blog/' + this.blog_id, getRequestInfo)
+        .get('blogapi', '/blog/' + this.blog_id, getRequestInfo)
         .then(response => {
           console.log("Updating the blog");
           console.log(response);
@@ -103,7 +103,7 @@ export class BlogPost {
 
         // First we fetch the current blog, to update any changes from other users
         API
-          .get('blog', '/blog/' + this.blog_id, getRequestInfo)
+          .get('blogapi', '/blog/' + this.blog_id, getRequestInfo)
           .then(response => {
             //We update the blog with the new content
             this.updateFromJSON(response);
@@ -128,7 +128,7 @@ export class BlogPost {
                 body: this.blogToJSON() 
             };
             API
-              .put('blog', '/blog', postRequestInfo)
+              .put('blogapi', '/blog', postRequestInfo)
               .then(response => {
                 console.log(response);
               })
@@ -152,7 +152,7 @@ export class BlogPost {
 
         // First we fetch the current blog, to update any changes from other users
         API
-          .get('blog', '/blog/' + this.blog_id, getRequestInfo)
+          .get('blogapi', '/blog/' + this.blog_id, getRequestInfo)
           .then(response => {
             //We update the blog with the new content
             this.updateFromJSON(response);
@@ -177,7 +177,7 @@ export class BlogPost {
                 body: this.blogToJSON() 
             };
             API
-              .put('blog', '/blog', postRequestInfo)
+              .put('blogapi', '/blog', postRequestInfo)
               .then(response => {
                 console.log(response);
               })
@@ -201,7 +201,7 @@ export class BlogPost {
     
         // First we fetch the current blog, to update any changes from other users
         API
-          .get('blog', '/blog/' + this.blog_id, getRequestInfo)
+          .get('blogapi', '/blog/' + this.blog_id, getRequestInfo)
           .then(response => {
             //We update the blog with the new content
             this.updateFromJSON(response);
@@ -215,7 +215,7 @@ export class BlogPost {
               body: this.blogToJSON() 
             };
             API
-              .put('blog', '/blog', postRequestInfo)
+              .put('blogapi', '/blog', postRequestInfo)
               .then(response => {
                 console.log(response);
               })
