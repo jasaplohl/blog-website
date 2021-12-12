@@ -2,19 +2,19 @@
     <div class="container-fluid">
         <a href="#" class="navbar-brand">BlogWebsite</a>
         <div>
-            <div class="d-flex" *ngIf="currentUser; else loggedOut">
-                <p class="navbar-brand">Hello {{ currentUser }}</p>
+            <div class="d-flex align-items-center" *ngIf="currentUser; else loggedOut">
+                <p class="greeting-text">Hello {{ currentUser }}</p>
                 <a 
-                    class="m-1 btn btn-outline-primary" 
+                    class="m-1 btn btn-secondary" 
                     href="/" (click)="signOut()">Sign out</a>
             </div>
             <ng-template #loggedOut>
                 <div class="d-flex">
                     <a 
-                        class="m-1 btn btn-outline-primary" 
+                        class="m-1 btn btn-secondary" 
                         href="/login">Log in</a>
                     <a 
-                        class="m-1 btn btn-outline-primary" 
+                        class="m-1 btn btn-secondary" 
                         href="/signup">Sign up</a>
                 </div>
             </ng-template>
