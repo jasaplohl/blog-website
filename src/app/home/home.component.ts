@@ -24,44 +24,64 @@ export class HomeComponent implements OnInit {
    * We fetch the new post and add it to the list (without refreshing the entire page)
    */
   async onNewPostEvent(blog_id: String) {
-    const user = await Auth.currentAuthenticatedUser();
-    
     const requestInfo = {
       headers: {
-        Authorization: user.signInUserSession.idToken.jwtToken
+        Authorization: undefined
       }
     };
 
-    API
-      .get('blog', '/blog/' + blog_id, requestInfo)
-      .then(response => {
-        response = response[0];
-        var post = new BlogPost(response.blog_id, response.user_id, response.user_name, response.timestamp, response.blog_content, response.image_id,
-          response.likes, response.dislikes, response.comments);
-          this.blogPosts = [post].concat(this.blogPosts); //Insert the new post at the beginning
-      })
-      .catch(error => {
-        console.log("Error: ", error);
-      });
+    await Auth.currentAuthenticatedUser()
+        .then(response => {
+          requestInfo.headers.Authorization = response.signInUserSession.idToken.jwtToken;
+
+          API
+            .get('blogapi', '/blog/' + blog_id, requestInfo)
+            .then(response => {
+              console.log(response);
+              response = response[0];
+              var post = new BlogPost(response.blog_id, response.user_id, response.user_name, response.timestamp, response.blog_content, response.image_id,
+                response.likes, response.dislikes, response.comments);
+              this.blogPosts = [post].concat(this.blogPosts); //Insert the new post at the beginning
+              if(post.image_id && post.image_id.trim() !== "") {
+                post.getBlogImage(); //Display the image
+              }
+            })
+            .catch(error => {
+              console.log("Error: ", error);
+            });
+        })
+        .catch(error => {
+          console.log(error);
+        });
   }
 
   async fetchData() {
-    const user = await Auth.currentAuthenticatedUser();
-    
     const requestInfo = {
       headers: {
-        Authorization: user.signInUserSession.idToken.jwtToken
+        Authorization: "" // user.signInUserSession.idToken.jwtToken
       }
     };
-    API
-      .get('blog', '/blog', requestInfo)
+
+    // const user = await Auth.currentAuthenticatedUser();
+    Auth.currentSession()
       .then(response => {
-        console.log(response);
-        this.formatData(response);
-        this.orderPostsByTimeStamp(this.blogPosts);
+        requestInfo.headers.Authorization = response.getAccessToken().getJwtToken();
       })
       .catch(error => {
-        console.log("Error: ", error);
+        console.log(error);
+      })
+      .finally(() => {
+        requestInfo.headers.Authorization = "";
+        API
+          .get('blogapi', '/blog', requestInfo)
+          .then(response => {
+            console.log(response);
+            this.formatData(response);
+            this.orderPostsByTimeStamp(this.blogPosts);
+          })
+          .catch(error => {
+            console.log("Error: ", error);
+          });
       });
   }
 

@@ -24,10 +24,10 @@ export class CommentReplyComponent implements OnInit {
   constructor() { }
 
   async ngOnInit() {
-    await Auth.currentAuthenticatedUser()
-    .then(usr => {
-      this.currentUser = usr.username;
-    });
+    // await Auth.currentAuthenticatedUser()
+    // .then(usr => {
+    //   this.currentUser = usr.username;
+    // });
   }
 
   convertToDate(dateStr: string) {

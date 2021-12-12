@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "blogwebsitea9fc2081_identitypool_a9fc2081",
+    "identityPoolName": "blogwebsitec5d6a990_identitypool_c5d6a990",
     "allowUnauthenticatedIdentities": true,
-    "resourceNameTruncated": "blogwea9fc2081",
-    "userPoolName": "blogwebsitea9fc2081_userpool_a9fc2081",
+    "resourceNameTruncated": "blogwec5d6a990",
+    "userPoolName": "blogwebsitec5d6a990_userpool_c5d6a990",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -31,10 +31,10 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "blogwea9fc2081_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "blogwec5d6a990_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "a9fc2081",
-    "resourceName": "blogwebsitea9fc2081",
+    "sharedId": "c5d6a990",
+    "resourceName": "blogwebsitec5d6a990",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "default",
     "userPoolGroupList": [],
@@ -54,15 +54,6 @@
       ]
     },
     "breakCircularDependency": true,
-    "dependsOn": [],
-    "userPoolGroups": false,
-    "adminQueries": false,
-    "triggers": {},
-    "hostedUI": false,
-    "parentStack": {
-      "Ref": "AWS::StackId"
-    },
-    "permissions": [],
-    "authProviders": []
+    "dependsOn": []
   }
 }

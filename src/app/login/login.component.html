@@ -1,2 +1,79 @@
+<div class="container">
+    <h1>Sign in to your account</h1>
+    <form
+        autocomplete="off"
+        [formGroup]="newBlogForm"
+        (ngSubmit)="onLogin(newBlogForm.value, confirmEmailModal)">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input 
+                id="username"
+                type="text"
+                formControlName="username"
+                placeholder="Username" 
+                class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input 
+                id="password"
+                type="password"
+                formControlName="password"
+                placeholder="Password" 
+                class="form-control">
+        </div>
+        <div class="form-group">
+            <button 
+                type="submit" 
+                class="btn btn-primary">LOG IN</button>
+        </div>
+        <div>
+            <a href="/">Forgot your password?</a>
+            <div class="d-flex">
+                <p>Don't have an account yet? </p><a href="/signup">Sign up</a>
+            </div>
+        </div>
+    </form>
+</div>
 
-<!-- <amplify-sign-in></amplify-sign-in> -->
+<!-- Email confirmation modal -->
+<ng-template #confirmEmailModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Please confirm your email.</h4>
+        <button class="close" (click)="modal.dismiss('cross')">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form
+              autocomplete="off"
+              [formGroup]="confirmationBlogForm"
+              (ngSubmit)="modal.close(confirmationBlogForm.value)">
+              <input 
+                  type="text" 
+                  placeholder="Verification code" 
+                  formControlName="verificationCode"
+                  class="form-control">
+          </form>
+      </div>
+      <div class="modal-footer">
+          <div>
+              <button 
+                  class="btn btn-outline-dark" 
+                  (click)="modal.dismiss('cancel')">
+                  <i class="bi bi-x-lg"></i> Cancel
+              </button>
+              <button 
+                  class="btn btn-outline-dark" 
+                  (click)="resendConfirmationCode()">
+                    Resend confirmation code
+              </button>
+              <button 
+                  type="submit"
+                  class="btn btn-outline-dark" 
+                  (click)="modal.close(confirmationBlogForm.value)">
+                  <i class="bi bi-check-lg"></i> Confirm
+              </button>
+          </div>
+      </div>
+</ng-template>

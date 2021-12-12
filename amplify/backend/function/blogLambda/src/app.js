@@ -12,13 +12,13 @@ const AWS = require('aws-sdk')
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 var bodyParser = require('body-parser')
 var express = require('express')
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid')
 
 AWS.config.update({ region: process.env.TABLE_REGION });
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-let tableName = "blogs";
+let tableName = "blogwebsiteDB";
 if(process.env.ENV && process.env.ENV !== "NONE") {
   tableName = tableName + '-' + process.env.ENV;
 }
@@ -40,8 +40,8 @@ app.use(awsServerlessExpressMiddleware.eventContext())
 
 // Enable CORS for all methods
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Headers", "*")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader("Access-Control-Allow-Headers", "*")
   next()
 });
 
@@ -178,31 +178,39 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, function(req, res) {
 
 app.put(path, function(req, res) {
 
-  if (userIdPresent) {
-    req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
-  }
-
   let putItemParams = {
     TableName: tableName,
     Item: req.body
   }
 
-  if(putItemParams.Item.blog_id === undefined) {
-    putItemParams.Item.blog_id = uuidv4();
-    putItemParams.Item.timestamp = new Date().toISOString();
-    putItemParams.Item.likes = [];
-    putItemParams.Item.dislikes = [];
-    putItemParams.Item.comments = [];
-  }
+  if(putItemParams.Item.user_id && putItemParams.Item.user_id.trim() !== "" && putItemParams.Item.user_name && putItemParams.Item.user_name.trim() !== "") {
+    if(putItemParams.Item.blog_content && putItemParams.Item.blog_content.trim() !== "") {
+      //Creating a post
+      if(putItemParams.Item.blog_id === undefined) {
+        putItemParams.Item.blog_id = uuidv4();
+        putItemParams.Item.timestamp = new Date().toISOString();
+        putItemParams.Item.likes = [];
+        putItemParams.Item.dislikes = [];
+        putItemParams.Item.comments = [];
+      } else {
+        //Updating the post - we need to check if the user posting the update is the same as the author
+        
+      }
 
-  dynamodb.put(putItemParams, (err, data) => {
-    if(err) {
-      res.statusCode = 500;
-      res.json({error: err, url: req.url, body: req.body});
-    } else{
-      res.json({success: 'put call succeed!', url: req.url, data: data})
+      dynamodb.put(putItemParams, (err, data) => {
+        if(err) {
+          res.statusCode = 500;
+          res.json({error: err, url: req.url, body: req.body});
+        } else{
+          res.json({success: 'put call succeed!', url: req.url, data: data, blog_id: putItemParams.Item.blog_id, requestData: req.apiGateway.event.requestContext})
+        }
+      });
+    } else {
+      res.json({error: "Blog content cannot be empty!"});
     }
-  });
+  } else {
+    res.json({error: "User needs to be authenticated!"});
+  }
 });
 
 /************************************
@@ -211,72 +219,61 @@ app.put(path, function(req, res) {
 
 app.post(path, function(req, res) {
 
-  if (userIdPresent) {
-    req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
-  }
-
   let putItemParams = {
     TableName: tableName,
     Item: req.body
   }
-  
-  if(putItemParams.Item.blog_id === undefined) {
-    putItemParams.Item.blog_id = uuidv4();
-    putItemParams.Item.timestamp = new Date().toISOString();
-    putItemParams.Item.likes = [];
-    putItemParams.Item.dislikes = [];
-    putItemParams.Item.comments = [];
-  }
-  
-  dynamodb.put(putItemParams, (err, data) => {
-    if(err) {
-      res.statusCode = 500;
-      res.json({error: err, url: req.url, body: req.body});
-    } else{
-      res.json({success: 'post call succeed!', url: req.url, data: data, blog_id: putItemParams.Item.blog_id})
+
+  if(putItemParams.Item.user_id && putItemParams.Item.user_id.trim() !== "" && putItemParams.Item.user_name && putItemParams.Item.user_name.trim() !== "") {
+    if(putItemParams.Item.blog_content && putItemParams.Item.blog_content.trim() !== "") {
+      //Creating an element, in other case we are updating it
+      if(putItemParams.Item.blog_id === undefined) {
+        putItemParams.Item.blog_id = uuidv4();
+        putItemParams.Item.timestamp = new Date().toISOString();
+        putItemParams.Item.likes = [];
+        putItemParams.Item.dislikes = [];
+        putItemParams.Item.comments = [];
+      }
+
+      dynamodb.put(putItemParams, (err, data) => {
+        if(err) {
+          res.statusCode = 500;
+          res.json({error: err, url: req.url, body: req.body});
+        } else{
+          res.json({success: 'post call succeed!', url: req.url, data: data, blog_id: putItemParams.Item.blog_id, requestData: req.apiGateway.event.requestContext})
+        }
+      });
+    } else {
+      res.json({error: "Blog content cannot be empty!"});
     }
-  });
+  } else {
+    res.json({error: "User needs to be authenticated!"});
+  }
 });
 
 /**************************************
 * HTTP remove method to delete object *
 ***************************************/
 
-app.delete(path + '/object' + hashKeyPath + sortKeyPath, function(req, res) {
-  var params = {};
-  if (userIdPresent && req.apiGateway) {
-    params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
-  } else {
-    params[partitionKeyName] = req.params[partitionKeyName];
-     try {
-      params[partitionKeyName] = convertUrlType(req.params[partitionKeyName], partitionKeyType);
-    } catch(err) {
-      res.statusCode = 500;
-      res.json({error: 'Wrong column type ' + err});
-    }
-  }
-  if (hasSortKey) {
-    try {
-      params[sortKeyName] = convertUrlType(req.params[sortKeyName], sortKeyType);
-    } catch(err) {
-      res.statusCode = 500;
-      res.json({error: 'Wrong column type ' + err});
-    }
-  }
+app.delete('/blog/:blog_id', function(req, res) {
 
   let removeItemParams = {
     TableName: tableName,
-    Key: params
+    Key: {
+      blog_id: req.params.blog_id
+    }
   }
+
   dynamodb.delete(removeItemParams, (err, data)=> {
     if(err) {
       res.statusCode = 500;
-      res.json({error: err, url: req.url, itemParams: removeItemParams});
+      res.json({error: err, url: req.url});
     } else {
-      res.json({url: req.url, data: data, itemParams: removeItemParams});
+      res.json({url: req.url, data: data});
     }
   });
 });
+
 app.listen(3000, function() {
     console.log("App started")
 });

@@ -14,13 +14,7 @@ export class CommentRepliesComponent implements OnInit {
   @Input() declare comment_id: String;
   @Input() declare replies: CommentReply[];
   
-  /**
-   * Called when:
-   * - a new reply has been created
-   * - an existing reply has been updated
-   * - a user liked or disliked the reply
-   */
-  @Output() repliesEvent = new EventEmitter<CommentReply[]>();
+  @Output() requestUpdateEvent = new EventEmitter<void>();
 
   public newReplyForm: FormGroup;
 
@@ -51,20 +45,20 @@ export class CommentRepliesComponent implements OnInit {
                   this.replies = []
                 }
                 this.replies.push(newReply); //We add the reply to the existing list
-                this.emitRepliesEvent();
+                // this.emitRepliesEvent();
               });
   }
 
   onUpdateReply(commentReply: CommentReply) {
       //TODO: UPDATE THE REPLY
-      this.emitRepliesEvent();
+      // this.emitRepliesEvent();
   }
 
   /**
    * Emits the replies to the parent component.
    */
-  emitRepliesEvent() {
-    this.repliesEvent.emit(this.replies);
-  }
+  // emitRepliesEvent() {
+  //   this.repliesEvent.emit(this.replies);
+  // }
 
 }

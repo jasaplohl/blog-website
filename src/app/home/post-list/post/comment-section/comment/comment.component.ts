@@ -11,6 +11,8 @@ export class CommentComponent implements OnInit {
   @Input() declare blog_id: String;
   @Input() declare comment: BlogComment;
 
+  @Output() requestUpdateEvent = new EventEmitter<void>();
+
   currentUser!: String;
   showCommentReplies: boolean;
 
@@ -19,10 +21,10 @@ export class CommentComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await Auth.currentAuthenticatedUser()
-              .then(usr => {
-                this.currentUser = usr.username;
-              });
+    // await Auth.currentAuthenticatedUser()
+    //           .then(usr => {
+    //             this.currentUser = usr.username;
+    //           });
   }
 
   toggleCommentReplies() {
@@ -34,16 +36,33 @@ export class CommentComponent implements OnInit {
   }
 
   onUpdateComment() {
-    this.comment.updateComment();
+    this.comment.updateComment()
+      .then(() => {
+        this.requestUpdateEvent.emit();
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   likeComment() {
-    console.log(this.comment);
-    this.comment.likeComment();
+    this.comment.likeComment()
+      .then(() => {
+        this.requestUpdateEvent.emit();
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   dislikeComment() {
-    this.comment.dislikeComment();
+    this.comment.dislikeComment()
+      .then(() => {
+        this.requestUpdateEvent.emit();
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
 }

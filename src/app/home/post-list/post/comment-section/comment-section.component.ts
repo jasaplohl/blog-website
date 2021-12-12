@@ -13,6 +13,8 @@ export class CommentSectionComponent implements OnInit {
   @Input() declare blog_id: String;
   @Input() declare comments: BlogComment[];
 
+  @Output() requestUpdateEvent = new EventEmitter<void>();
+
   public newCommentForm: FormGroup;
 
   constructor(fb: FormBuilder) {
@@ -75,7 +77,11 @@ export class CommentSectionComponent implements OnInit {
                     console.log(error);
                   });
               });
-}
+  }
+
+  onRequestUpdate() {
+    this.requestUpdateEvent.emit();
+  }
 
   // onCommentEvent(comment: BlogComment) {
   //   this.comments.forEach(element => {

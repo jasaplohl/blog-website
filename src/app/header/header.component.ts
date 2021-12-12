@@ -7,12 +7,21 @@ import { Auth } from 'aws-amplify';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  // @Input() isSignedIn!: boolean;
   @Input() currentUser!: String;
 
   constructor() {}
 
   async ngOnInit() {}
+
+  async signOut() {
+    Auth.currentUserPoolUser()
+      .then(response => {
+        response.signOut()
+      })
+      .catch(error => {
+        console.log(error)
+      });
+  }
 
   // ngOnChanges() {
   //   console.log("Header: " + this.isSignedIn);

@@ -53,6 +53,27 @@ export class BlogPost {
         this.comments = response[0].comments;
     }
 
+    async fetchLatestBlogData() {
+      const user = await Auth.currentAuthenticatedUser();
+      const getRequestInfo = {
+        headers: {
+          Authorization: user.signInUserSession.idToken.jwtToken
+        }
+      };
+
+      // First we fetch the current blog, to update any changes from other users
+      API
+        .get('blogapi', '/blog/' + this.blog_id, getRequestInfo)
+        .then(response => {
+          console.log("Updating the blog");
+          console.log(response);
+          this.updateFromJSON(response);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+
     /**
      * Fetches the image for the blog from the S3 bucket
      */
@@ -82,7 +103,7 @@ export class BlogPost {
 
         // First we fetch the current blog, to update any changes from other users
         API
-          .get('blog', '/blog/' + this.blog_id, getRequestInfo)
+          .get('blogapi', '/blog/' + this.blog_id, getRequestInfo)
           .then(response => {
             //We update the blog with the new content
             this.updateFromJSON(response);
@@ -107,7 +128,7 @@ export class BlogPost {
                 body: this.blogToJSON() 
             };
             API
-              .put('blog', '/blog', postRequestInfo)
+              .put('blogapi', '/blog', postRequestInfo)
               .then(response => {
                 console.log(response);
               })
@@ -131,7 +152,7 @@ export class BlogPost {
 
         // First we fetch the current blog, to update any changes from other users
         API
-          .get('blog', '/blog/' + this.blog_id, getRequestInfo)
+          .get('blogapi', '/blog/' + this.blog_id, getRequestInfo)
           .then(response => {
             //We update the blog with the new content
             this.updateFromJSON(response);
@@ -156,7 +177,7 @@ export class BlogPost {
                 body: this.blogToJSON() 
             };
             API
-              .put('blog', '/blog', postRequestInfo)
+              .put('blogapi', '/blog', postRequestInfo)
               .then(response => {
                 console.log(response);
               })
@@ -180,7 +201,7 @@ export class BlogPost {
     
         // First we fetch the current blog, to update any changes from other users
         API
-          .get('blog', '/blog/' + this.blog_id, getRequestInfo)
+          .get('blogapi', '/blog/' + this.blog_id, getRequestInfo)
           .then(response => {
             //We update the blog with the new content
             this.updateFromJSON(response);
@@ -194,7 +215,7 @@ export class BlogPost {
               body: this.blogToJSON() 
             };
             API
-              .put('blog', '/blog', postRequestInfo)
+              .put('blogapi', '/blog', postRequestInfo)
               .then(response => {
                 console.log(response);
               })
