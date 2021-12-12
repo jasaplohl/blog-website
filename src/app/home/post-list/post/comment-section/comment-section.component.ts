@@ -33,50 +33,51 @@ export class CommentSectionComponent implements OnInit {
   async createComment(commentPost: any) {
     this.newCommentForm.reset();
 
-    const user = await Auth.currentAuthenticatedUser();
-    const getRequestInfo = {
-      headers: {
-        Authorization: user.signInUserSession.idToken.jwtToken
-      }
-    };
+    await Auth.currentAuthenticatedUser()
+        .then(response => {
+          const getRequestInfo = {
+            headers: {
+              Authorization: response.signInUserSession.idToken.jwtToken
+            }
+          }
+          //We create a new comment
+          var newComment = new BlogComment(
+            this.blog_id, uuidv4(), response.signInUserSession.idToken.payload.sub, response.username, new Date().toISOString(), 
+            commentPost.comment_content, [], [], []
+          );
 
-    await Auth.currentUserInfo()
-              .then(user_ => {
-                //We create a new comment
-                var newComment = new BlogComment(
-                  this.blog_id, uuidv4(), user_.attributes.sub, user.username, new Date().toISOString(), 
-                  commentPost.comment_content, [], [], []
-                );
-
+          API
+            .get('blogapi', '/blog/' + this.blog_id, getRequestInfo)
+            .then(res => {
+              if(res.length > 0) {
+                this.comments.push(newComment);
+                res[0].comments.push(newComment.commentToJSON());
+                const postRequestInfo = {
+                  headers: {
+                    Authorization: response.signInUserSession.idToken.jwtToken
+                  },
+                  body: res[0]
+                };
                 API
-                  .get('blog', '/blog/' + this.blog_id, getRequestInfo)
+                  .put('blogapi', '/blog', postRequestInfo)
                   .then(response => {
-                    if(response.length > 0) {
-                      this.comments.push(newComment);
-                      response[0].comments.push(newComment.commentToJSON());
-                      const postRequestInfo = {
-                        headers: {
-                          Authorization: user.signInUserSession.idToken.jwtToken
-                        },
-                        body: response[0]
-                      };
-                      API
-                        .put('blog', '/blog', postRequestInfo)
-                        .then(response => {
-                          console.log(response);
-                        })
-                        .catch(error => {
-                          console.error("Error: ", error);
-                        });
-                    } else {
-                      //TODO error message
-                      console.log("The post has already been deleted.");
-                    }
+                    console.log(response);
                   })
                   .catch(error => {
-                    console.log(error);
+                    console.error("Error: ", error);
                   });
-              });
+              } else {
+                //TODO error message
+                console.log("The post has already been deleted.");
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        })
+        .catch(error => {
+          console.log(error);
+        });
   }
 
   onRequestUpdate() {
