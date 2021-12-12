@@ -1,21 +1,21 @@
-<div>
-    <div class="row">
+<div class="">
+    <div class="mb-2">
         <form
             autocomplete="off"
             [formGroup]="newCommentForm"
             (ngSubmit)="createComment(newCommentForm.value)">
-            <div class="m-1 d-flex">
+            <div class="d-flex">
                 <input 
                     type="text"
                     formControlName="comment_content"
                     placeholder="Write a comment ..."
-                    class="form-control me-1">
+                    class="form-control">
                 <button type="submit" class="btn btn-primary">Post</button>
             </div>
         </form>
     </div>
     <!-- A list of all comments -->
-    <div class="row">
+    <div>
         <app-comment
             (requestUpdateEvent)="onRequestUpdate()"
             [blog_id]="blog_id"

@@ -1,7 +1,8 @@
-<div>
-    <div class="comment bg-secondary">
-        <div class="container">
-            <p>{{ comment.user_name }}</p>
+<div class="d-flex mb-1 align-items-center">
+    <img src="assets/profile-img.png" class="profile-img profile-img-comment" alt="Profile image">
+    <div class="card-container w-100">
+        <div class="card-content">
+            <p class="user-name">{{ comment.user_name }}</p>
             <p>{{ comment.comment_content }}</p>
             <div class="row justify-content-between">
                 <div class="col d-flex">
@@ -29,10 +30,10 @@
                 <i class="bi bi-arrow-return-right"></i> {{ comment.replies.length }} {{ comment.replies.length === 1 ? "reply" : "replies" }}
             </p>
         </div>
-    </div>
-    <app-comment-replies
+        <app-comment-replies
             [blog_id]="blog_id"
             [comment_id]="comment.comment_id"
             [replies]="comment.replies" 
             *ngIf="showCommentReplies"></app-comment-replies>
+    </div>
 </div>

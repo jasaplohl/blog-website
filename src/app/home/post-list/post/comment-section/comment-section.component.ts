@@ -62,6 +62,7 @@ export class CommentSectionComponent implements OnInit {
                   .put('blogapi', '/blog', postRequestInfo)
                   .then(response => {
                     console.log(response);
+                    this.onRequestUpdate();
                   })
                   .catch(error => {
                     console.error("Error: ", error);

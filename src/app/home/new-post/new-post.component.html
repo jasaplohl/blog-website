@@ -12,10 +12,10 @@
         </div>
         <!-- Display the image -->
         <div *ngIf="imgFile">
-            <div class="d-flex justify-content-end">
-                <button class="btn btn-outline-danger" (click)="removeUploadedImage()"><i class="bi bi-trash"></i></button>
-            </div>
             <img [src]="url" width="100%">
+            <div class="d-flex justify-content-center m-1">
+                <button class="btn btn-outline-danger" (click)="removeUploadedImage()"><i class="bi bi-trash"></i> Remove Image</button>
+            </div>
         </div>
         <div class="m-1 d-flex align-items-center">
             <input 

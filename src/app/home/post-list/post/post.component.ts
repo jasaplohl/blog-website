@@ -16,7 +16,6 @@ export class PostComponent implements OnInit {
 
   currentUser!: String;
 
-  profileImage: any;
   showCommentSection: boolean;
   showDeletePostModal: boolean;
   commentCount!: number;
@@ -43,11 +42,7 @@ export class PostComponent implements OnInit {
         console.log(error);
       });
 
-    //We display the comment count for each post
-    this.commentCount = this.blog.comments.length;
-    this.blog.comments.forEach(element => {
-      this.commentCount += element.replies.length;
-    });
+    this.countComments();
 
     //The modal for editting the post content
     if(this.blog) {
@@ -59,8 +54,6 @@ export class PostComponent implements OnInit {
         blogEditContent: ["", Validators.required]
       });
     }
-
-    this.getProfileImg();
   }
 
   /**
@@ -148,7 +141,10 @@ export class PostComponent implements OnInit {
   }
 
   onRequestUpdate() {
-    this.blog.fetchLatestBlogData();
+    this.blog.fetchLatestBlogData()
+      .then(() => {
+        this.countComments();
+      });
   }
 
   showMode(mode: String, content: TemplateRef<any>) {
@@ -163,17 +159,12 @@ export class PostComponent implements OnInit {
     });
   }
 
-  async getProfileImg() {
-    await Storage
-      .get("profile-img.png", {
-          level: "public"
-      })
-      .then(res => {
-          this.profileImage = res;
-      })
-      .catch(error => {
-          console.log(error);
-      });
+  countComments() {
+    //We display the comment count for each post
+    this.commentCount = this.blog.comments.length;
+    this.blog.comments.forEach(element => {
+      this.commentCount += element.replies.length;
+    });
   }
 
 }

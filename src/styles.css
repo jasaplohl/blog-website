@@ -1,13 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
-/* 
-@import '~aws-amplify-angular/theme.css'; */
-@import "~bootstrap-icons/font/bootstrap-icons.css";
 
-.comment {
-    border-radius: 25px;
-    margin-top: 1%;
-    margin-bottom: 1%;
-}
+@import "~bootstrap-icons/font/bootstrap-icons.css";
 
 .hover-underline-text:hover {
     text-decoration: underline;
@@ -21,4 +14,47 @@
 
 .hover-pointer:hover {
     cursor: pointer;
+}
+
+/*
+    Post/comment/reply card
+*/
+
+.card-container {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border-radius: 5px;
+}
+
+.card-content {
+    padding: 8px 16px;
+}
+
+.card-container:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/*
+    User info
+*/
+
+.profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1em;
+}
+
+.profile-img-comment {
+    width: 40px;
+    height: 40px;
+}
+
+.user-name {
+    font-weight: bold;
+}
+
+.user-name::first-letter {
+    text-transform: capitalize;
 }

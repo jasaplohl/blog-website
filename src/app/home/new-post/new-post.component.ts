@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { API, Auth, Storage } from 'aws-amplify';
+import { environment } from 'src/environments/environment';
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -31,18 +32,25 @@ export class NewPostComponent implements OnInit {
    */
   onImageUpload(event: any) {
     this.imgFile = event.target.files[0];
+    
     if(this.imgFile) {
       if(!this.imgFile.type.match("image.*")) {
-        console.log("Invalid file format"); //TODO - display error
+        alert("Invalid file format!");
         this.imgFile = undefined!;
         this.imageInput.nativeElement.value = "";
       } else {
-        this.imgName = event.target.files[0].name;
-        var reader = new FileReader();
-        reader.readAsDataURL(event.target.files[0]);
-        reader.onload = (event) => {
-          this.url = event.target?.result;
-        };
+        if(this.imgFile.size > environment.max_file_size) {
+          alert("File too big!");
+          this.imgFile = undefined!;
+          this.imageInput.nativeElement.value = "";
+        } else {
+          this.imgName = event.target.files[0].name;
+          var reader = new FileReader();
+          reader.readAsDataURL(event.target.files[0]);
+          reader.onload = (event) => {
+            this.url = event.target?.result;
+          };
+        }
       }
     } else {
       this.imgName = undefined!;

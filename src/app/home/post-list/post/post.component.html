@@ -2,9 +2,9 @@
     <div class="card-content">
         <div class="row justify-content-between">
             <div class="col d-flex">
-                <img [src]="profileImage" class="profile-img" >
+                <img src="assets/profile-img.png" class="profile-img" >
                 <div>
-                    <h5>{{ blog.user_name }}</h5>
+                    <h5 class="user-name">{{ blog.user_name }}</h5>
                     <p>{{ blog.timestamp.toLocaleString() }}</p>
                 </div>
             </div>
@@ -48,25 +48,25 @@
             <button 
                 [ngClass]="blog.likes.includes(currentUser) ? 'btn btn-primary' : 'btn btn-outline-primary'" 
                 (click)="likePost()" 
-                class="m-1 col">
+                class="col me-1 mb-1">
                     <i class="bi bi-hand-thumbs-up"></i> Like
             </button>
             <button 
                 (click)="toggleCommentSection()" 
-                class="m-1 btn btn-outline-primary col">
+                class="btn btn-outline-primary col me-1 mb-1">
                     <i class="bi bi-chat-left"></i> Comment
             </button>
             <button 
                 [ngClass]="blog.dislikes.includes(currentUser) ? 'btn btn-primary' : 'btn btn-outline-primary'" 
                 (click)="dislikePost()" 
-                class="m-1 col">
+                class="col mb-1">
                     <i class="bi bi-hand-thumbs-down"></i> Dislike
             </button>
         </div>
         <app-comment-section 
             (requestUpdateEvent)="onRequestUpdate()"
             [blog_id]="blog.blog_id"
-            [comments]="blog.comments" 
+            [comments]="blog.comments"
             *ngIf="showCommentSection"></app-comment-section>
     </div>
 </div>
