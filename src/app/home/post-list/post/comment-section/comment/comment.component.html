@@ -19,7 +19,7 @@
                                 (click)="dislikeComment()"
                                 class="me-2 hover-underline-text"
                                 [ngClass]="{'text-primary': comment.dislikes.includes(currentUser)}">Dislike</p>
-                            <p>({{ convertToDate(comment.timestamp).toLocaleString() }})</p>
+                            <p>({{ timeFormat }})</p>
                         </div>
                     </div>  
                     <div class="col-auto d-flex">

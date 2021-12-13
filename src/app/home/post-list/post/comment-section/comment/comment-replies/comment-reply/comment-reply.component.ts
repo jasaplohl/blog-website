@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommentReply } from 'src/app/models/comment-reply.model';
 import { Auth, API } from 'aws-amplify';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-comment-reply',
@@ -13,6 +14,7 @@ export class CommentReplyComponent implements OnInit {
   @Input() declare reply: CommentReply;
 
   currentUser!: String;
+  timeFormat!: String;
 
   /**
    * Called when:
@@ -24,10 +26,15 @@ export class CommentReplyComponent implements OnInit {
   constructor() { }
 
   async ngOnInit() {
-    // await Auth.currentAuthenticatedUser()
-    // .then(usr => {
-    //   this.currentUser = usr.username;
-    // });
+    await Auth.currentAuthenticatedUser()
+      .then(usr => {
+        this.currentUser = usr.username;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+      
+    this.timeFormat = moment(new Date(this.reply.timestamp)).fromNow();
   }
 
   convertToDate(dateStr: string) {

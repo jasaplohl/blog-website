@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BlogComment } from 'src/app/models/blog-comment.model';
 import { Auth } from 'aws-amplify';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-comment',
@@ -15,16 +16,22 @@ export class CommentComponent implements OnInit {
 
   currentUser!: String;
   showCommentReplies: boolean;
+  timeFormat!: String;
 
   constructor() {
     this.showCommentReplies = false;
   }
 
   async ngOnInit() {
-    // await Auth.currentAuthenticatedUser()
-    //           .then(usr => {
-    //             this.currentUser = usr.username;
-    //           });
+    await Auth.currentAuthenticatedUser()
+      .then(usr => {
+        this.currentUser = usr.username;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+      
+    this.timeFormat = moment(new Date(this.comment.timestamp)).fromNow();
   }
 
   toggleCommentReplies() {

@@ -4,6 +4,7 @@ import { BlogPost } from 'src/app/models/blog-post.model';
 import { API, Auth, Storage } from 'aws-amplify';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-post',
@@ -19,6 +20,8 @@ export class PostComponent implements OnInit {
   showCommentSection: boolean;
   showDeletePostModal: boolean;
   commentCount!: number;
+
+  timeFormat!: String;
 
   show!: String;
 
@@ -42,7 +45,7 @@ export class PostComponent implements OnInit {
         console.log(error);
       });
 
-    this.countComments();
+    this.countComments(); // We get the total number of comments
 
     //The modal for editting the post content
     if(this.blog) {
@@ -54,6 +57,8 @@ export class PostComponent implements OnInit {
         blogEditContent: ["", Validators.required]
       });
     }
+
+    this.timeFormat = moment(new Date(this.blog.timestamp)).fromNow();
   }
 
   /**
