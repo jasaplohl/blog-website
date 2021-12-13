@@ -39,7 +39,7 @@ export class SignupComponent implements OnInit {
         this.confirmEmail(content);
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
   }
 
@@ -49,13 +49,13 @@ export class SignupComponent implements OnInit {
    confirmEmail(content: TemplateRef<any>) {
     this.modalService.open(content).result.then((result) => {
       // When we save the changes
-      console.log(result);
       Auth.confirmSignUp(this.username, result.verificationCode)
         .then(result => {
           console.log(result);
           this.router.navigate(["/login"]);
         })
         .catch(error => {
+          console.error(error);
           alert(error.message);
         });
     }, (reason) => {
@@ -70,7 +70,7 @@ export class SignupComponent implements OnInit {
         console.log(response);
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
   }
 

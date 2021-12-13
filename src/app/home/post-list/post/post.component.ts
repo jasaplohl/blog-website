@@ -24,6 +24,7 @@ export class PostComponent implements OnInit {
   timeFormat!: String;
 
   show!: String;
+  editable!: boolean;
 
   public newBlogForm!: FormGroup;
 
@@ -39,10 +40,13 @@ export class PostComponent implements OnInit {
   async ngOnInit() {
     await Auth.currentAuthenticatedUser()
       .then(usr => {
+        if(usr.attributes.sub === this.blog.user_id) {
+          this.editable = true;
+        }
         this.currentUser = usr.username;
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
 
     this.countComments(); // We get the total number of comments
@@ -118,11 +122,11 @@ export class PostComponent implements OnInit {
 
             })
             .catch(error => {
-              console.log(error);
+              console.error(error);
             });
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });   
     }
   }
@@ -140,8 +144,7 @@ export class PostComponent implements OnInit {
           this.deletePostEvent.emit(this.blog);
         })
         .catch(error => {
-          console.log("Unable to remove the image."); //TODO - display error
-          console.log(error);
+          console.error(error);
         });
   }
 
@@ -154,14 +157,7 @@ export class PostComponent implements OnInit {
 
   showMode(mode: String, content: TemplateRef<any>) {
     this.show = mode;
-    console.log(this.show);
-    this.modalService.open(content).result.then((result) => {
-      // When we save the changes
-      console.log(result);
-    }, (reason) => {
-      // When we cancel the changes
-      console.log(reason);
-    });
+    this.modalService.open(content);
   }
 
   countComments() {

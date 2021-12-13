@@ -31,7 +31,7 @@ export class CommentReplyComponent implements OnInit {
         this.currentUser = usr.username;
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
       
     this.timeFormat = moment(new Date(this.reply.timestamp)).fromNow();

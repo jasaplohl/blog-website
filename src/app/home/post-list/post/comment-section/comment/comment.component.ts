@@ -17,6 +17,7 @@ export class CommentComponent implements OnInit {
   currentUser!: String;
   showCommentReplies: boolean;
   timeFormat!: String;
+  editable!: boolean;
 
   constructor() {
     this.showCommentReplies = false;
@@ -25,10 +26,13 @@ export class CommentComponent implements OnInit {
   async ngOnInit() {
     await Auth.currentAuthenticatedUser()
       .then(usr => {
+        if(usr.attributes.sub === this.comment.user_id) {
+          this.editable = true;
+        }
         this.currentUser = usr.username;
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
       
     this.timeFormat = moment(new Date(this.comment.timestamp)).fromNow();
@@ -38,17 +42,13 @@ export class CommentComponent implements OnInit {
     this.showCommentReplies = !this.showCommentReplies;
   }
 
-  convertToDate(dateStr: string) {
-    return new Date(dateStr);
-  }
-
   onUpdateComment() {
     this.comment.updateComment()
       .then(() => {
         this.requestUpdateEvent.emit();
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
   }
 
@@ -58,7 +58,7 @@ export class CommentComponent implements OnInit {
         this.requestUpdateEvent.emit();
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
   }
 
@@ -68,8 +68,16 @@ export class CommentComponent implements OnInit {
         this.requestUpdateEvent.emit();
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
+  }
+
+  onEditCommentClick() {
+
+  }
+
+  onDeleteCommentClick() {
+
   }
 
 }

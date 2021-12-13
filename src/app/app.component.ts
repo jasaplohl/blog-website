@@ -12,7 +12,6 @@ export class AppComponent {
   currentUser!: String;
 
   async ngOnInit() {
-    // console.log(Auth.Credentials);
     Auth.currentSession()
       .then(response => {
         console.log(response);
@@ -20,7 +19,7 @@ export class AppComponent {
       })
       .catch(error => {
         //No user is signed in
-        console.log(error);
+        console.error(error);
         this.currentUser = undefined!;
       });
 

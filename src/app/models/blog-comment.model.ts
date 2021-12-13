@@ -44,43 +44,52 @@ export class BlogComment {
     }
 
     async likeComment() {
-        const user = await Auth.currentAuthenticatedUser();
+      const requestInfo = {
+        headers: {
+          Authorization: undefined
+        },
+        body: undefined
+      };
 
-        const getRequestInfo = {
-          headers: {
-            Authorization: user.signInUserSession.idToken.jwtToken
-          }
-        };
+      var username: String = undefined!;
 
+      await Auth.currentAuthenticatedUser()
+        .then(response => {
+          requestInfo.headers.Authorization = response.signInUserSession.idToken.jwtToken;
+          username = response.username;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
+      if(requestInfo.headers.Authorization) {
         // First we fetch the current blog, to update any changes from other users
-        API
-          .get('blog', '/blog/' + this.blog_id, getRequestInfo)
-          .then(response => {
-            if(response.length > 0) {
-                response = this.likeCommentFromJson(response[0], user.username);
+        await API
+          .get('blogapi', '/blog/' + this.blog_id, requestInfo)
+          .then(res => {
+            if(res.length > 0) {
+                res = this.likeCommentFromJson(res[0], username);
                 // Then we upload the changes
-                const postRequestInfo = {
-                    headers: {
-                      Authorization: user.signInUserSession.idToken.jwtToken
-                    },
-                    body: response
-                };
-                API
-                  .put('blog', '/blog', postRequestInfo)
-                  .then(response => {
-                    console.log(response);
-                  })
-                  .catch(error => {
-                    console.error("Error: ", error);
-                  });
+                requestInfo.body = res;
             } else {
-                //TODO error message
-                console.log("The post has already been deleted");
+                console.error("The post has already been deleted");
             }
           })
           .catch(error => {
             console.error(error);
           });
+
+          if(requestInfo.body) {
+            await API
+              .put('blogapi', '/blog', requestInfo)
+              .then(response => {
+                console.log(response);
+              })
+              .catch(error => {
+                console.error("Error: ", error);
+              });
+          }
+      }
     }
 
     likeCommentFromJson(response: any, currentUser: String): any {
@@ -104,43 +113,52 @@ export class BlogComment {
     }
 
     async dislikeComment() {
-        const user = await Auth.currentAuthenticatedUser();
+      const requestInfo = {
+        headers: {
+          Authorization: undefined
+        },
+        body: undefined
+      };
 
-        const getRequestInfo = {
-          headers: {
-            Authorization: user.signInUserSession.idToken.jwtToken
-          }
-        };
+      var username: String = undefined!;
 
+      await Auth.currentAuthenticatedUser()
+        .then(response => {
+          requestInfo.headers.Authorization = response.signInUserSession.idToken.jwtToken;
+          username = response.username;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
+      if(requestInfo.headers.Authorization) {
         // First we fetch the current blog, to update any changes from other users
-        API
-          .get('blog', '/blog/' + this.blog_id, getRequestInfo)
-          .then(response => {
-            if(response.length > 0) {
-                response = this.dislikeCommentFromJson(response[0], user.username);
+        await API
+          .get('blogapi', '/blog/' + this.blog_id, requestInfo)
+          .then(res => {
+            if(res.length > 0) {
+                res = this.dislikeCommentFromJson(res[0], username);
                 // Then we upload the changes
-                const postRequestInfo = {
-                    headers: {
-                      Authorization: user.signInUserSession.idToken.jwtToken
-                    },
-                    body: response
-                };
-                API
-                  .put('blog', '/blog', postRequestInfo)
-                  .then(response => {
-                    console.log(response);
-                  })
-                  .catch(error => {
-                    console.error("Error: ", error);
-                  });
+                requestInfo.body = res;
             } else {
-                //TODO error message
-                console.log("The post has already been deleted");
+                console.error("The post has already been deleted");
             }
-          })
-          .catch(error => {
-            console.error(error);
-          });
+        })
+        .catch(error => {
+          console.error(error);
+        }); 
+        
+        if(requestInfo.body) {
+          await API
+            .put('blogapi', '/blog', requestInfo)
+            .then(response => {
+              console.log(response);
+            })
+            .catch(error => {
+              console.error("Error: ", error);
+            });
+        }
+      }
     }
 
     dislikeCommentFromJson(response: any, currentUser: String): any {

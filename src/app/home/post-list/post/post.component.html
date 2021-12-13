@@ -10,9 +10,9 @@
             </div>
             <div class="col-auto">
                 <!-- Edit/delete post dropdown -->
-                <div class="dropdown">
-                    <button 
-                        id="dropdownMenuButton"
+                <div class="dropdown" *ngIf="editable">
+                    <button
+                        id="postDropDown"
                         class="btn btn-outline-secondary dropdown-toggle"
                         type="button"
                         data-bs-toggle="dropdown"
@@ -20,7 +20,7 @@
                         aria-expanded="false">
                             <i class="bi bi-three-dots-vertical"></i>
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu" aria-labelledby="postDropDown">
                         <button class="dropdown-item" (click)="onEditPostClick(mymodal)">Edit Post</button>
                         <button class="dropdown-item" (click)="onDeletePostClick()" >Delete Post</button>
                     </div>
