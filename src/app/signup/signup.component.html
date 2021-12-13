@@ -1,49 +1,54 @@
-<div class="container">
-    <form
-        autocomplete="off"
-        [formGroup]="newBlogForm"
-        (ngSubmit)="onSignup(newBlogForm.value, confirmEmailModal)">
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input 
-                id="email"
-                type="email"
-                formControlName="email"
-                placeholder="Email" 
-                class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input 
-                id="username"
-                type="text"
-                formControlName="username"
-                placeholder="Username" 
-                class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input 
-                id="password"
-                type="password"
-                formControlName="password"
-                placeholder="Password" 
-                class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone number</label>
-            <input 
-                id="phone"
-                type="tel"
-                formControlName="phone"
-                placeholder="Phone number" 
-                class="form-control">
-        </div>
-        <button type="submit">SIGN UP</button>
-        <div class="d-flex">
-            <p>Already have an account? </p><a href="/signin">Sign in</a>
-        </div>
-    </form>
+<div class="d-flex justify-content-center">
+    <div class="content-container">
+        <h1>Create a new account</h1>
+        <form
+            class="form"
+            autocomplete="off"
+            [formGroup]="newBlogForm"
+            (ngSubmit)="onSignup(newBlogForm.value, confirmEmailModal)">
+            <div class="form-group mb-2">
+                <label for="email">Email</label>
+                <input 
+                    id="email"
+                    type="email"
+                    formControlName="email"
+                    placeholder="Email" 
+                    class="form-control">
+            </div>
+            <div class="form-group mb-2">
+                <label for="username">Username</label>
+                <input 
+                    id="username"
+                    type="text"
+                    formControlName="username"
+                    placeholder="Username" 
+                    class="form-control">
+            </div>
+            <div class="form-group mb-2">
+                <label for="password">Password</label>
+                <input 
+                    id="password"
+                    type="password"
+                    formControlName="password"
+                    placeholder="Password" 
+                    class="form-control">
+                <small class="form-text text-muted">Your password must be at least 8 characters long.</small>
+            </div>
+            <div class="form-group mb-3">
+                <label for="phone">Phone number</label>
+                <input 
+                    id="phone"
+                    type="tel"
+                    formControlName="phone"
+                    placeholder="Phone number" 
+                    class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">SIGN UP</button>
+            <div class="d-flex">
+                <p>Already have an account? </p><a href="/signin">Sign in</a>
+            </div>
+        </form>
+    </div>
 </div>
 
 <!-- Email confirmation modal -->

@@ -1,34 +1,36 @@
-<div class="d-flex mb-1 align-items-center">
-    <img src="assets/profile-img.png" class="profile-img profile-img-comment" alt="Profile image">
-    <div class="card-container w-100">
-        <div class="card-content">
-            <p class="user-name">{{ comment.user_name }}</p>
-            <p>{{ comment.comment_content }}</p>
-            <div class="row justify-content-between">
-                <div class="col d-flex">
-                    <div class="d-flex">
-                        <p
-                            (click)="likeComment()"
-                            class="me-2 hover-underline-text"
-                            [ngClass]="{'text-primary': comment.likes.includes(currentUser)}">Like</p>
-                        <p 
-                            (click)="toggleCommentReplies()" 
-                            class="me-2 hover-underline-text">Reply</p>
-                        <p 
-                            (click)="dislikeComment()"
-                            class="me-2 hover-underline-text"
-                            [ngClass]="{'text-primary': comment.dislikes.includes(currentUser)}">Dislike</p>
-                        <p>({{ convertToDate(comment.timestamp).toLocaleString() }})</p>
+<div class="d-flex mb-1">
+    <img src="assets/profile-img.png" class="profile-img profile-img-comment mt-1" alt="Profile image">
+    <div class="d-flex flex-column w-100">
+        <div class="card-container">
+            <div class="card-content">
+                <p class="user-name mb-1">{{ comment.user_name }}</p>
+                <p class="mb-1">{{ comment.comment_content }}</p>
+                <div class="row justify-content-between">
+                    <div class="col d-flex">
+                        <div class="d-flex">
+                            <p
+                                (click)="likeComment()"
+                                class="me-2 hover-underline-text"
+                                [ngClass]="{'text-primary': comment.likes.includes(currentUser)}">Like</p>
+                            <p 
+                                (click)="toggleCommentReplies()" 
+                                class="me-2 hover-underline-text">Reply</p>
+                            <p 
+                                (click)="dislikeComment()"
+                                class="me-2 hover-underline-text"
+                                [ngClass]="{'text-primary': comment.dislikes.includes(currentUser)}">Dislike</p>
+                            <p>({{ convertToDate(comment.timestamp).toLocaleString() }})</p>
+                        </div>
+                    </div>  
+                    <div class="col-auto d-flex">
+                        <p class="text-primary hover-pointer"><i class="bi bi-hand-thumbs-up"></i>{{ comment.likes.length }}</p>
+                        <p class="text-primary hover-pointer"><i class="bi bi-hand-thumbs-down"></i>{{ comment.dislikes.length }}</p>
                     </div>
-                </div>  
-                <div class="col-auto d-flex">
-                    <p><i class="bi bi-hand-thumbs-up"></i>{{ comment.likes.length }}</p>
-                    <p><i class="bi bi-hand-thumbs-down"></i>{{ comment.dislikes.length }}</p>
                 </div>
+                <p (click)="toggleCommentReplies()" class="hover-underline-text" *ngIf="comment.replies.length !== 0">
+                    <i class="bi bi-arrow-return-right"></i> {{ comment.replies.length }} {{ comment.replies.length === 1 ? "reply" : "replies" }}
+                </p>
             </div>
-            <p (click)="toggleCommentReplies()" class="hover-underline-text" *ngIf="comment.replies.length !== 0">
-                <i class="bi bi-arrow-return-right"></i> {{ comment.replies.length }} {{ comment.replies.length === 1 ? "reply" : "replies" }}
-            </p>
         </div>
         <app-comment-replies
             [blog_id]="blog_id"

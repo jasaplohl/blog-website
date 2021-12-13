@@ -1,24 +1,27 @@
-<div class="comment bg-secondary">
-    <div class="container">
-        <p>{{ reply.user_name }}</p>
-        <p>{{ reply.reply_content }}</p> 
-        <div class="row justify-content-between">
-            <div class="col d-flex">
-                <div class="d-flex">
-                    <p 
-                        (click)="likeReply()"
-                        class="me-2 hover-underline-text"
-                        [ngClass]="{'text-primary': reply.likes.includes(currentUser)}">Like</p>
-                    <p 
-                        (click)="dislikeReply()"
-                        class="me-2 hover-underline-text"
-                        [ngClass]="{'text-primary': reply.dislikes.includes(currentUser)}">Dislike</p>
-                    <p>{{ convertToDate(reply.timestamp).toLocaleString() }}</p>
+<div class="d-flex mb-1">
+    <img src="assets/profile-img.png" class="profile-img profile-img-comment mt-1" alt="Profile image">
+    <div class="card-container w-100">
+        <div class="card-content">
+            <p class="user-name mb-1">{{ reply.user_name }}</p>
+            <p class="mb-1">{{ reply.reply_content }}</p> 
+            <div class="row justify-content-between">
+                <div class="col d-flex">
+                    <div class="d-flex">
+                        <p 
+                            (click)="likeReply()"
+                            class="me-2 hover-underline-text"
+                            [ngClass]="{'text-primary': reply.likes.includes(currentUser)}">Like</p>
+                        <p 
+                            (click)="dislikeReply()"
+                            class="me-2 hover-underline-text"
+                            [ngClass]="{'text-primary': reply.dislikes.includes(currentUser)}">Dislike</p>
+                        <p>{{ convertToDate(reply.timestamp).toLocaleString() }}</p>
+                    </div>
                 </div>
-            </div>
-            <div class="col-auto d-flex">
-                <p><i class="bi bi-hand-thumbs-up"></i>{{ reply.likes.length }}</p>
-                <p><i class="bi bi-hand-thumbs-down"></i>{{ reply.dislikes.length }}</p>
+                <div class="col-auto d-flex">
+                    <p class="text-primary hover-pointer"><i class="bi bi-hand-thumbs-up"></i>{{ reply.likes.length }}</p>
+                    <p class="text-primary hover-pointer"><i class="bi bi-hand-thumbs-down"></i>{{ reply.dislikes.length }}</p>
+                </div>
             </div>
         </div>
     </div>

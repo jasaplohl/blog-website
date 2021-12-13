@@ -17,6 +17,14 @@
 }
 
 /*
+    Custom container
+*/
+.content-container {
+    min-width: 50%;
+    max-width: 100%;
+}
+
+/*
     Post/comment/reply card
 */
 
