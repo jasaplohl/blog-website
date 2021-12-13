@@ -19,11 +19,7 @@ export class HeaderComponent implements OnInit {
         response.signOut()
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
       });
   }
-
-  // ngOnChanges() {
-  //   console.log("Header: " + this.isSignedIn);
-  // }
 }

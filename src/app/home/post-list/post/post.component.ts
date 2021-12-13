@@ -4,6 +4,7 @@ import { BlogPost } from 'src/app/models/blog-post.model';
 import { API, Auth, Storage } from 'aws-amplify';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-post',
@@ -20,7 +21,10 @@ export class PostComponent implements OnInit {
   showDeletePostModal: boolean;
   commentCount!: number;
 
+  timeFormat!: String;
+
   show!: String;
+  editable!: boolean;
 
   public newBlogForm!: FormGroup;
 
@@ -36,13 +40,16 @@ export class PostComponent implements OnInit {
   async ngOnInit() {
     await Auth.currentAuthenticatedUser()
       .then(usr => {
+        if(usr.attributes.sub === this.blog.user_id) {
+          this.editable = true;
+        }
         this.currentUser = usr.username;
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
 
-    this.countComments();
+    this.countComments(); // We get the total number of comments
 
     //The modal for editting the post content
     if(this.blog) {
@@ -54,6 +61,8 @@ export class PostComponent implements OnInit {
         blogEditContent: ["", Validators.required]
       });
     }
+
+    this.timeFormat = moment(new Date(this.blog.timestamp)).fromNow();
   }
 
   /**
@@ -113,11 +122,11 @@ export class PostComponent implements OnInit {
 
             })
             .catch(error => {
-              console.log(error);
+              console.error(error);
             });
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });   
     }
   }
@@ -135,8 +144,7 @@ export class PostComponent implements OnInit {
           this.deletePostEvent.emit(this.blog);
         })
         .catch(error => {
-          console.log("Unable to remove the image."); //TODO - display error
-          console.log(error);
+          console.error(error);
         });
   }
 
@@ -149,14 +157,7 @@ export class PostComponent implements OnInit {
 
   showMode(mode: String, content: TemplateRef<any>) {
     this.show = mode;
-    console.log(this.show);
-    this.modalService.open(content).result.then((result) => {
-      // When we save the changes
-      console.log(result);
-    }, (reason) => {
-      // When we cancel the changes
-      console.log(reason);
-    });
+    this.modalService.open(content);
   }
 
   countComments() {

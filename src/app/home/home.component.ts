@@ -47,11 +47,11 @@ export class HomeComponent implements OnInit {
               }
             })
             .catch(error => {
-              console.log(error);
+              console.error(error);
             });
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
   }
 
@@ -67,7 +67,7 @@ export class HomeComponent implements OnInit {
           requestInfo.headers.Authorization = response.signInUserSession.idToken.jwtToken;
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         })
         .finally(() => {
           API
@@ -78,7 +78,7 @@ export class HomeComponent implements OnInit {
               this.orderPostsByTimeStamp(this.blogPosts);
             })
             .catch(error => {
-              console.log(error);
+              console.error(error);
             });
         });
   }

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BlogComment } from 'src/app/models/blog-comment.model';
 import { Auth } from 'aws-amplify';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-comment',
@@ -15,24 +16,30 @@ export class CommentComponent implements OnInit {
 
   currentUser!: String;
   showCommentReplies: boolean;
+  timeFormat!: String;
+  editable!: boolean;
 
   constructor() {
     this.showCommentReplies = false;
   }
 
   async ngOnInit() {
-    // await Auth.currentAuthenticatedUser()
-    //           .then(usr => {
-    //             this.currentUser = usr.username;
-    //           });
+    await Auth.currentAuthenticatedUser()
+      .then(usr => {
+        if(usr.attributes.sub === this.comment.user_id) {
+          this.editable = true;
+        }
+        this.currentUser = usr.username;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+      
+    this.timeFormat = moment(new Date(this.comment.timestamp)).fromNow();
   }
 
   toggleCommentReplies() {
     this.showCommentReplies = !this.showCommentReplies;
-  }
-
-  convertToDate(dateStr: string) {
-    return new Date(dateStr);
   }
 
   onUpdateComment() {
@@ -41,7 +48,7 @@ export class CommentComponent implements OnInit {
         this.requestUpdateEvent.emit();
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
   }
 
@@ -51,7 +58,7 @@ export class CommentComponent implements OnInit {
         this.requestUpdateEvent.emit();
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
   }
 
@@ -61,8 +68,16 @@ export class CommentComponent implements OnInit {
         this.requestUpdateEvent.emit();
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
+  }
+
+  onEditCommentClick() {
+
+  }
+
+  onDeleteCommentClick() {
+
   }
 
 }

@@ -15,6 +15,8 @@ export class LoginComponent implements OnInit {
   public confirmationBlogForm: FormGroup;
 
   username!: string;
+  
+  ngOnInit(): void {}
 
   constructor(fb: FormBuilder, private router: Router, private modalService: NgbModal) {
     this.newBlogForm = fb.group({
@@ -34,6 +36,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(["/"]);
       })
       .catch(error => {
+        console.error(error);
         switch(error.message) {
           case 'User is not confirmed.':
             this.confirmEmail(content);
@@ -72,11 +75,8 @@ export class LoginComponent implements OnInit {
         console.log(response);
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
-  }
-
-  ngOnInit(): void {
   }
 
 }

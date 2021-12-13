@@ -68,16 +68,14 @@ export class BlogPost {
             API
               .get('blogapi', '/blog/' + this.blog_id, requestInfo)
               .then(response => {
-                console.log("Updating the blog");
-                console.log(response);
                 this.updateFromJSON(response);
               })
               .catch(error => {
-                console.log(error);
+                console.error(error);
               });
           })
           .catch(error => {
-            console.log(error);
+            console.error(error);
           });
     }
 
@@ -94,7 +92,7 @@ export class BlogPost {
                     this.image = res;
                 })
                 .catch(error => {
-                    console.log(error);
+                    console.error(error);
                 });
         }
     }
@@ -151,7 +149,7 @@ export class BlogPost {
 
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     }
 
@@ -207,7 +205,7 @@ export class BlogPost {
 
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     }
 
@@ -251,7 +249,7 @@ export class BlogPost {
           });
         })
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     }
 

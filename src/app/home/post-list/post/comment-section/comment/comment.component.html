@@ -1,9 +1,31 @@
-<div class="d-flex mb-1">
+<div class="d-flex mb-1 w-100">
     <img src="assets/profile-img.png" class="profile-img profile-img-comment mt-1" alt="Profile image">
     <div class="d-flex flex-column w-100">
         <div class="card-container">
             <div class="card-content">
-                <p class="user-name mb-1">{{ comment.user_name }}</p>
+                <div class="row justify-content-between">
+                    <div class="col d-flex">
+                        <p class="user-name mb-1">{{ comment.user_name }}</p>
+                    </div>
+                    <div class="col-auto">
+                        <!-- Edit/delete post dropdown -->
+                        <div class="dropdown" *ngIf="editable">
+                            <button 
+                                id="commentDropDown"
+                                class="btn btn-outline-secondary dropdown-toggle btn-sm"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="commentDropDown">
+                                <button class="dropdown-item btn-sm" (click)="onEditCommentClick()">Edit Comment</button>
+                                <button class="dropdown-item btn-sm" (click)="onDeleteCommentClick()" >Delete Comment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <p class="mb-1">{{ comment.comment_content }}</p>
                 <div class="row justify-content-between">
                     <div class="col d-flex">
@@ -19,11 +41,11 @@
                                 (click)="dislikeComment()"
                                 class="me-2 hover-underline-text"
                                 [ngClass]="{'text-primary': comment.dislikes.includes(currentUser)}">Dislike</p>
-                            <p>({{ convertToDate(comment.timestamp).toLocaleString() }})</p>
+                            <p>({{ timeFormat }})</p>
                         </div>
                     </div>  
                     <div class="col-auto d-flex">
-                        <p class="text-primary hover-pointer"><i class="bi bi-hand-thumbs-up"></i>{{ comment.likes.length }}</p>
+                        <p class="text-primary hover-pointer me-2"><i class="bi bi-hand-thumbs-up"></i>{{ comment.likes.length }}</p>
                         <p class="text-primary hover-pointer"><i class="bi bi-hand-thumbs-down"></i>{{ comment.dislikes.length }}</p>
                     </div>
                 </div>

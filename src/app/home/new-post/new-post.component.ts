@@ -79,9 +79,8 @@ export class NewPostComponent implements OnInit {
           this.createBlog(blogPost, res.key);
         })
         .catch(error => {
-          console.log("Unable to upload the image."); //TODO - display error
-          console.log(error);
-          this.createBlog(blogPost); //We upload the post anyway
+          console.error(error);
+          alert("Unable to upload the image."); //TODO - display error
         });
     } else {
       this.createBlog(blogPost);
@@ -110,11 +109,11 @@ export class NewPostComponent implements OnInit {
             this.newPostEvent.emit(response.blog_id);
           })
           .catch(error => {
-            console.log(error);
+            console.error(error);
           });
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {
         this.newBlogForm.reset();

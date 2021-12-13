@@ -17,7 +17,6 @@ export class PostListComponent implements OnInit {
 
   onNewPostEvent(post: BlogPost) {
     this.blogPosts.push(post);
-    console.log(this.blogPosts);
   }
 
   deletePost(post: BlogPost) {
