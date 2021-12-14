@@ -95,8 +95,8 @@ export class NewPostComponent implements OnInit {
             Authorization: response.signInUserSession.idToken.jwtToken
           },
           body: {
-            user_id: response.signInUserSession.idToken.payload.sub,
-            user_name: response.username,
+            // user_id: response.signInUserSession.idToken.payload.sub,
+            // user_name: response.username,
             blog_content: blogPost.blogContent,
             image_id: imageID
           }
@@ -106,6 +106,7 @@ export class NewPostComponent implements OnInit {
           .post('blogapi', '/blog', requestInfo)
           .then(response => {
             console.log(response);
+            console.log(response.requestData.authorizer.claims['cognito:username']);
             this.newPostEvent.emit(response.blog_id);
           })
           .catch(error => {

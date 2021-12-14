@@ -37,8 +37,6 @@ export class HomeComponent implements OnInit {
           API
             .get('blogapi', '/blog/' + blog_id, requestInfo)
             .then(response => {
-              console.log(response);
-              response = response[0];
               var post = new BlogPost(response.blog_id, response.user_id, response.user_name, response.timestamp, response.blog_content, response.image_id,
                 response.likes, response.dislikes, response.comments);
               this.blogPosts = [post].concat(this.blogPosts); //Insert the new post at the beginning
