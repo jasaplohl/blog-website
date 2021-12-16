@@ -1,6 +1,5 @@
-import { Component, ChangeDetectorRef, Input  } from '@angular/core';
+import { Component  } from '@angular/core';
 import { Auth, Hub } from 'aws-amplify';
-import { onAuthUIStateChange, CognitoUserInterface, AuthState, FormFieldTypes  } from '@aws-amplify/ui-components';
 
 @Component({
   selector: 'app-root',

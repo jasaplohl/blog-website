@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
-import { BlogComment } from 'src/app/models/blog-comment.model';
 import { BlogPost } from 'src/app/models/blog-post.model';
 import { API, Auth, Storage } from 'aws-amplify';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
@@ -101,7 +100,6 @@ export class PostComponent implements OnInit {
 
   /**
    * Deletes the post from the DB
-   * TODO
    */
    async onDeletePostClick() {
     if(confirm("Are you sure you want to delete your post?")) {

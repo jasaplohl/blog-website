@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { Auth } from 'aws-amplify';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -11,7 +10,7 @@ import {Router} from "@angular/router";
 export class HeaderComponent implements OnInit {
   @Input() currentUser!: String;
 
-  constructor(private modalService: NgbModal, private router: Router) {}
+  constructor(private modalService: NgbModal) {}
 
   async ngOnInit() {}
 

@@ -93,17 +93,5 @@ export class CommentSectionComponent implements OnInit {
   onRequestUpdate() {
     this.requestUpdateEvent.emit();
   }
-
-  // onCommentEvent(comment: BlogComment) {
-  //   this.comments.forEach(element => {
-  //     if(element.comment_id === comment.comment_id) {
-  //       element = comment;
-  //       console.log(true);
-  //     } else {
-  //       console.log(false);
-  //     }
-  //   });
-  //   this.emitCommentEvent();
-  // }
   
 }

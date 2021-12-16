@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { BlogComment } from 'src/app/models/blog-comment.model';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { Auth } from 'aws-amplify';
 import * as moment from 'moment';
 
@@ -14,12 +15,13 @@ export class CommentComponent implements OnInit {
 
   @Output() requestUpdateEvent = new EventEmitter<void>();
 
+  show!: String;
   currentUser!: String;
   showCommentReplies: boolean;
   timeFormat!: String;
   editable!: boolean;
 
-  constructor() {
+  constructor(private modalService: NgbModal) {
     this.showCommentReplies = false;
   }
 
@@ -73,11 +75,28 @@ export class CommentComponent implements OnInit {
   }
 
   onEditCommentClick() {
-
+    this.comment.updateComment()
+      .then(() => {
+        this.requestUpdateEvent.emit();
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
   onDeleteCommentClick() {
+    this.comment.deleteComment()
+      .then(() => {
+        this.requestUpdateEvent.emit();
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
 
+  showMode(mode: String, content: TemplateRef<any>) {
+    this.show = mode;
+    this.modalService.open(content);
   }
 
 }

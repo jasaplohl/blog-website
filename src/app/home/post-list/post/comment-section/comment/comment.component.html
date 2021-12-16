@@ -47,8 +47,8 @@
                         </div>
                     </div>  
                     <div class="col-auto d-flex">
-                        <p class="text-primary hover-pointer me-2"><i class="bi bi-hand-thumbs-up"></i>{{ comment.likes.length }}</p>
-                        <p class="text-primary hover-pointer"><i class="bi bi-hand-thumbs-down"></i>{{ comment.dislikes.length }}</p>
+                        <p (click)="showMode('like', likesModal)" class="text-primary hover-pointer me-2"><i class="bi bi-hand-thumbs-up"></i>{{ comment.likes.length }}</p>
+                        <p (click)="showMode('dislike', likesModal)" class="text-primary hover-pointer"><i class="bi bi-hand-thumbs-down"></i>{{ comment.dislikes.length }}</p>
                     </div>
                 </div>
                 <p (click)="toggleCommentReplies()" class="hover-underline-text" *ngIf="comment.replies.length !== 0">
@@ -63,3 +63,40 @@
             *ngIf="showCommentReplies"></app-comment-replies>
     </div>
 </div>
+
+<!-- Liked/disliked by modal -->
+<ng-template #likesModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" *ngIf="show === 'like'; else dislikeTitle">Liked by</h4>
+      <ng-template #dislikeTitle>     
+        <h4 class="modal-title">Disliked by</h4>
+      </ng-template>
+      <button class="close" (click)="modal.dismiss('cross')">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+        <div *ngIf="show === 'like'; else dislikeItems">
+            <ul *ngIf="comment.likes.length > 0; else noLikesYet">
+                <li *ngFor="let like of comment.likes">{{ like }}</li>
+            </ul>
+            <ng-template #noLikesYet><p>This comment doesn't have any likes yet.</p></ng-template>
+        </div>
+        <ng-template #dislikeItems>
+            <div>
+                <ul *ngIf="comment.dislikes.length > 0; else noDislikesYet">
+                    <li *ngFor="let dislike of comment.dislikes">{{ dislike }}</li>
+                </ul>
+                <ng-template #noDislikesYet><p>This comment doesn't have any dislikes yet.</p></ng-template>
+            </div>
+        </ng-template>
+    </div>
+    <div class="modal-footer">
+        <button 
+            class="btn btn-outline-dark" 
+            (click)="modal.dismiss('cancel')">
+            <i class="bi bi-x-lg"></i> Close
+        </button>
+    </div>
+</ng-template>

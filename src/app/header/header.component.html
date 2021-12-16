@@ -3,7 +3,7 @@
         <a href="#" class="navbar-brand">BlogWebsite</a>
         <div>
             <div class="d-flex align-items-center" *ngIf="currentUser; else loggedOut">
-                <p class="greeting-text">Hello {{ currentUser }}</p>
+                <p class="greeting-text">Hello <span class="capital">{{ currentUser }}</span></p>
                 <a 
                     class="m-1 btn btn-secondary" 
                     (click)="onLogOutClick(mymodal)">Sign out</a>
