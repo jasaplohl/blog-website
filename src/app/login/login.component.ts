@@ -42,7 +42,6 @@ export class LoginComponent implements OnInit {
             this.confirmEmail(content);
             break;
           default:
-            //TODO: error msg display
             alert(error.message);
             break;
         }

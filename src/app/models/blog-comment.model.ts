@@ -67,8 +67,9 @@ export class BlogComment {
         await API
           .get('blogapi', '/blog/' + this.blog_id, requestInfo)
           .then(res => {
-            if(res.length > 0) {
-                res = this.likeCommentFromJson(res[0], username);
+            console.log(res);
+            if(res.blog_id) {
+                res = this.likeCommentFromJson(res, username);
                 // Then we upload the changes
                 requestInfo.body = res;
             } else {
@@ -136,8 +137,8 @@ export class BlogComment {
         await API
           .get('blogapi', '/blog/' + this.blog_id, requestInfo)
           .then(res => {
-            if(res.length > 0) {
-                res = this.dislikeCommentFromJson(res[0], username);
+            if(res.blog_id) {
+                res = this.dislikeCommentFromJson(res, username);
                 // Then we upload the changes
                 requestInfo.body = res;
             } else {
@@ -182,7 +183,11 @@ export class BlogComment {
     }
 
     async updateComment() {
+      console.log("TODO: Update comment");
+    }
 
+    async deleteComment() {
+      console.log("TODO: Update comment");
     }
 
 }

@@ -123,14 +123,14 @@
             <ul *ngIf="blog.likes.length > 0; else noLikesYet">
                 <li *ngFor="let like of blog.likes">{{ like }}</li>
             </ul>
-            <ng-template #noLikesYet><p>This post doesnt have any likes yet.</p></ng-template>
+            <ng-template #noLikesYet><p>This post doesn't have any likes yet.</p></ng-template>
         </div>
         <ng-template #dislikeItems>
             <div>
                 <ul *ngIf="blog.dislikes.length > 0; else noDislikesYet">
                     <li *ngFor="let dislike of blog.dislikes">{{ dislike }}</li>
                 </ul>
-                <ng-template #noDislikesYet><p>This post doesnt have any dislikes yet.</p></ng-template>
+                <ng-template #noDislikesYet><p>This post doesn't have any dislikes yet.</p></ng-template>
             </div>
         </ng-template>
     </div>
