@@ -117,9 +117,10 @@ export class PostComponent implements OnInit {
             .del('blogapi', '/blog/'+ this.blog.blog_id.trim(), requestInfo)
             .then(response => {
               console.log(response);
-              // this.deletePostEvent.emit(this.blog);
-              this.deleteImage(this.blog.image_id);
-
+              if(this.blog.image_id)
+                this.deleteImage(this.blog.image_id);
+              else
+                this.deletePostEvent.emit(this.blog);
             })
             .catch(error => {
               console.error(error);

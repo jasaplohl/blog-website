@@ -59,23 +59,7 @@ const convertUrlType = (param, type) => {
  * HTTP Get method for all objects *
  ********************************/
 
- app.get(path, function(req, res) {
-  var condition = {}
-  condition[partitionKeyName] = {
-    ComparisonOperator: 'EQ'
-  }
-
-  if (userIdPresent && req.apiGateway) {
-    condition[partitionKeyName]['AttributeValueList'] = [req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH ];
-  } else {
-    try {
-      condition[partitionKeyName]['AttributeValueList'] = [ convertUrlType(req.params[partitionKeyName], partitionKeyType) ];
-    } catch(err) {
-      res.statusCode = 500;
-      res.json({error: 'Wrong column type ' + err});
-    }
-  }
-
+ app.get("/blog", function(req, res) {
   let queryParams = {
     TableName: tableName
   }
@@ -90,71 +74,16 @@ const convertUrlType = (param, type) => {
   });
 });
 
-/********************************
- * HTTP Get method for list objects *
- ********************************/
-
-app.get(path + hashKeyPath, function(req, res) {
-  var condition = {}
-  condition[partitionKeyName] = {
-    ComparisonOperator: 'EQ'
-  }
-
-  if (userIdPresent && req.apiGateway) {
-    condition[partitionKeyName]['AttributeValueList'] = [req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH ];
-  } else {
-    try {
-      condition[partitionKeyName]['AttributeValueList'] = [ convertUrlType(req.params[partitionKeyName], partitionKeyType) ];
-    } catch(err) {
-      res.statusCode = 500;
-      res.json({error: 'Wrong column type ' + err});
-    }
-  }
-
-  let queryParams = {
-    TableName: tableName,
-    KeyConditions: condition
-  }
-
-  dynamodb.query(queryParams, (err, data) => {
-    if (err) {
-      res.statusCode = 500;
-      res.json({error: 'Could not load items: ' + err});
-    } else {
-      res.json(data.Items);
-    }
-  });
-});
-
 /*****************************************
  * HTTP Get method for get single object *
  *****************************************/
 
-app.get(path + '/object' + hashKeyPath + sortKeyPath, function(req, res) {
-  var params = {};
-  if (userIdPresent && req.apiGateway) {
-    params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
-  } else {
-    params[partitionKeyName] = req.params[partitionKeyName];
-    try {
-      params[partitionKeyName] = convertUrlType(req.params[partitionKeyName], partitionKeyType);
-    } catch(err) {
-      res.statusCode = 500;
-      res.json({error: 'Wrong column type ' + err});
-    }
-  }
-  if (hasSortKey) {
-    try {
-      params[sortKeyName] = convertUrlType(req.params[sortKeyName], sortKeyType);
-    } catch(err) {
-      res.statusCode = 500;
-      res.json({error: 'Wrong column type ' + err});
-    }
-  }
-
+app.get('/blog/:blog_id', function(req, res) {
   let getItemParams = {
     TableName: tableName,
-    Key: params
+    Key: {
+      blog_id: req.params.blog_id
+    }
   }
 
   dynamodb.get(getItemParams,(err, data) => {
@@ -176,40 +105,46 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, function(req, res) {
 * HTTP put method for insert object *
 *************************************/
 
-app.put(path, function(req, res) {
+app.put("/blog", function(req, res) {
 
   let putItemParams = {
     TableName: tableName,
     Item: req.body
   }
 
-  if(putItemParams.Item.user_id && putItemParams.Item.user_id.trim() !== "" && putItemParams.Item.user_name && putItemParams.Item.user_name.trim() !== "") {
-    if(putItemParams.Item.blog_content && putItemParams.Item.blog_content.trim() !== "") {
+  //If content is empty we don't post it
+  if(putItemParams.Item.blog_content && putItemParams.Item.blog_content.trim() !== "") {
+    if(putItemParams.Item.blog_id === undefined) {
       //Creating a post
-      if(putItemParams.Item.blog_id === undefined) {
-        putItemParams.Item.blog_id = uuidv4();
-        putItemParams.Item.timestamp = new Date().toISOString();
-        putItemParams.Item.likes = [];
-        putItemParams.Item.dislikes = [];
-        putItemParams.Item.comments = [];
-      } else {
-        //Updating the post - we need to check if the user posting the update is the same as the author
-        
-      }
+      putItemParams.Item.user_id = req.apiGateway.event.requestContext.authorizer.claims.sub;
+      putItemParams.Item.user_name = req.apiGateway.event.requestContext.authorizer.claims['cognito:username'];
+      putItemParams.Item.blog_id = uuidv4();
+      putItemParams.Item.timestamp = new Date().toISOString();
+      putItemParams.Item.likes = [];
+      putItemParams.Item.dislikes = [];
+      putItemParams.Item.comments = [];
 
-      dynamodb.put(putItemParams, (err, data) => {
-        if(err) {
-          res.statusCode = 500;
-          res.json({error: err, url: req.url, body: req.body});
-        } else{
-          res.json({success: 'put call succeed!', url: req.url, data: data, blog_id: putItemParams.Item.blog_id, requestData: req.apiGateway.event.requestContext})
-        }
-      });
     } else {
-      res.json({error: "Blog content cannot be empty!"});
+      //Updating the post - we need to check if the user posting the update is the same as the author
+      
+      // if(req.apiGateway.event.requestContext.authorizer.claims['cognito:username'] === putItemParams.Item.user_id) {
+        
+      // } else {
+      //   res.statusCode = 500;
+      //   res.json({error: "You can only edit your own posts!", url: req.url});
+      // }
     }
+    dynamodb.put(putItemParams, (err, data) => {
+      if(err) {
+        res.statusCode = 500;
+        res.json({error: err, url: req.url, body: req.body});
+      } else{
+        res.json({success: 'put call succeed!', url: req.url, data: data, blog_id: putItemParams.Item.blog_id, requestData: req.apiGateway.event.requestContext})
+      }
+    });
   } else {
-    res.json({error: "User needs to be authenticated!"});
+    res.statusCode = 500;
+    res.json({error: "Blog content cannot be empty!", url: req.url});
   }
 });
 
@@ -217,37 +152,46 @@ app.put(path, function(req, res) {
 * HTTP post method for insert object *
 *************************************/
 
-app.post(path, function(req, res) {
+app.post("/blog", function(req, res) {
 
   let putItemParams = {
     TableName: tableName,
     Item: req.body
   }
 
-  if(putItemParams.Item.user_id && putItemParams.Item.user_id.trim() !== "" && putItemParams.Item.user_name && putItemParams.Item.user_name.trim() !== "") {
-    if(putItemParams.Item.blog_content && putItemParams.Item.blog_content.trim() !== "") {
-      //Creating an element, in other case we are updating it
-      if(putItemParams.Item.blog_id === undefined) {
-        putItemParams.Item.blog_id = uuidv4();
-        putItemParams.Item.timestamp = new Date().toISOString();
-        putItemParams.Item.likes = [];
-        putItemParams.Item.dislikes = [];
-        putItemParams.Item.comments = [];
-      }
+  //If content is empty we don't post it
+  if(putItemParams.Item.blog_content && putItemParams.Item.blog_content.trim() !== "") {
+    if(putItemParams.Item.blog_id === undefined) {
+      //Creating a post
+      putItemParams.Item.user_id = req.apiGateway.event.requestContext.authorizer.claims.sub;
+      putItemParams.Item.user_name = req.apiGateway.event.requestContext.authorizer.claims['cognito:username'];
+      putItemParams.Item.blog_id = uuidv4();
+      putItemParams.Item.timestamp = new Date().toISOString();
+      putItemParams.Item.likes = [];
+      putItemParams.Item.dislikes = [];
+      putItemParams.Item.comments = [];
 
-      dynamodb.put(putItemParams, (err, data) => {
-        if(err) {
-          res.statusCode = 500;
-          res.json({error: err, url: req.url, body: req.body});
-        } else{
-          res.json({success: 'post call succeed!', url: req.url, data: data, blog_id: putItemParams.Item.blog_id, requestData: req.apiGateway.event.requestContext})
-        }
-      });
     } else {
-      res.json({error: "Blog content cannot be empty!"});
+      //Updating the post - we need to check if the user posting the update is the same as the author
+      
+      // if(req.apiGateway.event.requestContext.authorizer.claims['cognito:username'] === putItemParams.Item.user_id) {
+
+      // } else {
+      //   res.statusCode = 500;
+      //   res.json({error: "You can only edit your own posts!", url: req.url});
+      // }
     }
+    dynamodb.put(putItemParams, (err, data) => {
+      if(err) {
+        res.statusCode = 500;
+        res.json({error: err, url: req.url, body: req.body});
+      } else{
+        res.json({success: 'post call succeed!', url: req.url, data: data, blog_id: putItemParams.Item.blog_id, requestData: req.apiGateway.event.requestContext})
+      }
+    });
   } else {
-    res.json({error: "User needs to be authenticated!"});
+    res.statusCode = 500;
+    res.json({error: "Blog content cannot be empty!", url: req.url});
   }
 });
 
@@ -264,12 +208,30 @@ app.delete('/blog/:blog_id', function(req, res) {
     }
   }
 
-  dynamodb.delete(removeItemParams, (err, data)=> {
+  dynamodb.get(removeItemParams,(err, data) => {
     if(err) {
       res.statusCode = 500;
-      res.json({error: err, url: req.url});
+      res.json({error: 'Could not load items: ' + err.message});
     } else {
-      res.json({url: req.url, data: data});
+      var dataTemp;
+      if (data.Item) {
+        dataTemp = data.Item;
+      } else {
+        dataTemp = data;
+      }
+      if(req.apiGateway.event.requestContext.authorizer.claims['cognito:username'] === dataTemp.user_id) {
+        dynamodb.delete(removeItemParams, (err, data)=> {
+          if(err) {
+            res.statusCode = 500;
+            res.json({error: err, url: req.url});
+          } else {
+            res.json({url: req.url, data: data});
+          }
+        });
+      } else {
+        res.statusCode = 500;
+        res.json({error: "You can only delete your own posts!", url: req.url});
+      }
     }
   });
 });

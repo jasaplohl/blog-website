@@ -16,6 +16,8 @@ export class NewPostComponent implements OnInit {
   imgFile!: File;
   url!: any;
 
+  currentUser!: String;
+
   public newBlogForm: FormGroup;
 
   constructor(fb: FormBuilder) {
@@ -24,7 +26,14 @@ export class NewPostComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await Auth.currentAuthenticatedUser()
+      .then(response => {
+        this.currentUser = response.username;
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
   /**
@@ -95,8 +104,6 @@ export class NewPostComponent implements OnInit {
             Authorization: response.signInUserSession.idToken.jwtToken
           },
           body: {
-            user_id: response.signInUserSession.idToken.payload.sub,
-            user_name: response.username,
             blog_content: blogPost.blogContent,
             image_id: imageID
           }
@@ -105,7 +112,6 @@ export class NewPostComponent implements OnInit {
         API
           .post('blogapi', '/blog', requestInfo)
           .then(response => {
-            console.log(response);
             this.newPostEvent.emit(response.blog_id);
           })
           .catch(error => {

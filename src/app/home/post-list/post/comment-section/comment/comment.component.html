@@ -30,17 +30,19 @@
                 <div class="row justify-content-between">
                     <div class="col d-flex">
                         <div class="d-flex">
-                            <p
-                                (click)="likeComment()"
-                                class="me-2 hover-underline-text"
-                                [ngClass]="{'text-primary': comment.likes.includes(currentUser)}">Like</p>
-                            <p 
-                                (click)="toggleCommentReplies()" 
-                                class="me-2 hover-underline-text">Reply</p>
-                            <p 
-                                (click)="dislikeComment()"
-                                class="me-2 hover-underline-text"
-                                [ngClass]="{'text-primary': comment.dislikes.includes(currentUser)}">Dislike</p>
+                            <div class="d-flex" *ngIf="currentUser">
+                                <p
+                                    (click)="likeComment()"
+                                    class="me-2 hover-underline-text"
+                                    [ngClass]="{'text-primary': comment.likes.includes(currentUser)}">Like</p>
+                                <p 
+                                    (click)="toggleCommentReplies()" 
+                                    class="me-2 hover-underline-text">Reply</p>
+                                <p 
+                                    (click)="dislikeComment()"
+                                    class="me-2 hover-underline-text"
+                                    [ngClass]="{'text-primary': comment.dislikes.includes(currentUser)}">Dislike</p>
+                            </div>
                             <p>({{ timeFormat }})</p>
                         </div>
                     </div>  

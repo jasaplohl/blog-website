@@ -15,6 +15,7 @@ export class CommentSectionComponent implements OnInit {
 
   @Output() requestUpdateEvent = new EventEmitter<void>();
 
+  currentUser!: String;
   public newCommentForm: FormGroup;
 
   constructor(fb: FormBuilder) {
@@ -23,7 +24,15 @@ export class CommentSectionComponent implements OnInit {
     });
   }
 
-  async ngOnInit() {}
+  async ngOnInit() {
+    await Auth.currentAuthenticatedUser()
+      .then(response => {
+        this.currentUser = response.username;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
 
   commentFromJSON(json: any) {
     return new BlogComment(json.blog_id, json.comment_id, json.user_id, json.user_name, json.timestamp, 
@@ -49,14 +58,14 @@ export class CommentSectionComponent implements OnInit {
           API
             .get('blogapi', '/blog/' + this.blog_id, getRequestInfo)
             .then(res => {
-              if(res.length > 0) {
+              if(res.blog_id) {
                 this.comments.push(newComment);
-                res[0].comments.push(newComment.commentToJSON());
+                res.comments.push(newComment.commentToJSON());
                 const postRequestInfo = {
                   headers: {
                     Authorization: response.signInUserSession.idToken.jwtToken
                   },
-                  body: res[0]
+                  body: res
                 };
                 API
                   .put('blogapi', '/blog', postRequestInfo)

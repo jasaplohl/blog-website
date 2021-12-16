@@ -47,10 +47,10 @@ export class BlogPost {
     }
 
     updateFromJSON(response: any) {
-        this.blog_content = response[0].blog_content;
-        this.likes = response[0].likes;
-        this.dislikes = response[0].dislikes;
-        this.comments = response[0].comments;
+        this.blog_content = response.blog_content;
+        this.likes = response.likes;
+        this.dislikes = response.dislikes;
+        this.comments = response.comments;
     }
 
     async fetchLatestBlogData() {
