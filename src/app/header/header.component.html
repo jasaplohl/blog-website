@@ -6,7 +6,7 @@
                 <p class="greeting-text">Hello {{ currentUser }}</p>
                 <a 
                     class="m-1 btn btn-secondary" 
-                    href="/" (click)="signOut()">Sign out</a>
+                    (click)="onLogOutClick(mymodal)">Sign out</a>
             </div>
             <ng-template #loggedOut>
                 <div class="d-flex">
@@ -21,3 +21,30 @@
         </div>
     </div>
 </nav>
+
+<!-- Log out modal -->
+<ng-template #mymodal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Log out</h4>
+      <button class="close" (click)="modal.dismiss('cross')">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+        <p class="modal-title">Are you sure you want to log out?</p>
+    </div>
+    <div class="modal-footer">
+        <button 
+            class="btn btn-outline-dark" 
+            (click)="modal.dismiss('cancel')">
+            <i class="bi bi-x-lg"></i> No
+        </button>
+        <button 
+            type="submit"
+            class="btn btn-outline-dark" 
+            href="/"
+            (click)="modal.close(true)">
+            <i class="bi bi-check-lg"></i> Yes
+        </button>
+    </div>
+</ng-template>

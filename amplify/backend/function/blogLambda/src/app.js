@@ -123,11 +123,17 @@ app.put("/blog", function(req, res) {
       putItemParams.Item.likes = [];
       putItemParams.Item.dislikes = [];
       putItemParams.Item.comments = [];
+
     } else {
       //Updating the post - we need to check if the user posting the update is the same as the author
       
+      // if(req.apiGateway.event.requestContext.authorizer.claims['cognito:username'] === putItemParams.Item.user_id) {
+        
+      // } else {
+      //   res.statusCode = 500;
+      //   res.json({error: "You can only edit your own posts!", url: req.url});
+      // }
     }
-
     dynamodb.put(putItemParams, (err, data) => {
       if(err) {
         res.statusCode = 500;
@@ -137,7 +143,8 @@ app.put("/blog", function(req, res) {
       }
     });
   } else {
-    res.json({error: "Blog content cannot be empty!"});
+    res.statusCode = 500;
+    res.json({error: "Blog content cannot be empty!", url: req.url});
   }
 });
 
@@ -157,17 +164,23 @@ app.post("/blog", function(req, res) {
     if(putItemParams.Item.blog_id === undefined) {
       //Creating a post
       putItemParams.Item.user_id = req.apiGateway.event.requestContext.authorizer.claims.sub;
-      putItemParams.Item.user_name = req.apiGateway.event.requestContext.authorizer.claims.username;
+      putItemParams.Item.user_name = req.apiGateway.event.requestContext.authorizer.claims['cognito:username'];
       putItemParams.Item.blog_id = uuidv4();
       putItemParams.Item.timestamp = new Date().toISOString();
       putItemParams.Item.likes = [];
       putItemParams.Item.dislikes = [];
       putItemParams.Item.comments = [];
+
     } else {
       //Updating the post - we need to check if the user posting the update is the same as the author
       
-    }
+      // if(req.apiGateway.event.requestContext.authorizer.claims['cognito:username'] === putItemParams.Item.user_id) {
 
+      // } else {
+      //   res.statusCode = 500;
+      //   res.json({error: "You can only edit your own posts!", url: req.url});
+      // }
+    }
     dynamodb.put(putItemParams, (err, data) => {
       if(err) {
         res.statusCode = 500;
@@ -177,7 +190,8 @@ app.post("/blog", function(req, res) {
       }
     });
   } else {
-    res.json({error: "Blog content cannot be empty!"});
+    res.statusCode = 500;
+    res.json({error: "Blog content cannot be empty!", url: req.url});
   }
 });
 
@@ -194,12 +208,30 @@ app.delete('/blog/:blog_id', function(req, res) {
     }
   }
 
-  dynamodb.delete(removeItemParams, (err, data)=> {
+  dynamodb.get(removeItemParams,(err, data) => {
     if(err) {
       res.statusCode = 500;
-      res.json({error: err, url: req.url});
+      res.json({error: 'Could not load items: ' + err.message});
     } else {
-      res.json({url: req.url, data: data});
+      var dataTemp;
+      if (data.Item) {
+        dataTemp = data.Item;
+      } else {
+        dataTemp = data;
+      }
+      if(req.apiGateway.event.requestContext.authorizer.claims['cognito:username'] === dataTemp.user_id) {
+        dynamodb.delete(removeItemParams, (err, data)=> {
+          if(err) {
+            res.statusCode = 500;
+            res.json({error: err, url: req.url});
+          } else {
+            res.json({url: req.url, data: data});
+          }
+        });
+      } else {
+        res.statusCode = 500;
+        res.json({error: "You can only delete your own posts!", url: req.url});
+      }
     }
   });
 });

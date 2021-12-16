@@ -1,5 +1,5 @@
 <div>
-    <div class="mb-2">
+    <div class="mb-2" *ngIf="currentUser">
         <form
             autocomplete="off"
             [formGroup]="newCommentForm"
