@@ -188,8 +188,4 @@ export class BlogComment {
       console.log("TODO: Update comment");
     }
 
-    async deleteComment() {
-      console.log("TODO: Delete comment");
-    }
-
 }

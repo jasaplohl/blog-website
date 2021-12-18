@@ -13,6 +13,7 @@ export class CommentComponent implements OnInit {
   @Input() declare blog_id: String;
   @Input() declare comment: BlogComment;
 
+  @Output() deleteCommentEvent = new EventEmitter<String>();
   @Output() requestUpdateEvent = new EventEmitter<void>();
 
   show!: String;
@@ -75,13 +76,7 @@ export class CommentComponent implements OnInit {
   }
 
   onDeleteCommentClick() {
-    this.comment.deleteComment()
-      .then(() => {
-        this.requestUpdateEvent.emit();
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    this.deleteCommentEvent.emit(this.comment.comment_id);
   }
 
   showMode(mode: String, content: TemplateRef<any>) {

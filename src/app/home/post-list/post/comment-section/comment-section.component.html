@@ -17,6 +17,7 @@
     <!-- A list of all comments -->
     <div>
         <app-comment
+            (deleteCommentEvent)="deleteComment($event)"
             (requestUpdateEvent)="onRequestUpdate()"
             [blog_id]="blog_id"
             *ngFor="let comment of comments"
