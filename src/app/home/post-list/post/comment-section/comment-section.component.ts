@@ -79,6 +79,7 @@ export class CommentSectionComponent implements OnInit {
               } else {
                 //TODO error message
                 console.error("The post has already been deleted.");
+                window.location.reload();
               }
             })
             .catch(error => {

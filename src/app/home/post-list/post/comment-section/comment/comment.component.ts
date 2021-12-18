@@ -99,4 +99,8 @@ export class CommentComponent implements OnInit {
     this.modalService.open(content);
   }
 
+  onRequestUpdate() {
+    this.requestUpdateEvent.emit();
+  }
+
 }

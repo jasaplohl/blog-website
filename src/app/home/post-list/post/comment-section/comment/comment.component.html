@@ -57,6 +57,7 @@
             </div>
         </div>
         <app-comment-replies
+            (requestUpdateEvent)="onRequestUpdate()"
             [blog_id]="blog_id"
             [comment_id]="comment.comment_id"
             [replies]="comment.replies" 

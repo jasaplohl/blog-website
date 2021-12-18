@@ -63,20 +63,22 @@ export class BlogPost {
       await Auth.currentAuthenticatedUser()
           .then(response => {
             requestInfo.headers.Authorization = response.signInUserSession.idToken.jwtToken;
-  
-            // First we fetch the current blog, to update any changes from other users
-            API
-              .get('blogapi', '/blog/' + this.blog_id, requestInfo)
-              .then(response => {
-                this.updateFromJSON(response);
-              })
-              .catch(error => {
-                console.error(error);
-              });
           })
           .catch(error => {
             console.error(error);
           });
+      
+      // First we fetch the current blog, to update any changes from other users
+      if(requestInfo.headers.Authorization) {
+        await API
+          .get('blogapi', '/blog/' + this.blog_id, requestInfo)
+          .then(response => {
+            this.updateFromJSON(response);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
     }
 
     /**
