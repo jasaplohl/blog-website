@@ -108,6 +108,7 @@ export class BlogComment {
                         response.comments[i].likes.splice(index, 1);
                     }
                 }
+                break;
             }
         }
         return response;
@@ -177,12 +178,13 @@ export class BlogComment {
                         response.comments[i].dislikes.splice(index, 1);
                     }
                 }
+                break;
             }
         }
         return response;
     }
 
-    async updateComment() {
+    async editComment() {
       console.log("TODO: Update comment");
     }
 

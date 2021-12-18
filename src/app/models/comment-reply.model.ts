@@ -1,3 +1,5 @@
+import { API, Auth } from 'aws-amplify';
+
 export class CommentReply {
     public blog_id: String;
     public comment_id: String;
@@ -22,5 +24,167 @@ export class CommentReply {
         this.reply_content = reply_content;
         this.likes = likes;
         this.dislikes = dislikes;
+    }
+
+    async likeReply() {
+        const requestInfo = {
+            headers: {
+              Authorization: undefined
+            },
+            body: undefined
+        };
+        var username: String = undefined!;
+
+        await Auth.currentAuthenticatedUser()
+            .then(response => {
+                requestInfo.headers.Authorization = response.signInUserSession.idToken.jwtToken;
+                username = response.username;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        
+        if(requestInfo.headers.Authorization) {
+            // First we fetch the current blog, to update any changes from other users
+            await API
+              .get('blogapi', '/blog/' + this.blog_id, requestInfo)
+              .then(res => {
+                console.log(res);
+                if(res.blog_id) {
+                    res = this.likeReplyFromJson(res, username);
+                    // Then we upload the changes
+                    requestInfo.body = res;
+                } else {
+                    console.error("The post has already been deleted");
+                }
+              })
+              .catch(error => {
+                console.error(error);
+              });
+
+              if(requestInfo.body) {
+                await API
+                  .put('blogapi', '/blog', requestInfo)
+                  .then(response => {
+                    console.log(response);
+                  })
+                  .catch(error => {
+                    console.error("Error: ", error);
+                  });
+              }
+        }
+    }
+
+    likeReplyFromJson(response: any, currentUser: String) {
+        for(var i=0; i<response.comments.length; i++) {
+            if(response.comments[i].comment_id === this.comment_id) {
+                //We have found the correct comment
+                for(var j=0; j<response.comments[i].replies.length; j++) {
+                    if(response.comments[i].replies[j].reply_id === this.reply_id) {
+                        //We have found the correct reply
+                        if(!response.comments[i].replies[j].likes.includes(currentUser)) {
+                            var index = response.comments[i].replies[j].dislikes.indexOf(currentUser);
+                            if(index > -1) {
+                                response.comments[i].replies[j].dislikes.splice(index, 1);
+                            }
+                            response.comments[i].replies[j].likes.push(currentUser);
+                        } else {
+                            var index = response.comments[i].replies[j].likes.indexOf(currentUser);
+                            if(index > -1) {
+                                response.comments[i].replies[j].likes.splice(index, 1);
+                            }
+                        }
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        return response;
+    }
+
+    async dislikeReply() {
+        const requestInfo = {
+            headers: {
+              Authorization: undefined
+            },
+            body: undefined
+        };
+        var username: String = undefined!;
+
+        await Auth.currentAuthenticatedUser()
+            .then(response => {
+                requestInfo.headers.Authorization = response.signInUserSession.idToken.jwtToken;
+                username = response.username;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        
+        if(requestInfo.headers.Authorization) {
+            // First we fetch the current blog, to update any changes from other users
+            await API
+              .get('blogapi', '/blog/' + this.blog_id, requestInfo)
+              .then(res => {
+                console.log(res);
+                if(res.blog_id) {
+                    res = this.dislikeReplyFromJson(res, username);
+                    // Then we upload the changes
+                    requestInfo.body = res;
+                } else {
+                    console.error("The post has already been deleted");
+                }
+              })
+              .catch(error => {
+                console.error(error);
+              });
+
+              if(requestInfo.body) {
+                await API
+                  .put('blogapi', '/blog', requestInfo)
+                  .then(response => {
+                    console.log(response);
+                  })
+                  .catch(error => {
+                    console.error("Error: ", error);
+                  });
+              }
+        }
+    }
+    
+    dislikeReplyFromJson(response: any, currentUser: String) {
+        for(var i=0; i<response.comments.length; i++) {
+            if(response.comments[i].comment_id === this.comment_id) {
+                //We have found the correct comment
+                for(var j=0; j<response.comments[i].replies.length; j++) {
+                    if(response.comments[i].replies[j].reply_id === this.reply_id) {
+                        //We have found the correct reply
+                        if(!response.comments[i].replies[j].dislikes.includes(currentUser)) {
+                            var index = response.comments[i].replies[j].likes.indexOf(currentUser);
+                            if(index > -1) {
+                                response.comments[i].replies[j].likes.splice(index, 1);
+                            }
+                            response.comments[i].replies[j].dislikes.push(currentUser);
+                        } else {
+                            var index = response.comments[i].replies[j].dislikes.indexOf(currentUser);
+                            if(index > -1) {
+                                response.comments[i].replies[j].dislikes.splice(index, 1);
+                            }
+                        }
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        return response;
+      }
+
+    async editReply() {
+        console.log("TODO: Edit reply");
+    }
+
+    async deleteReply() {
+        console.log("TODO: Delete reply");
     }
 }

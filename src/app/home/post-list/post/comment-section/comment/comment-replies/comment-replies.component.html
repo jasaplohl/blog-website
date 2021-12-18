@@ -1,10 +1,11 @@
 <div class="d-flex flex-column mb-2">
     <!-- A list of all replies -->
     <app-comment-reply
+        (requestUpdateEvent)="onRequestUpdate()"
         [blog_id]="blog_id"
         [comment_id]="comment_id"
         *ngFor="let reply of replies"
-        [reply]="reply"></app-comment-reply>
+        [reply]="replyFromJSON(reply)"></app-comment-reply>
     <div *ngIf="currentUser">
         <form
             autocomplete="off"

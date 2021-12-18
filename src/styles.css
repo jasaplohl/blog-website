@@ -66,3 +66,7 @@
 .user-name::first-letter {
     text-transform: capitalize;
 }
+
+.capitalized-text {
+    text-transform: capitalize;
+}

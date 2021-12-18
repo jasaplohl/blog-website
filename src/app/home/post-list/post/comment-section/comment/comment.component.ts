@@ -44,16 +44,6 @@ export class CommentComponent implements OnInit {
     this.showCommentReplies = !this.showCommentReplies;
   }
 
-  onUpdateComment() {
-    this.comment.updateComment()
-      .then(() => {
-        this.requestUpdateEvent.emit();
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }
-
   likeComment() {
     this.comment.likeComment()
       .then(() => {
@@ -75,7 +65,7 @@ export class CommentComponent implements OnInit {
   }
 
   onEditCommentClick() {
-    this.comment.updateComment()
+    this.comment.editComment()
       .then(() => {
         this.requestUpdateEvent.emit();
       })
