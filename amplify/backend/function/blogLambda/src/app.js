@@ -219,7 +219,7 @@ app.delete('/blog/:blog_id', function(req, res) {
       } else {
         dataTemp = data;
       }
-      if(req.apiGateway.event.requestContext.authorizer.claims['cognito:username'] === dataTemp.user_id) {
+      if(req.apiGateway.event.requestContext.authorizer.claims.sub === dataTemp.user_id) {
         dynamodb.delete(removeItemParams, (err, data)=> {
           if(err) {
             res.statusCode = 500;

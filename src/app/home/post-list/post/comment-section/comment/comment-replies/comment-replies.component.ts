@@ -2,7 +2,7 @@ import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommentReply } from 'src/app/models/comment-reply.model';
 import { v4 as uuidv4 } from 'uuid';
-import { Auth } from 'aws-amplify';
+import { Auth, API } from 'aws-amplify';
 
 @Component({
   selector: 'app-comment-replies',
@@ -16,6 +16,7 @@ export class CommentRepliesComponent implements OnInit {
   
   @Output() requestUpdateEvent = new EventEmitter<void>();
 
+  currentUser!: String;
   public newReplyForm: FormGroup;
 
   constructor(fb: FormBuilder) {
@@ -24,41 +25,67 @@ export class CommentRepliesComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
-
-  onCreateReply(commentReply: any): void {
-    this.newReplyForm.reset();
-    this.createReply(commentReply);
+  async ngOnInit() {
+    await Auth.currentAuthenticatedUser()
+      .then(response => {
+        this.currentUser = response.username;
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
   async createReply(commentReply: any) {
-    const user = await Auth.currentAuthenticatedUser();
-    await Auth.currentUserInfo()
-              .then(user_ => {
-                //We create a new reply
-                var newReply = new CommentReply(
-                  this.blog_id, this.comment_id, uuidv4(), user_.attributes.sub, user.username, 
-                  new Date().toISOString(), commentReply.reply_content, [], []
-                );
-                //If the list is still empty
-                if(this.replies === undefined) {
-                  this.replies = []
+    this.newReplyForm.reset();
+
+    Auth.currentAuthenticatedUser()
+      .then(response => {
+        const requestInfo = {
+          headers: {
+            Authorization: response.signInUserSession.idToken.jwtToken
+          },
+          body: undefined
+        }
+        var newReply = new CommentReply(
+          this.blog_id, this.comment_id, uuidv4(), response.signInUserSession.idToken.payload.sub, response.username, 
+          new Date().toISOString(), commentReply.reply_content, [], []
+        );
+
+        API
+          .get('blogapi', '/blog/' + this.blog_id, requestInfo)
+          .then(res => {
+            if(res.blog_id) {
+              for(var i=0; i<res.comments.length; i++) {
+                console.log(res.comments[i].comment_content);
+                if(res.comments[i].comment_id === this.comment_id) {
+                  res.comments[i].replies.push(newReply);
+                  break;
                 }
-                this.replies.push(newReply); //We add the reply to the existing list
-                // this.emitRepliesEvent();
-              });
+              }
+              requestInfo.body = res;
+              API
+                .put('blogapi', '/blog', requestInfo)
+                .then(response => {
+                  console.log(response);
+                  this.onRequestUpdate();
+                })
+                .catch(error => {
+                  console.error("Error: ", error);
+                });
+            } else {
+              console.error("The post has already been deleted.");
+              window.location.reload();
+            }
+          })
+          .catch();
+      })
+      .catch(error => {
+        console.warn(error);
+      });
   }
 
-  onUpdateReply(commentReply: CommentReply) {
-      //TODO: UPDATE THE REPLY
-      // this.emitRepliesEvent();
+  onRequestUpdate() {
+    this.requestUpdateEvent.emit();
   }
-
-  /**
-   * Emits the replies to the parent component.
-   */
-  // emitRepliesEvent() {
-  //   this.repliesEvent.emit(this.replies);
-  // }
 
 }
