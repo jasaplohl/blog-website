@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, TemplateRef } from '@an
 import { BlogComment } from 'src/app/models/blog-comment.model';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { Auth } from 'aws-amplify';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 
 @Component({
@@ -24,7 +25,9 @@ export class CommentComponent implements OnInit {
 
   editable!: boolean;
 
-  constructor(private modalService: NgbModal) {
+  public newCommentForm!: FormGroup;
+
+  constructor(private modalService: NgbModal, private fb: FormBuilder) {
     this.showCommentReplies = false;
   }
 
@@ -39,6 +42,17 @@ export class CommentComponent implements OnInit {
       .catch(error => {
         console.error(error);
       });
+
+    //The modal for editting the post content
+    if(this.comment) {
+      this.newCommentForm = this.fb.group({
+        commentEditContent: [this.comment.comment_content, Validators.required]
+      });
+    } else {
+      this.newCommentForm = this.fb.group({
+        blogEditContent: ["", Validators.required]
+      });
+    }
       
     this.timeFormat = moment(new Date(this.comment.timestamp)).fromNow();
   }
@@ -67,14 +81,20 @@ export class CommentComponent implements OnInit {
       });
   }
 
-  onEditCommentClick() {
-    this.comment.editComment()
-      .then(() => {
-        this.requestUpdateEvent.emit();
-      })
-      .catch(error => {
-        console.error(error);
-      });
+  onEditCommentClick(content: TemplateRef<any>) {
+    this.modalService.open(content).result.then((result) => {
+      // When we save the changes
+      this.comment.editComment(result.commentEditContent)
+        .then(() => {
+          this.requestUpdateEvent.emit();
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }, (reason) => {
+      // When we cancel the changes
+      console.log(reason);
+    });
   }
 
   onDeleteCommentClick() {

@@ -43,6 +43,13 @@ export class BlogComment {
         };
     }
 
+    updateFromJSON(response: any) {
+      this.comment_content = response.comment_content;
+      this.likes = response.likes;
+      this.dislikes = response.dislikes;
+      this.replies = response.replies;
+    }
+
     async likeComment() {
       const requestInfo = {
         headers: {
@@ -184,8 +191,58 @@ export class BlogComment {
         return response;
     }
 
-    async editComment() {
-      console.log("TODO: Update comment");
+    async editComment(newContent: String) {
+      const getRequestInfo = {
+        headers: {
+          Authorization: undefined
+        }
+      };
+
+      //TODO : CHANGE THE FORM, SO THAT THE AWAITS DONT NEST
+
+      await Auth.currentAuthenticatedUser()
+        .then(response => {
+          getRequestInfo.headers.Authorization = response.signInUserSession.idToken.jwtToken;
+
+          // First we fetch the current blog, to update any changes from other users
+          API
+          .get('blogapi', '/blog/' + this.blog_id, getRequestInfo)
+          .then(res => {
+            if(res.blog_id) {
+              //We update the comment with the new content
+              for(var i=0; i<res.comments.length; i++) {
+                if(res.comments[i].comment_id === this.comment_id) {
+                  // this.updateFromJSON(res.comments[i]);
+                  res.comments[i].comment_content = newContent;
+                  break;
+                }
+              }
+              this.comment_content = newContent;
+
+              // Then we upload the changes
+              const postRequestInfo = {
+                headers: {
+                  Authorization: response.signInUserSession.idToken.jwtToken
+                },
+                body: res 
+              };
+              API
+                .put('blogapi', '/blog', postRequestInfo)
+                .then(response => {
+                  console.log(response);
+                })
+                .catch(error => {
+                  console.error("Error: ", error);
+                });
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
+        })
+        .catch(error => {
+          console.error(error);
+        });
     }
 
 }

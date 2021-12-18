@@ -20,7 +20,7 @@
                                     <i class="bi bi-three-dots-vertical"></i>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="commentDropDown">
-                                <button class="dropdown-item btn-sm" (click)="onEditCommentClick()">Edit Comment</button>
+                                <button class="dropdown-item btn-sm" (click)="onEditCommentClick(mymodal)">Edit Comment</button>
                                 <button *ngIf="deletable" class="dropdown-item btn-sm" (click)="onDeleteCommentClick()" >Delete Comment</button>
                             </div>
                         </div>
@@ -64,6 +64,41 @@
             *ngIf="showCommentReplies"></app-comment-replies>
     </div>
 </div>
+
+<!-- Edit comment modal -->
+<ng-template #mymodal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Edit your comment content.</h4>
+      <button class="close" (click)="modal.dismiss('cross')">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+        <form
+            autocomplete="off"
+            [formGroup]="newCommentForm"
+            (ngSubmit)="modal.close(newCommentForm.value)">
+            <input 
+                type="text" 
+                placeholder="{{ comment.comment_content }}" 
+                formControlName="commentEditContent"
+                class="form-control">
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button 
+            class="btn btn-outline-dark" 
+            (click)="modal.dismiss('cancel')">
+            <i class="bi bi-x-lg"></i> Cancel
+        </button>
+        <button 
+            type="submit"
+            class="btn btn-outline-dark" 
+            (click)="modal.close(newCommentForm.value)">
+            <i class="bi bi-check-lg"></i> Save
+        </button>
+    </div>
+</ng-template>
 
 <!-- Liked/disliked by modal -->
 <ng-template #likesModal let-modal>
