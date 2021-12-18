@@ -13,12 +13,14 @@ export class CommentReplyComponent implements OnInit {
   @Input() declare blog_id: String;
   @Input() declare comment_id: String;
   @Input() declare reply: CommentReply;
+  @Input() declare deletable: boolean;
 
   currentUser!: String;
   editable!: boolean;
   timeFormat!: String;
   show!: String;
   
+  @Output() deleteReplyEvent = new EventEmitter<String[]>();
   @Output() requestUpdateEvent = new EventEmitter<void>();
 
   constructor(private modalService: NgbModal) { }
@@ -78,13 +80,7 @@ export class CommentReplyComponent implements OnInit {
   }
 
   deleteReply() {
-    this.reply.deleteReply()
-      .then(() => {
-        // this.requestUpdateEvent.emit();
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    this.deleteReplyEvent.emit([this.comment_id, this.reply.reply_id]);
   }
 
 }

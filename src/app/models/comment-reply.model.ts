@@ -183,8 +183,4 @@ export class CommentReply {
     async editReply() {
         console.log("TODO: Edit reply");
     }
-
-    async deleteReply() {
-        console.log("TODO: Delete reply");
-    }
 }

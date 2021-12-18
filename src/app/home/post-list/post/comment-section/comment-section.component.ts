@@ -39,6 +39,59 @@ export class CommentSectionComponent implements OnInit {
         json.comment_content, json.likes, json.dislikes, json.replies);
   }
 
+  async deleteComment(comment_id: String) {
+    await Auth.currentAuthenticatedUser()
+        .then(response => {
+          const getRequestInfo = {
+            headers: {
+              Authorization: response.signInUserSession.idToken.jwtToken
+            }
+          }
+
+          API
+            .get('blogapi', '/blog/' + this.blog_id, getRequestInfo)
+            .then(res => {
+              if(res.blog_id) {
+
+                var index = -1;
+                for(var i=0; i<res.comments.length; i++) {
+                  if(res.comments[i].comment_id === comment_id) {
+                    index = i;
+                    break;
+                  }
+                };
+                res.comments.splice(index, 1);
+
+                const postRequestInfo = {
+                  headers: {
+                    Authorization: response.signInUserSession.idToken.jwtToken
+                  },
+                  body: res
+                };
+                API
+                  .put('blogapi', '/blog', postRequestInfo)
+                  .then(response => {
+                    console.log(response);
+                    this.onRequestUpdate();
+                  })
+                  .catch(error => {
+                    console.error("Error: ", error);
+                  });
+              } else {
+                //TODO error message
+                console.error("The post has already been deleted.");
+                window.location.reload();
+              }
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        })
+        .catch(error => {
+          console.error(error);
+        });
+  }
+
   async createComment(commentPost: any) {
     this.newCommentForm.reset();
 

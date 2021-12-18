@@ -17,9 +17,11 @@
     <!-- A list of all comments -->
     <div>
         <app-comment
+            (deleteCommentEvent)="deleteComment($event)"
             (requestUpdateEvent)="onRequestUpdate()"
             [blog_id]="blog_id"
-            *ngFor="let comment of comments"
-            [comment]="commentFromJSON(comment)"></app-comment>
+            *ngFor="let comment of comments; let i = index"
+            [comment]="commentFromJSON(comment)"
+            [deletable]="(comments.length-1) === i"></app-comment>
     </div>
 </div>
