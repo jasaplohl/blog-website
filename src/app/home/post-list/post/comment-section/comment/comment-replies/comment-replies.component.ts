@@ -35,6 +35,11 @@ export class CommentRepliesComponent implements OnInit {
       });
   }
 
+  replyFromJSON(json: any) {
+    return new CommentReply(json.blog_id, json.comment_id, json.reply_id, json.user_id, json.user_name, json.timestamp, 
+      json.reply_content, json.likes, json.dislikes);
+  }
+
   async createReply(commentReply: any) {
     this.newReplyForm.reset();
 
@@ -55,13 +60,15 @@ export class CommentRepliesComponent implements OnInit {
           .get('blogapi', '/blog/' + this.blog_id, requestInfo)
           .then(res => {
             if(res.blog_id) {
+              var reply = false;
               for(var i=0; i<res.comments.length; i++) {
-                console.log(res.comments[i].comment_content);
                 if(res.comments[i].comment_id === this.comment_id) {
+                  reply = true;
                   res.comments[i].replies.push(newReply);
                   break;
                 }
               }
+              console.log(reply ? "The comment exists" : "The comment no longer exists");
               requestInfo.body = res;
               API
                 .put('blogapi', '/blog', requestInfo)

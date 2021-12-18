@@ -121,14 +121,14 @@
     <div class="modal-body">
         <div *ngIf="show === 'like'; else dislikeItems">
             <ul *ngIf="blog.likes.length > 0; else noLikesYet">
-                <li *ngFor="let like of blog.likes">{{ like }}</li>
+                <li class="capitalized-text"  *ngFor="let like of blog.likes">{{ like }}</li>
             </ul>
             <ng-template #noLikesYet><p>This post doesn't have any likes yet.</p></ng-template>
         </div>
         <ng-template #dislikeItems>
             <div>
                 <ul *ngIf="blog.dislikes.length > 0; else noDislikesYet">
-                    <li *ngFor="let dislike of blog.dislikes">{{ dislike }}</li>
+                    <li class="capitalized-text"  *ngFor="let dislike of blog.dislikes">{{ dislike }}</li>
                 </ul>
                 <ng-template #noDislikesYet><p>This post doesn't have any dislikes yet.</p></ng-template>
             </div>
