@@ -21,7 +21,7 @@
                             </button>
                             <div class="dropdown-menu" aria-labelledby="commentDropDown">
                                 <button class="dropdown-item btn-sm" (click)="onEditCommentClick()">Edit Comment</button>
-                                <button class="dropdown-item btn-sm" (click)="onDeleteCommentClick()" >Delete Comment</button>
+                                <button *ngIf="deletable" class="dropdown-item btn-sm" (click)="onDeleteCommentClick()" >Delete Comment</button>
                             </div>
                         </div>
                     </div>

@@ -91,6 +91,65 @@ export class CommentRepliesComponent implements OnInit {
       });
   }
 
+  async deleteReply(ids: String[]) {
+    await Auth.currentAuthenticatedUser()
+      .then(response => {
+        const getRequestInfo = {
+          headers: {
+            Authorization: response.signInUserSession.idToken.jwtToken
+          }
+        }
+
+        API
+          .get('blogapi', '/blog/' + this.blog_id, getRequestInfo)
+          .then(res => {
+            if(res.blog_id) {
+
+              for(var i=0; i<res.comments.length; i++) {
+                if(res.comments[i].comment_id === ids[0]) {
+                  //We have found the correct comment
+                  for(var j=0; j< res.comments[i].replies.length; j++) {
+                    if(res.comments[i].replies[j].reply_id === ids[1]) {
+                      //We have found the correct reply
+
+                      res.comments[i].replies.splice(j, 1);
+
+                      const postRequestInfo = {
+                        headers: {
+                          Authorization: response.signInUserSession.idToken.jwtToken
+                        },
+                        body: res
+                      };
+                      API
+                        .put('blogapi', '/blog', postRequestInfo)
+                        .then(response => {
+                          console.log(response);
+                          this.onRequestUpdate();
+                        })
+                        .catch(error => {
+                          console.error("Error: ", error);
+                        });
+                      break;
+                    }
+                  }
+                  break;
+                }
+              }
+            } else {
+              //TODO error message
+              console.error("The post has already been deleted.");
+              window.location.reload();
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
   onRequestUpdate() {
     this.requestUpdateEvent.emit();
   }

@@ -12,6 +12,7 @@ import * as moment from 'moment';
 export class CommentComponent implements OnInit {
   @Input() declare blog_id: String;
   @Input() declare comment: BlogComment;
+  @Input() declare deletable: boolean;
 
   @Output() deleteCommentEvent = new EventEmitter<String>();
   @Output() requestUpdateEvent = new EventEmitter<void>();
@@ -20,6 +21,7 @@ export class CommentComponent implements OnInit {
   currentUser!: String;
   showCommentReplies: boolean;
   timeFormat!: String;
+
   editable!: boolean;
 
   constructor(private modalService: NgbModal) {

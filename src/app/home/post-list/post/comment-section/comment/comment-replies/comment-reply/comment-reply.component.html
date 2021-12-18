@@ -20,7 +20,7 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="replyDropDown">
                             <button class="dropdown-item btn-sm" (click)="editReply()">Edit Reply</button>
-                            <button class="dropdown-item btn-sm" (click)="deleteReply()" >Delete Reply</button>
+                            <button *ngIf="deletable" class="dropdown-item btn-sm" (click)="deleteReply()" >Delete Reply</button>
                         </div>
                     </div>
                 </div>
@@ -32,10 +32,12 @@
                         <p 
                             (click)="likeReply()"
                             class="me-2 hover-underline-text"
+                            *ngIf="currentUser"
                             [ngClass]="{'text-primary': reply.likes.includes(currentUser)}">Like</p>
                         <p 
                             (click)="dislikeReply()"
                             class="me-2 hover-underline-text"
+                            *ngIf="currentUser"
                             [ngClass]="{'text-primary': reply.dislikes.includes(currentUser)}">Dislike</p>
                         <p>({{ timeFormat }})</p>
                     </div>

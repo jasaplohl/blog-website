@@ -1,11 +1,13 @@
 <div class="d-flex flex-column mb-2">
     <!-- A list of all replies -->
     <app-comment-reply
+        (deleteReplyEvent)="deleteReply($event)"
         (requestUpdateEvent)="onRequestUpdate()"
         [blog_id]="blog_id"
         [comment_id]="comment_id"
-        *ngFor="let reply of replies"
-        [reply]="replyFromJSON(reply)"></app-comment-reply>
+        *ngFor="let reply of replies; let i = index"
+        [reply]="replyFromJSON(reply)"
+        [deletable]="(replies.length-1) === i"></app-comment-reply>
     <div *ngIf="currentUser">
         <form
             autocomplete="off"
