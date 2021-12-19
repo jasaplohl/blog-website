@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@an
 import { CommentReply } from 'src/app/models/comment-reply.model';
 import { Auth } from 'aws-amplify';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 
 @Component({
@@ -23,7 +24,9 @@ export class CommentReplyComponent implements OnInit {
   @Output() deleteReplyEvent = new EventEmitter<String[]>();
   @Output() requestUpdateEvent = new EventEmitter<void>();
 
-  constructor(private modalService: NgbModal) { }
+  public editReplyForm!: FormGroup;
+
+  constructor(private modalService: NgbModal, private fb: FormBuilder) { }
 
   async ngOnInit() {
     await Auth.currentAuthenticatedUser()
@@ -36,6 +39,17 @@ export class CommentReplyComponent implements OnInit {
       .catch(error => {
         console.error(error);
       });
+
+    //The modal for editting the post content
+    if(this.reply) {
+      this.editReplyForm = this.fb.group({
+        replyEditContent: [this.reply.reply_content, Validators.required]
+      });
+    } else {
+      this.editReplyForm = this.fb.group({
+        blogEditContent: ["", Validators.required]
+      });
+    }
       
     this.timeFormat = moment(new Date(this.reply.timestamp)).fromNow();
   }
@@ -69,14 +83,20 @@ export class CommentReplyComponent implements OnInit {
       });
   }
 
-  editReply() {
-    this.reply.editReply()
-      .then(() => {
-        // this.requestUpdateEvent.emit();
-      })
-      .catch(error => {
-        console.error(error);
-      });
+  editReply(content: TemplateRef<any>) {
+    this.modalService.open(content).result.then((result) => {
+      // When we save the changes
+      this.reply.editReply(result.replyEditContent)
+        .then(() => {
+          this.requestUpdateEvent.emit();
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }, (reason) => {
+      // When we cancel the changes
+      console.log(reason);
+    });
   }
 
   deleteReply() {

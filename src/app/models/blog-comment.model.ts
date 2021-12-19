@@ -43,6 +43,13 @@ export class BlogComment {
         };
     }
 
+    // updateFromJSON(response: any) {
+    //   this.comment_content = response.comment_content;
+    //   this.likes = response.likes;
+    //   this.dislikes = response.dislikes;
+    //   this.replies = response.replies;
+    // }
+
     async likeComment() {
       const requestInfo = {
         headers: {
@@ -184,8 +191,58 @@ export class BlogComment {
         return response;
     }
 
-    async editComment() {
-      console.log("TODO: Update comment");
+    async editComment(newContent: String) {
+      const requestInfo = {
+        headers: {
+          Authorization: undefined
+        },
+        body: undefined
+      };
+
+      var username: String = undefined!;
+
+      await Auth.currentAuthenticatedUser()
+        .then(response => {
+          requestInfo.headers.Authorization = response.signInUserSession.idToken.jwtToken;
+          username = response.username;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
+      if(requestInfo.headers.Authorization) {
+        // First we fetch the current blog, to update any changes from other users
+        await API
+          .get('blogapi', '/blog/' + this.blog_id, requestInfo)
+          .then(res => {
+            if(res.blog_id) {
+              //We update the comment with the new content
+              for(var i=0; i<res.comments.length; i++) {
+                if(res.comments[i].comment_id === this.comment_id) {
+                  res.comments[i].comment_content = newContent;
+                  break;
+                }
+              }
+              this.comment_content = newContent;
+
+              // Then we upload the changes
+              requestInfo.body = res;
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
+          if(requestInfo.body) {
+            await API
+              .put('blogapi', '/blog', requestInfo)
+              .then(response => {
+                console.log(response);
+              })
+              .catch(error => {
+                console.error("Error: ", error);
+              });
+          }
+      }
     }
 
 }
