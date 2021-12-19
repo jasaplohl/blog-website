@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class NewPostComponent implements OnInit {
   @ViewChild("imageInput") imageInput!: ElementRef;
   @Output() newPostEvent = new EventEmitter<String>();
-  new_blog_content!: String;
+  new_blog_content: String;
   imgName!: string;
   imgFile!: File;
   url!: any;
@@ -24,6 +24,7 @@ export class NewPostComponent implements OnInit {
     this.newBlogForm = fb.group({
       blogContent: ["", Validators.required]
     });
+    this.new_blog_content="";
   }
 
   async ngOnInit() {
@@ -34,8 +35,6 @@ export class NewPostComponent implements OnInit {
       .catch(error => {
         console.error(error);
       });
-
-      this.new_blog_content="";
   }
 
   /**
