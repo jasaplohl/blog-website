@@ -86,13 +86,15 @@ export class CommentReplyComponent implements OnInit {
   editReply(content: TemplateRef<any>) {
     this.modalService.open(content).result.then((result) => {
       // When we save the changes
-      this.reply.editReply(result.replyEditContent)
+      if(result.replyEditContent.trim() !== "") {
+        this.reply.editReply(result.replyEditContent)
         .then(() => {
           this.requestUpdateEvent.emit();
         })
         .catch(error => {
           console.error(error);
         });
+      }
     }, (reason) => {
       // When we cancel the changes
       console.log(reason);

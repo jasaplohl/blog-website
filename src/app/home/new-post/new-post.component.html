@@ -5,6 +5,7 @@
         (ngSubmit)="onCreate(newBlogForm.value)">
         <div class="m-1">
             <input 
+                [(ngModel)]="new_blog_content"
                 type="text"
                 formControlName="blogContent"
                 placeholder="What is on your mind?" 
@@ -26,7 +27,8 @@
                 class="col">
             <button 
                 type="submit" 
-                class="m-1 btn btn-primary col">Post</button>
+                class="m-1 btn btn-primary col"
+                [disabled]="new_blog_content.trim() === ''">Post</button>
         </div>
     </form>
 </div>
