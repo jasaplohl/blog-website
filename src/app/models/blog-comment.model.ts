@@ -192,21 +192,28 @@ export class BlogComment {
     }
 
     async editComment(newContent: String) {
-      const getRequestInfo = {
+      const requestInfo = {
         headers: {
           Authorization: undefined
-        }
+        },
+        body: undefined
       };
 
-      //TODO : CHANGE THE FORM, SO THAT THE AWAITS DONT NEST
+      var username: String = undefined!;
 
       await Auth.currentAuthenticatedUser()
         .then(response => {
-          getRequestInfo.headers.Authorization = response.signInUserSession.idToken.jwtToken;
+          requestInfo.headers.Authorization = response.signInUserSession.idToken.jwtToken;
+          username = response.username;
+        })
+        .catch(error => {
+          console.error(error);
+        });
 
-          // First we fetch the current blog, to update any changes from other users
-          API
-          .get('blogapi', '/blog/' + this.blog_id, getRequestInfo)
+      if(requestInfo.headers.Authorization) {
+        // First we fetch the current blog, to update any changes from other users
+        await API
+          .get('blogapi', '/blog/' + this.blog_id, requestInfo)
           .then(res => {
             if(res.blog_id) {
               //We update the comment with the new content
@@ -220,29 +227,23 @@ export class BlogComment {
               this.comment_content = newContent;
 
               // Then we upload the changes
-              const postRequestInfo = {
-                headers: {
-                  Authorization: response.signInUserSession.idToken.jwtToken
-                },
-                body: res 
-              };
-              API
-                .put('blogapi', '/blog', postRequestInfo)
-                .then(response => {
-                  console.log(response);
-                })
-                .catch(error => {
-                  console.error("Error: ", error);
-                });
+              requestInfo.body = res;
             }
           })
           .catch(error => {
             console.error(error);
           });
-        })
-        .catch(error => {
-          console.error(error);
-        });
+          if(requestInfo.body) {
+            await API
+              .put('blogapi', '/blog', requestInfo)
+              .then(response => {
+                console.log(response);
+              })
+              .catch(error => {
+                console.error("Error: ", error);
+              });
+          }
+      }
     }
 
 }
