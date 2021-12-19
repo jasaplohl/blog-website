@@ -21,6 +21,12 @@
       "auth": {
         "blogwebsitec5d6a990": {},
         "true": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "dqgn9rc9r6fai",
+          "type": "manual"
+        }
       }
     }
   }

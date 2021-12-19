@@ -1,7 +1,6 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { API, Auth, Storage } from 'aws-amplify';
-import { environment } from 'src/environments/environment';
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -51,7 +50,7 @@ export class NewPostComponent implements OnInit {
         this.imgFile = undefined!;
         this.imageInput.nativeElement.value = "";
       } else {
-        if(this.imgFile.size > environment.max_file_size) {
+        if(this.imgFile.size > 2097152) {
           alert("File too big!");
           this.imgFile = undefined!;
           this.imageInput.nativeElement.value = "";

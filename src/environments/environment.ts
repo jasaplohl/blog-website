@@ -3,8 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  max_file_size: 2097152
+  production: false
 };
 
 /*
