@@ -19,7 +19,7 @@
                                 <i class="bi bi-three-dots-vertical"></i>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="replyDropDown">
-                            <button class="dropdown-item btn-sm" (click)="editReply()">Edit Reply</button>
+                            <button class="dropdown-item btn-sm" (click)="editReply(mymodal)">Edit Reply</button>
                             <button *ngIf="deletable" class="dropdown-item btn-sm" (click)="deleteReply()" >Delete Reply</button>
                         </div>
                     </div>
@@ -50,6 +50,41 @@
         </div>
     </div>
 </div>
+
+<!-- Edit reply modal -->
+<ng-template #mymodal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Edit your reply content.</h4>
+      <button class="close" (click)="modal.dismiss('cross')">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+        <form
+            autocomplete="off"
+            [formGroup]="editReplyForm"
+            (ngSubmit)="modal.close(editReplyForm.value)">
+            <input 
+                type="text" 
+                placeholder="{{ reply.reply_content }}" 
+                formControlName="replyEditContent"
+                class="form-control">
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button 
+            class="btn btn-outline-dark" 
+            (click)="modal.dismiss('cancel')">
+            <i class="bi bi-x-lg"></i> Cancel
+        </button>
+        <button 
+            type="submit"
+            class="btn btn-outline-dark" 
+            (click)="modal.close(editReplyForm.value)">
+            <i class="bi bi-check-lg"></i> Save
+        </button>
+    </div>
+</ng-template>
 
 <!-- Liked/disliked by modal -->
 <ng-template #likesModal let-modal>

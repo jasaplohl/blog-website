@@ -43,12 +43,12 @@ export class BlogComment {
         };
     }
 
-    updateFromJSON(response: any) {
-      this.comment_content = response.comment_content;
-      this.likes = response.likes;
-      this.dislikes = response.dislikes;
-      this.replies = response.replies;
-    }
+    // updateFromJSON(response: any) {
+    //   this.comment_content = response.comment_content;
+    //   this.likes = response.likes;
+    //   this.dislikes = response.dislikes;
+    //   this.replies = response.replies;
+    // }
 
     async likeComment() {
       const requestInfo = {
@@ -219,7 +219,6 @@ export class BlogComment {
               //We update the comment with the new content
               for(var i=0; i<res.comments.length; i++) {
                 if(res.comments[i].comment_id === this.comment_id) {
-                  // this.updateFromJSON(res.comments[i]);
                   res.comments[i].comment_content = newContent;
                   break;
                 }
